@@ -1,0 +1,23 @@
+<script>
+import device from "@system.device";
+
+export default {
+  onCreate() {
+    device.getInfo({
+      success: (res) => {
+        this.setScreenShape(res.screenShape);
+      },
+      fail: function () {},
+    });
+  },
+
+  setScreenShape(shape) {
+    this.screenShape = shape;
+  },
+
+  onDestroy() {
+    console.info("Application onDestroy");
+  }
+
+};
+</script >

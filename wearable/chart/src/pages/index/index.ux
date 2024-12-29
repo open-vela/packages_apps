@@ -1,0 +1,71 @@
+<template>
+  <div class="demo-page">
+    <text class="title">欢迎打开{{ title }}示例模板</text>
+    <div class="btn line" onclick="toLine">
+      <text class="btn-txt">每日血糖监测</text>
+    </div>
+    <div class="btn bar" onclick="toBar">
+      <text class="btn-txt">每日心率监测</text>
+    </div>
+  </div>
+</template>
+
+<script>
+  import router from "@system.router";
+
+  export default {
+    // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
+    private: {
+      title: "图表类",
+    },
+
+    toLine() {
+      router.push({
+        uri: "/pages/line",
+      });
+    },
+
+    toBar() {
+      router.push({
+        uri: "/pages/bar",
+      });
+    },
+  };
+</script>
+
+<style>
+  .demo-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 100px;
+  }
+
+  .btn {
+    width: 240px;
+    height: 60px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #09ba07;
+    font-size: 20px;
+    color: #ffffff;
+    justify-content: center;
+  }
+
+  .btn-txt {
+    font-size: 30px;
+    color: white;
+  }
+
+  .line {
+    margin-top: 60px;
+  }
+
+  .bar {
+    margin-top: 50px;
+  }
+</style>

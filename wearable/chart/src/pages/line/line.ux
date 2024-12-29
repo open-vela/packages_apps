@@ -1,0 +1,235 @@
+<template>
+  <div class="blood-sugar-page" @swipe="back">
+    <text class="title">每日血糖</text>
+    <text class="cur-time">{{ curTime }}</text>
+    <stack class="stack-wrap">
+      <div class="background-wrap">
+        <div class="line-item" for="{{ valueYs }}">
+          <text class="line"></text>
+          <text class="line-num">{{ $item }}</text>
+        </div>
+        <text class="line-bottom"></text>
+      </div>
+      <div class="top-wrap">
+        <div class="chart-wrap">
+          <chart
+            class="chart"
+            type="line"
+            id="chart"
+            options="{{ lineOpts }}"
+            datasets="{{ lineData }}"
+          ></chart>
+        </div>
+        <div class="time-wrap">
+          <text class="times" for="times">{{ $item }}</text>
+        </div>
+      </div>
+    </stack>
+    <div class="footer">
+      <div class="min-value">
+        <image class="arrow-icon" src="/common/down-arrow.png"></image>
+        <text class="arrow-txt">{{ min }}</text>
+      </div>
+      <div class="max-value">
+        <image class="arrow-icon" src="/common/up-arrow.png"></image>
+        <text class="arrow-txt">{{ max }}</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import router from "@system.router";
+  export default {
+    private: {
+      curTime: "-",
+      min: "-",
+      max: "-",
+      valueYs: ["9", "6", "3"],
+      lineData: [
+        {
+          strokeColor: "#FFC65B",
+          fillColor: "#cce5ff",
+          // 示例数据
+          data: [
+            3.0, 3.4, 3.2, 6.0, 4.4, 3.5, 6.0, 5.0, 2.3, 4.6, 4.3, 5.6, 4.6,
+            3.9, 3.8, 4.5, 5.0, 5.6, 5.1, 5.1,
+          ],
+          gradient: true,
+        },
+      ],
+      lineOpts: {
+        xAxis: {
+          min: 0,
+          max: 19, // 由于axisTick 数量是10 这里写9
+          display: false,
+          axisTick: 20,
+        },
+        yAxis: {
+          min: 0,
+          max: 100,
+          display: false,
+          axisTick: 11,
+        },
+        series: {
+          lineStyle: {
+            width: "2px",
+          },
+          loop: {
+            margin: "0", // 新绘制点与旧绘制点的间距
+          },
+        },
+      },
+      times: ["5:00", "8:00", "11:00", "14:00", "17:00"],
+    },
+
+    onInit() {
+      // chart不支持小数，所以扩大倍数
+      let arr = this.lineData[0].data;
+      this.lineData[0].data = arr.map((item) => item * 10);
+
+      // 计算血糖最大值和最小值
+      this.min = Math.min(...arr);
+      this.max = Math.max(...arr);
+
+      // 获取时间
+      this.getDate();
+    },
+
+    back(event) {
+      if (event.direction == "right") {
+        router.back();
+      }
+    },
+
+    getDate() {
+      const date = new Date();
+      if (this.timeoutTimer) {
+        clearTimeout(this.timeoutTimer);
+      }
+      // 获取系统时间进行更新最新时间
+      this.updateCurTime();
+      this.timeoutTimer = setTimeout(
+        this.getDate,
+        (60 - date.getSeconds()) * 1000
+      );
+    },
+
+    // 显示当前时间
+    updateCurTime() {
+      let time = new Date();
+      const hour = time.getHours();
+      const minute = time.getMinutes();
+      this.curTime =
+        (hour < 10 ? "0" + hour : hour) +
+        ":" +
+        (minute < 10 ? "0" + minute : minute);
+    },
+  };
+</script>
+
+<style>
+  .blood-sugar-page {
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid white;
+	border-radius: 233px; */
+  }
+  .chart-wrap {
+    width: 80%;
+  }
+  .title {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .cur-time {
+    margin-top: 10px;
+    font-size: 25px;
+  }
+
+  .stack-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .background-wrap {
+    position: absolute;
+    bottom: 38px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .line-item {
+    width: 84%;
+    margin-top: 48px;
+    align-items: center;
+    height: 23px;
+    margin-left: 15px;
+  }
+
+  .line {
+    height: 1px;
+    width: 100%;
+    border: 1px solid rgb(80, 80, 80);
+  }
+
+  .line-num {
+    font-size: 25px;
+    margin-left: 7px;
+  }
+  .line-bottom {
+    height: 1px;
+    width: 80%;
+    border: 1px solid white;
+    margin-top: 60px;
+  }
+
+  .top-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100px;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #09ba07;
+    font-size: 20px;
+    color: #ffffff;
+    margin-right: 40px;
+  }
+
+  .btn-wrap {
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .time-wrap {
+    width: 85%;
+    justify-content: space-between;
+  }
+
+  .times {
+    font-size: 20px;
+  }
+
+  .footer {
+    margin-top: 30px;
+    width: 40%;
+    justify-content: space-around;
+  }
+
+  .arrow-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arrow-txt {
+    font-size: 25px;
+  }
+</style>

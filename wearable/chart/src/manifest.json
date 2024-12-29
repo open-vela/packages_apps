@@ -1,0 +1,32 @@
+{
+  "package": "com.application.watch.demo",
+  "name": "vela-chart",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": ["watch"],
+  "features": [
+    {
+      "name": "system.router"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 480
+  },
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      },
+      "pages/line": {
+        "component": "line"
+      },
+      "pages/bar": {
+        "component": "bar"
+      }
+    }
+  }
+}

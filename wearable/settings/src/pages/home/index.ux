@@ -1,0 +1,135 @@
+<template>
+  <div class="w-full h-full bg-black">
+    <list class="list">
+      <list-item class="list-item justify-center" type="title">
+        <image class="w-30 h-30 mr-10" src="/common/image/back.png" onclick="handleClick"></image>
+        <text class="list-item-title">设置</text>
+      </list-item>
+      <list-item class="list-item justify-between pl-60" type="setting-item" for="{{list}}">
+        <div>
+          <image class="subject-image mt-4" src="{{$item.iconSrc}}"></image>
+          <text class="subject-name">{{ $item.name }}</text>
+        </div>
+
+        <image class="subject-image mr-60" src="/common/image/right.png"></image>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+import app from "@system.app"
+
+export default {
+  // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
+  private: {
+    title: "示例页面",
+    list: [
+      {
+        name: "显示与亮度",
+        iconSrc: "/common/image/display.indexed_8.png"
+      },
+      {
+        name: "应用视图",
+        iconSrc: "/common/image/applayout.indexed_8.png"
+      },
+      {
+        name: "蓝牙与连接",
+        iconSrc: "/common/image/bluetooth.indexed_8.png"
+      },
+      {
+        name: "移动网络",
+        iconSrc: "/common/image/wlan.indexed_8.png"
+      },
+      {
+        name: "声音与振动",
+        iconSrc: "/common/image/display.indexed_8.png"
+      },
+      {
+        name: "专注模式",
+        iconSrc: "/common/image/disturb.indexed_8.png"
+      },
+      {
+        name: "运动",
+        iconSrc: "/common/image/motion.indexed_8.png"
+      },
+      {
+        name: "健康",
+        iconSrc: "/common/image/downkey.indexed_8.png"
+      },
+      {
+        name: "心率广播",
+        iconSrc: "/common/image/applayout.indexed_8.png"
+      },
+      {
+        name: "体感手势",
+        iconSrc: "/common/image/guesture.indexed_8.png"
+      },
+      {
+        name: "快捷与帮助",
+        iconSrc: "/common/image/novice.indexed_8.png"
+      },
+      {
+        name: "密码",
+        iconSrc: "/common/image/wrist.indexed_8.png"
+      },
+      {
+        name: "隐私与安全",
+        iconSrc: "/common/image/wrist.indexed_8.png"
+      },
+      {
+        name: "系统管理",
+        iconSrc: "/common/image/system.indexed_8.png"
+      },
+      {
+        name: "关于手表",
+        iconSrc: "/common/image/about.indexed_8.png"
+      }
+    ]
+  },
+
+  routeDetail() {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push({
+      uri: "/pages/detail"
+    })
+  },
+  handleClick() {
+    app.terminate()
+  }
+}
+</script>
+
+<style>
+@import "./index.less";
+.list {
+  width: 100%;
+  height: 100%;
+}
+.title {
+  color: #fff;
+  font-size: 40px;
+  margin-top: 42px;
+}
+.list-item-title{
+  font-size: 36px;
+  color:white;
+}
+.list-item {
+  flex-direction: row;
+  align-items: center;
+  height: 88px;
+}
+
+.subject-image {
+	width: 58px;
+	height: 58px;
+	margin-right: 30px;
+}
+.subject-name {
+	font-size: 36px;
+	font-weight: 400;
+	color: #fff;
+}
+</style>

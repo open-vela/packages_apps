@@ -1,0 +1,94 @@
+text {
+  font-size: 36px;
+}
+
+.date {
+  width: 100%;
+  height: 226px;
+  justify-content: center;
+}
+
+.date-text {
+  height: 100%;
+  padding-top: 36px;
+  padding-bottom: 36px;
+  font-size: 60px;
+}
+
+.title {
+  height: 180px;
+  margin-top: 36px;
+}
+
+.title-text {
+  margin: 0 20px;
+  width: 100%;
+  height: 100%;
+  font-size: 60px;
+  lines: 3;
+}
+
+.desc {
+  height: 180px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.desc-text {
+  width: 100%;
+  height: 100%;
+  margin: 0 20px;
+  lines: 6;
+  font-size: 54px;
+}
+
+.itemWrapper {
+  height: 138px;
+}
+
+.image {
+  margin-left: 14px;
+  margin-right: 12px;
+  width: 60px;
+  height: 60px;
+  margin-top: 4px;
+}
+
+.contentWrapper {
+  width: 332px;
+  height: 138px;
+}
+
+.item-title-text {
+  width: 332px;
+  height: 69px;
+  line-height: 69px;
+  font-size: 46px;
+}
+
+.item-date-text {
+  width: 332px;
+  height: 69px;
+  line-height: 69px;
+  font-size: 46px;
+}
+
+.bottom {
+  height: 156px;
+}
+
+.confirm {
+  bottom: 10px;
+  width: 100%;
+  height: 156px;
+}
+
+.confirm-btn {
+  margin: 14px auto;
+  border-radius: 54px;
+  height: 128px;
+}
+
+.confirm-text {
+  font-size: 60px;
+}

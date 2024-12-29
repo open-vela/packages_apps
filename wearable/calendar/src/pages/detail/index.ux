@@ -1,0 +1,90 @@
+<template>
+	<div class="detail-page" @swipe="goBack">
+		<text>{{ year }}年{{ month < 10 ? "0" + month : month }}月{{ day }}日</text>
+				<text if="{{!!week}}">周{{ week }}</text>
+				<text if="{{!!lunarYear}}">
+					{{ lunarYear }}年 {{ lunarMonth }}月 {{ lunarDay }}
+				</text>
+				<div else class="container" if="{{$app.$def.screenShape === 'pill-shaped'}}">
+					<text @click="backClick">返回</text>
+				</div>
+	</div>
+</template>
+
+<script>
+import router from "@system.router";
+import sloarToLunar from "../../common/utils/sloarToLunar";
+
+export default {
+	private: {
+		year: "",
+		month: "",
+		day: "",
+		week: null,
+		lunarYear: null,
+		lunarMonth: null,
+		lunarDay: null,
+	},
+
+	onInit() {
+		const { year, month, day } = this;
+		const { lunarYear, lunarMonth, lunarDay } = sloarToLunar(year, month, day);
+		this.lunarYear = lunarYear;
+		this.lunarMonth = lunarMonth;
+		this.lunarDay = lunarDay;
+		this.getWeek();
+	},
+
+	getWeek() {
+		const { year, month, day } = this;
+		const weeks = ["日", "一", "二", "三", "四", "五", "六"];
+		const weekIndex = new Date(year, month - 1, day).getDay();
+		this.week = weeks[weekIndex];
+	},
+	backClick() {
+		router.back();
+	},
+
+	goBack(eve) {
+		if (eve.direction === "right") {
+			router.back();
+		}
+	},
+};
+</script>
+
+<style>
+.detail-page {
+	width: 100%;
+	height: 100%;
+	border-radius: 240px;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+text {
+	font-size: 40px;
+	font-weight: 700;
+	color: #fff;
+}
+.container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 40px;
+	justify-content: center;
+	padding: 10px;
+	color: white;
+	border-radius: 20px;
+	margin: 0px 20px 0px 20px;
+	background-color: grey;
+}
+@media (width <= 212) {
+	text {
+		font-size: 24px;
+		font-weight: 700;
+		color: #fff;
+	}
+}
+</style>

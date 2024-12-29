@@ -1,0 +1,37 @@
+{
+  "package": "com.todolist.watch.demo",
+  "name": "test-todolist",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1200,
+  "icon": "/common/logo.png",
+  "simulationVersion": "default",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 466
+  },
+  "router": {
+    "entry": "pages/task",
+    "pages": {
+      "pages/task": {
+        "component": "index"
+      },
+      "pages/detail": {
+        "component": "index"
+      }
+    }
+  },
+  "display": {
+    "backgroundColor": "#000000",
+    "textColor": "#ffffff"
+  },
+  "minAPILevel": 1
+}

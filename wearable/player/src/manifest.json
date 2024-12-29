@@ -1,0 +1,37 @@
+{
+  "package": "com.vela.player",
+  "name": "vela-player",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.audio"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": "device-width"
+  },
+  "router": {
+    "entry": "pages/player",
+    "pages": {
+      "pages/player": {
+        "component": "player"
+      },
+      "pages/volume": {
+        "component": "volume"
+      },
+      "pages/list": {
+        "component": "list"
+      }
+    }
+  }
+}

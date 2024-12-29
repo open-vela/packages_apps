@@ -1,0 +1,161 @@
+<template>
+  <div class="demo-page" @swipe="back">
+    <div class="title">
+      <image class="title-icon" src="/common/heart.png"></image>
+      <text class="title-txt">本周平均心率</text>
+    </div>
+    <div class="average-heart-rate">
+      <text class="heart-rate-value">{{ heartRate }}</text>
+      <text class="heart-rate-txt">次/分</text>
+    </div>
+    <div class="chart-wrap">
+      <div class="valueY-wrap">
+        <text class="valueY" for="valueYs">
+          {{ $idx % 2 === 0 ? "" : $item }}
+        </text>
+      </div>
+      <chart
+        class="chart"
+        type="bar"
+        options="{{ barOpts }}"
+        datasets="{{ barData }}"
+      ></chart>
+    </div>
+    <div class="week-wrap">
+      <text class="weeks" for="weeks">
+        {{ $item }}
+      </text>
+    </div>
+  </div>
+</template>
+
+<script>
+  import router from "@system.router";
+  export default {
+    private: {
+      valueYs: [],
+      weeks: ["一", "二", "三", "四", "五", "六", "七"],
+      heartRate: "-",
+      barData: [
+        {
+          fillColor: "#437F1C",
+          data: [60, 100, 98, 95, 90, 110, 103],
+        },
+      ],
+      barOpts: {
+        xAxis: {
+          min: 0,
+          max: 7,
+          display: true,
+          axisTick: 7,
+        },
+        yAxis: {
+          min: 0,
+          max: 200,
+          axisTick: 11,
+          display: true,
+        },
+      },
+    },
+
+    onInit() {
+      // 根据最大值、最小值和刻度数量 初始化y轴刻度值
+      let arr = [];
+      let { min, max, axisTick } = this.barOpts.yAxis;
+      // 刻度步长
+      let step = (max - min) / (axisTick - 1);
+      for (let i = 0; i < axisTick; i++) {
+        let item = step * i;
+        arr.push(item);
+      }
+      this.valueYs = arr.reverse();
+
+      //计算平均心率
+      this.countAvgHrtRate();
+    },
+
+    countAvgHrtRate() {
+      let heartRates = this.barData[0].data;
+      if (heartRates || heartRates.length > 0) {
+        let sum = heartRates.reduce((prev, cur) => {
+          prev = cur + prev;
+          return prev;
+        }, 0);
+        this.heartRate = Math.round(sum / heartRates.length);
+      }
+    },
+
+    back(event) {
+      if (event.direction === "right") {
+        router.back();
+      }
+    },
+  };
+</script>
+
+<style>
+  .demo-page {
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid white;
+	border-radius: 233px; */
+  }
+
+  .chart-wrap {
+    margin-top: 10px;
+  }
+  .chart {
+    width: 70%;
+  }
+  .title {
+    width: 60%;
+    margin-top: 40px;
+  }
+
+  .title-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .title-txt {
+    font-size: 35px;
+    text-align: center;
+    margin-left: 3px;
+  }
+
+  .average-heart-rate {
+    width: 60%;
+    align-items: flex-end;
+    margin-left: 5px;
+  }
+
+  .heart-rate-value {
+    font-size: 40px;
+    color: red;
+  }
+
+  .heart-rate-txt {
+    font-size: 20px;
+    color: red;
+    margin-bottom: 7px;
+  }
+
+  .valueY-wrap {
+    flex-direction: column;
+    width: 36px;
+    margin-top: -3px;
+    justify-content: space-between;
+  }
+  .valueY {
+    font-size: 15px;
+  }
+  .week-wrap {
+    width: 70%;
+    justify-content: space-around;
+    margin-left: 40px;
+  }
+  .weeks {
+    font-size: 25px;
+    text-align: right;
+  }
+</style>

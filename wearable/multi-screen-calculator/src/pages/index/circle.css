@@ -1,0 +1,45 @@
+.resultBox {
+  width: 400px;
+  height: 155px;
+}
+
+.resultShow {
+  width: 400px;
+  height: 50px;
+  margin-top: 105px;
+}
+
+.keyBoardBox {
+  margin-top: 8px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 420px;
+  height: 60px;
+}
+
+.inputCommon {
+  width: 74px;
+  height: 54px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.clearAll {
+  width: 74px;
+  height: 54px;
+  margin-top: -327px;
+  margin-left: -318px;
+  border-color: #000;
+}
+
+.input1 {
+  background-color: #F53333;
+}
+
+.delIcon {
+  width: 30px;
+  height: 22px;
+  margin-left: 320px;
+  margin-top: 28px;
+}

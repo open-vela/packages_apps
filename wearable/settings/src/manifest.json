@@ -1,0 +1,37 @@
+{
+  "package": "com.application.setting",
+  "name": "vela-demo-1",
+  "versionName": "1.0.2",
+  "versionCode": 1,
+  "minPlatformVersion": 1000,
+  "icon": "/common/logo.png",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 466,
+    "background": { 
+      "features": [
+        "system.audio",
+        "system.request"
+      ]
+    }
+  },
+  "router": {
+    "entry": "pages/home",
+    "pages": {
+      "pages/home": {
+        "component": "index"
+      },
+      "pages/detail": {
+        "component": "index"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "this is a vela project",
+  "engines": {
+    "node": ">=8.10"
+  },
+  "scripts": {
+    "start": "aiot server --watch --open-nuttx --enable-custom-component",
+    "build": "aiot build --enable-custom-component",
+    "release": "aiot release",
+    "server": "aiot server",
+    "watch": "aiot watch",
+    "lint": "eslint --format codeframe --fix --ext .ux,.js src/"
+  },
+  "devDependencies": {
+    "@aiot-toolkit/velasim": "^0.1.25",
+    "aiot-toolkit": "1.1.4",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-ux": "^0.0.4"
+  }
+}

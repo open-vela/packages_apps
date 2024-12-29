@@ -1,0 +1,155 @@
+<template>
+  <div>
+    <stack class="container">
+      <list class="list" onswipe="touchMove">
+        <list-item class="date" type="date">
+          <text class="date-text">
+            {{task.dateString}}
+          </text>
+        </list-item>
+        <list-item class="title" type="title">
+          <text class="title-text">{{task.title}}</text>
+        </list-item>
+        <list-item class="desc" type="desc">
+          <text class="desc-text">
+            {{task.desc}}
+          </text>
+        </list-item>
+        <list-item for="{{(index, item) in task.checklistItem}}" class="itemWrapper" type="itemWrapper">
+          <image src="/common/checkbox.png" class="image" onclick="subTaskDone(index)"></image>
+          <div class="contentWrapper" onclick="toDetail(item)">
+            <text class="item-title-text">{{item.title}}</text>
+            <text class="item-date-text">{{item.dateString}}</text>
+          </div>
+        </list-item>
+        <list-item class="bottom" type="bottom"></list-item>
+      </list>
+      <div class="confirm" onclick="done">
+        <div class="confirm-btn">
+          <text class="confirm-text">确认</text>
+        </div>
+      </div>
+    </stack>
+  </div>
+</template>
+
+<script>
+import router from "@system.router";
+
+export default {
+  data: {
+    task: {}
+  },
+  onInit() {
+    const task =
+      typeof this.pushTask === "string"
+        ? JSON.parse(this.pushTask)
+        : this.pushTask;
+    this.initTask(task);
+  },
+  toDetail(task) {
+    router.push({
+      uri: "pages/detail",
+      params: {
+        pushTask: task
+      },
+    });
+  },
+  initTask(task) {
+    this.task = task;
+  },
+  subTaskDone(index) {
+    this.task.checklistItem.splice(index, 1)
+  },
+  done() {
+    router.back()
+  },
+  touchMove: function (e) {
+    if (e.direction == "right") {
+      router.back();
+    }
+  }
+}
+</script>
+
+<style>
+@import "./radioLessThanHalf.css" screen and (aspect-ratio < 1/2);
+@import "./radioMoreThanHalf.css" screen and (aspect-ratio >= 1/2) and (aspect-ratio < 1/1);
+@import "./radioMoreThanOne.css" screen and (aspect-ratio >= 1);
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.list {
+  width: 100%;
+  height: 100%;
+}
+
+text {
+  color: white;
+  text-overflow: ellipsis;
+}
+
+.date-text {
+  width: 100%;
+  text-align: center;
+  color: #ff6a24;
+}
+
+.title {
+  width: 100%;
+  justify-content: center;
+}
+
+.title-text {
+  flex-wrap: wrap;
+}
+
+.desc {
+  width: 100%;
+}
+
+.desc-text {
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.itemWrapper {
+  width: 100%;
+  justify-content: center;
+}
+
+.contentWrapper {
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-date-text {
+  color: #6f6f6f;
+}
+
+.bottom {
+  width: 100%;
+}
+
+.confirm {
+  position: absolute;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.confirm-btn {
+  width: 220px;
+  background-color: #2c2b35;
+  align-items: center;
+}
+
+.confirm-text {
+  width: 220px;
+  text-align: center;
+  color: white;
+}
+
+</style>

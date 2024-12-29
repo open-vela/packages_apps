@@ -1,0 +1,248 @@
+<template>
+  <div class="demo-page">
+    <!-- 歌曲信息 -->
+    <div class="song">
+      <marquee class="song-name" scrollamount="{{36}}">
+        {{ currSong.name || "未知" }}
+      </marquee>
+      <marquee class="singer-name" scrollamount="{{36}}">
+        {{ currSong.artists || "未知" }}
+      </marquee>
+    </div>
+    <!-- 播放控制按钮 -->
+    <div class="controls">
+      <image class="icon" src="/common/icon/prev.png" onclick="change(-1)" />
+      <div class="play-button">
+        <!-- 播放进度条 -->
+        <div class="progress-container">
+          <progress class="play-progress" type="arc" percent="{{progress}}"></progress>
+        </div>
+        <image class="icon" if="{{isPlaying}}" src="/common/icon/pause.png" onclick="playOrPause" />
+        <image class="icon" else src="/common/icon/play.png" onclick="playOrPause" />
+      </div>
+      <image class="icon" src="/common/icon/next.png" onclick="change(1)" />
+    </div>
+    <!-- 底部操作按钮 -->
+    <div class="footer">
+      <image class="icon" src="/common/icon/volume.png" onclick="goToVolume" />
+      <image class="icon" src="/common/icon/play-list.png" onclick="goToList" />
+    </div>
+  </div>
+</template>
+
+<script>
+import router from "@system.router";
+import audio from "@system.audio";
+
+export default {
+	data: {
+		// 当前歌曲索引
+		index: 0,
+		// 当前播放的歌曲信息
+		currSong: null,
+		// 需要播放的歌曲列表
+		songList: [
+			{
+				id: 1,
+				name: "静止",
+				artists: "花儿乐队",
+				playUrl: "http://music.163.com/song/media/outer/url?id=357424.mp3",
+			},
+			{
+				id: 2,
+				name: "生活因你而火热",
+				artists: "新裤子",
+				playUrl: "http://music.163.com/song/media/outer/url?id=406737702.mp3",
+			},
+			{
+				id: 3,
+				name: "你要跳舞吗",
+				artists: "新裤子",
+				playUrl: "http://music.163.com/song/media/outer/url?id=408055928.mp3",
+			},
+		],
+		// 是否在播放
+		isPlaying: false,
+		// 当前播放进度
+		progress: 0,
+	},
+
+	onInit() {
+		this.currSong = this.songList[this.index];
+		// 音频开始播放事件
+		audio.onplay = () => {
+			this.isPlaying = true;
+		};
+		// 音频暂停播放事件
+		audio.onpause = () => {
+			this.isPlaying = false;
+		};
+		// 音频停止播放事件
+		audio.onstop = () => {
+			this.isPlaying = false;
+		};
+		// 音频播放随时间更新事件
+		audio.ontimeupdate = () => {
+			this.progress = audio.percent;
+		};
+		// 音频播放结束事件
+		audio.onended = () => {
+			this.change(1);
+		};
+	},
+
+	onReady() {
+		if (this.songId) {
+			this.index = this.songList.findIndex((item) => item.id === this.songId);
+			this.currSong = this.songList[this.index];
+		}
+		setTimeout(this.playCurrsong, 1000);
+	},
+
+	playCurrsong() {
+		audio.stop();
+		audio.src = this.currSong.playUrl;
+		audio.play();
+	},
+
+	playOrPause() {
+		if (this.isPlaying) {
+			audio.pause();
+		} else {
+			audio.play();
+		}
+	},
+
+	change(dir) {
+		this.index =
+			(this.index + dir + this.songList.length) % this.songList.length;
+		this.currSong = this.songList[this.index];
+		this.playCurrsong();
+	},
+
+	goToVolume() {
+		router.push({
+			uri: "/pages/volume",
+		});
+	},
+
+	goToList() {
+		router.push({
+			uri: "/pages/list",
+		});
+	},
+};
+</script>
+
+<style>
+.demo-page {
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #000;
+}
+
+.progress-container {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 200px;
+	height: 200px;
+	justify-content: center;
+	align-items: center;
+}
+.play-button {
+	width: 200px;
+	height: 200px;
+	justify-content: center;
+	align-items: center;
+}
+
+.play-progress {
+	radius: 74px;
+	stroke-width: 14px;
+	start-angle: 4deg;
+	total-angle: 360deg;
+	color: #ff3a3a;
+	layer-color: rgba(255, 255, 255, 0.1);
+}
+
+.song {
+	width: 320px;
+	height: 160px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.song-name {
+	width: 320px;
+	font-size: 42px;
+	color: #ffffff;
+	lines: 1;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+.singer-name {
+	width: 300px;
+	font-size: 26px;
+	color: rgba(255, 255, 255, 0.8);
+	lines: 1;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+.controls {
+	width: 360px;
+	height: 160px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.icon {
+	width: 64px;
+	height: 64px;
+}
+
+.footer {
+	width: 320px;
+	height: 160px;
+	justify-content: space-around;
+	align-items: center;
+}
+
+@media (max-width: 212) {
+	.footer {
+		width: 100%;
+	}
+	.controls {
+		width: 100%;
+	}
+	.singer-name {
+		width: 100%;
+	}
+	.progress-container {
+		width: 100%;
+	}
+	.play-button {
+		width: 100px;
+	}
+
+	.play-progress {
+		radius: 46px;
+	}
+
+	.song {
+		width: 100%;
+	}
+	.song-name {
+		width: 100%;
+	}
+	.icon {
+		width: 48px;
+		height: 48px;
+	}
+}
+</style>

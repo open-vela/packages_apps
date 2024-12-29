@@ -1,0 +1,294 @@
+<template>
+  <div class="home-page" @swipe="handleSwipe">
+    <div class="header">
+      <div class="year-month">
+        <text class="title">{{ year }}年</text>
+        <text class="title">{{ month < 10 ? "0" + month : month }}月</text>
+      </div>
+      <div class="week-head">
+        <text class="week-text weekend">日</text>
+        <text class="week-text">一</text>
+        <text class="week-text">二</text>
+        <text class="week-text">三</text>
+        <text class="week-text">四</text>
+        <text class="week-text">五</text>
+        <text class="week-text weekend">六</text>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <div class="list">
+      <div for="row in list" class="item" style="height: {{height}}">
+        <div class="cell" for="cell in row" tid="id">
+          <text @click="handleClick(cell)" class="{{cell.className}}">
+            {{ cell.value }}
+          </text>
+        </div>
+      </div>
+    </div>
+    <div else class="container" if="{{$app.$def.screenShape === 'pill-shaped'}}">
+      <text @click="backClick">返回</text>
+    </div>
+  </div>
+</template>
+
+<script>
+import router from "@system.router";
+import app from "@system.app";
+export default {
+	private: {
+		date: new Date(),
+		year: "",
+		month: "",
+		list: null,
+		height: "50px",
+	},
+
+	onInit() {
+		this.initList();
+		this.getCalendar();
+	},
+
+	initList() {
+		let list = [];
+		for (let i = 0; i < 5; i++) {
+			let initArray = new Array(7).fill("x").map((item) => {
+				return {
+					value: "",
+					className: "",
+				};
+			});
+			list.push(initArray);
+		}
+
+		this.list = list;
+	},
+	backClick() {
+		app.terminate();
+	},
+
+	isToday(yy, mm, dd) {
+		const date = new Date();
+		const year = date.getFullYear();
+		const month = date.getMonth() + 1;
+		const day = date.getDate();
+		return yy === year && mm === month && dd === day;
+	},
+
+	getCalendar() {
+		const year = this.date.getFullYear();
+		const month = this.date.getMonth();
+
+		// 获取当月第一天为周几
+		const firstDay = new Date(year, month, 1).getDay();
+
+		// 获取当月的天数
+		const days = new Date(year, month + 1, 0).getDate();
+
+		this.year = year;
+		this.month = month + 1;
+
+		// 确定list的行数，设置每一行的高度
+		const rows = Math.ceil((days + firstDay) / 7);
+		this.updateListRows(rows);
+		this.height = 300 / rows + "px";
+
+		/**
+		 * 更新日历：
+		 * 1. 从当月第一天开始，根据总天数来进行更新
+		 * 2. 前面的空白和后面的空白用“”来填充
+		 * 3. 样式为“”或者“today”
+		 */
+		let count = 1;
+		for (let i = 0; i < rows; i++) {
+			for (let j = 0; j < 7; j++) {
+				if (j === 0 || j === 6) {
+					this.list[i][j].className = "cell-text-weekend";
+				} else {
+					this.list[i][j].className = "cell-text-workday";
+				}
+
+				if (i === 0 && j < firstDay) {
+					this.list[i][j].value = "";
+					continue;
+				}
+				if (count > days) {
+					this.list[i][j].value = "";
+					continue;
+				}
+
+				this.list[i][j].value = count;
+				this.list[i][j].id = "" + this.year + this.month + count;
+
+				if (this.isToday(this.year, this.month, count)) {
+					this.list[i][j].className = "cell-text-today";
+				}
+
+				count += 1;
+			}
+		}
+	},
+
+	updateListRows(rows) {
+		while (this.list.length < rows) {
+			let initArray = new Array(7).fill("x").map((item) => {
+				return {
+					value: "",
+					className: "",
+				};
+			});
+			this.list.push(initArray);
+		}
+
+		while (this.list.length > rows) {
+			this.list.pop();
+		}
+	},
+
+	prevMonth() {
+		this.date = new Date(this.year, this.month - 1, 0);
+		this.getCalendar();
+	},
+
+	nextMonth() {
+		this.date = new Date(this.year, this.month + 1, 0);
+		this.getCalendar();
+	},
+
+	handleClick(item) {
+		if (item.value === "") return;
+		router.push({
+			uri: "pages/detail",
+			params: {
+				year: this.year,
+				month: this.month,
+				day: item.value,
+			},
+		});
+	},
+
+	handleSwipe(eve) {
+		if (eve.direction === "left") {
+			this.nextMonth();
+		} else if (eve.direction === "right") {
+			this.prevMonth();
+		}
+	},
+};
+</script>
+
+<style>
+.home-page {
+	width: 100%;
+	height: 100%;
+	border-radius: 240px;
+	flex-direction: column;
+}
+
+@media not (width <= 212) {
+	.home-page {
+		width: 100%;
+		height: 100%;
+		border-radius: 240px;
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+.header {
+	width: 350px;
+	height: 80px;
+	margin-top: 20px;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.year-month {
+	width: 240px;
+	height: 60px;
+	justify-content: center;
+	align-items: center;
+}
+.container {
+	justify-content: center;
+	padding: 10px;
+	color: white;
+	border-radius: 20px;
+	margin: 0px 20px 0px 20px;
+	background-color: grey;
+}
+
+.title {
+	font-weight: 700;
+}
+
+.red {
+	color: #f00;
+}
+
+.week-head {
+	width: 350px;
+	justify-content: center;
+	align-items: center;
+}
+
+.week-text {
+	width: 50px;
+	font-weight: 700;
+	color: #fff;
+	text-align: center;
+}
+
+.weekend {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.divider {
+	width: 100%;
+	height: 2px;
+	margin-top: 4px;
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+.list {
+	width: 350px;
+	height: 300px;
+	flex-direction: column;
+}
+
+.item {
+	width: 100%;
+}
+
+.cell {
+	width: 50px;
+	height: 100%;
+}
+
+.cell-text-workday {
+	width: 100%;
+	height: 100%;
+	font-weight: 700;
+	text-align: center;
+	color: rgba(255, 255, 255, 1);
+	background-color: transparent;
+}
+
+.cell-text-weekend {
+	width: 100%;
+	height: 100%;
+	font-weight: 700;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.6);
+	background-color: transparent;
+}
+
+.cell-text-today {
+	width: 100%;
+	height: 100%;
+	font-weight: 700;
+	text-align: center;
+	color: rgba(255, 255, 255, 1);
+	background-color: #ff3a3a;
+}
+</style>

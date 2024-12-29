@@ -1,0 +1,65 @@
+.today-text {
+  padding-top: 46px;
+  height: 226px;
+  padding-bottom: 46px;
+  font-size: 60px;
+}
+
+.complete-text {
+  margin-top: 120px;
+  font-size: 60px;
+}
+
+.item-box {
+  flex: 1;
+  flex-direction: column;
+}
+
+.itemWrapper {
+  margin-top: 10px;
+  background-color:#202020;
+  border-radius: 40px;
+}
+
+.image {
+  padding-top: 10%;
+  width: 90px;
+  height: 90px;
+}
+
+.contentWrapper {
+  width: 332px;
+}
+
+.title-text {
+  width: 332px;
+  font-size: 60px;
+  margin-right: 10px;
+  height: 100%;
+}
+
+.content-common {
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.date-text-box {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.date-text {
+  height: 80%;
+  width: 332px;
+  font-size: 54px;
+  margin-right: 10px;
+  padding-bottom: 10%;
+}
+
+.more-text {
+  padding-top: 46px;
+  padding-bottom: 46px;
+  height: 226px;
+  font-size: 60px;
+}

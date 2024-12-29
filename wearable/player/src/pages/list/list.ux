@@ -1,0 +1,149 @@
+<template>
+  <div class="list-container">
+    <text class="title" onclick="goBack">返回</text>
+    <list class="list">
+      <list-item for="{{(index, item) in songList}}" class="item" onclick="play(item)" tid="id" type="song">
+        <text class="item-index">{{ index + 1 }}</text>
+        <div class="detail">
+          <text class="item-title">{{ item.name }}</text>
+          <text class="item-subtitle">{{ item.artists }}</text>
+        </div>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<script>
+import router from "@system.router";
+
+export default {
+	data: {
+		songList: [
+			{
+				id: 1,
+				name: "静止",
+				artists: "花儿乐队",
+				playUrl: "http://music.163.com/song/media/outer/url?id=357424.mp3",
+			},
+			{
+				id: 2,
+				name: "生活因你而火热",
+				artists: "新裤子",
+				playUrl: "http://music.163.com/song/media/outer/url?id=406737702.mp3",
+			},
+			{
+				id: 3,
+				name: "你要跳舞吗",
+				artists: "新裤子",
+				playUrl: "http://music.163.com/song/media/outer/url?id=408055928.mp3",
+			},
+		],
+	},
+
+	play(item) {
+		router.replace({
+			uri: "/pages/player",
+			params: {
+				songId: item.id,
+			},
+		});
+	},
+
+	goBack() {
+		router.back();
+	},
+};
+</script>
+
+<style>
+.list-container {
+	width: 100%;
+	height: 100%;
+	padding: 40px;
+	flex-direction: column;
+	align-items: center;
+	background-color: black;
+}
+
+.title {
+	font-size: 40px;
+	text-align: center;
+	color: #ff3a3a;
+}
+
+.list {
+	width: 360px;
+	margin-top: 10px;
+	height: 300px;
+}
+
+.item {
+	display: flex;
+	width: 100%;
+	height: 100px;
+	padding-bottom: 8px;
+}
+
+.item-index {
+	width: 60px;
+	height: 100%;
+	text-align: center;
+}
+
+.detail {
+	flex: 1;
+	height: 100%;
+	flex-direction: column;
+}
+
+.item-title {
+	width: 100%;
+	font-size: 34px;
+	height: 56px;
+	line-height: 56px;
+	color: #ffffff;
+	lines: 1;
+	text-overflow: ellipsis;
+}
+
+.item-subtitle {
+	width: 100%;
+	font-size: 28px;
+	height: 44px;
+	line-height: 44px;
+	color: rgba(255, 255, 255, 0.6);
+	lines: 1;
+	text-overflow: ellipsis;
+}
+@media (max-width: 212) {
+	.list-container {
+		padding: 10px;
+	}
+	.list {
+		width: 100%;
+		margin-top: 10px;
+	}
+	.title {
+		font-size: 28px;
+	}
+
+	.item {
+		display: flex;
+		width: 100%;
+		height: 100px;
+		padding-bottom: 8px;
+	}
+
+	.item-index {
+		width: 40px;
+		height: 100%;
+		text-align: center;
+	}
+	.item-title {
+		font-size: 22px;
+	}
+	.item-subtitle {
+		font-size: 20px;
+	}
+}
+</style>

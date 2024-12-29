@@ -1,0 +1,154 @@
+<!-- 按键横纵均等比分配 -->
+<template>
+  <div class="container" onswipe="touchMove">
+    <div class="container" if="{{$app.$def.screenShape === 'circle'}}">
+      <div class="resultBox">
+        <text class="resultShow">{{resultShow}}</text>
+      </div>
+      <div class="keyBoardBox">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[1]}};" value="{{keyBoardNum[1]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[2]}};" value="{{keyBoardNum[2]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[3]}};" value="{{keyBoardNum[3]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[4]}};" value="{{keyBoardNum[4]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[5]}};" value="{{keyBoardNum[5]}}">
+      </div>
+      <div class="keyBoardBox">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[6]}};" value="{{keyBoardNum[6]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[7]}};" value="{{keyBoardNum[7]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[8]}};" value="{{keyBoardNum[8]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[9]}};color:{{signColorList[3]}}" value="{{keyBoardNum[9]}}">
+          <input type="button"  class="inputCommon" style="background-color: {{clickColorList[10]}};color:{{signColorList[1]}}" value="{{keyBoardNum[10]}}">
+      </div>
+      <div class="keyBoardBox">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[11]}};" value="{{keyBoardNum[11]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[12]}};" value="{{keyBoardNum[12]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[13]}};" value="{{keyBoardNum[13]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[14]}};color:{{signColorList[2]}}" value="{{keyBoardNum[14]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[15]}};color:{{signColorList[0]}}" value="{{keyBoardNum[15]}}">
+      </div>
+      <div class="keyBoardBox">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[16]}};" value="{{keyBoardNum[16]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[17]}};" value="{{keyBoardNum[17]}}">
+          <input type="button" class="inputCommon" style="background-color: {{clickColorList[18]}};" value="{{keyBoardNum[18]}}">
+      </div>
+      <input type="button"  class="clearAll" style="background-color: {{clickColorList[0]}};" value="{{keyBoardNum[0]}}">
+      <image src="../../res/textures/del.png" class="delIcon" ></image>
+    </div>
+    <div else class="container" if="{{$app.$def.screenShape === 'rect'}}">
+      <div class="resultBox">
+        <text class="resultShow">{{resultShow}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon input1">AC</text>
+        <text class="inputCommon input1">D</text>
+        <text class="inputCommon input1">{{keyBoardNum[19]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[15]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[1]}}</text>
+        <text class="inputCommon">{{keyBoardNum[2]}}</text>
+        <text class="inputCommon">{{keyBoardNum[3]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[10]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[6]}}</text>
+        <text class="inputCommon">{{keyBoardNum[7]}}</text>
+        <text class="inputCommon">{{keyBoardNum[8]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[14]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[11]}}</text>
+        <text class="inputCommon">{{keyBoardNum[12]}}</text>
+        <text class="inputCommon">{{keyBoardNum[13]}}</text>
+        <text  class="inputCommon input1">{{keyBoardNum[9]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <input onclick="exit" class="inputCommon input1" value="退出"></input>
+        <text class="inputCommon">{{keyBoardNum[16]}}</text>
+        <text class="inputCommon">{{keyBoardNum[17]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[18]}}</text>
+      </div>
+    </div>
+    <div else class="container" if="{{$app.$def.screenShape === 'pill-shaped'}}">
+      <div class="resultBox">
+        <text class="resultShow result-text">{{resultShow}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon input1">AC</text>
+        <text class="inputCommon input1">D</text>
+        <text class="inputCommon input1">{{keyBoardNum[19]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[15]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[1]}}</text>
+        <text class="inputCommon">{{keyBoardNum[2]}}</text>
+        <text class="inputCommon">{{keyBoardNum[3]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[10]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[6]}}</text>
+        <text class="inputCommon">{{keyBoardNum[7]}}</text>
+        <text class="inputCommon">{{keyBoardNum[8]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[14]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <text class="inputCommon">{{keyBoardNum[11]}}</text>
+        <text class="inputCommon">{{keyBoardNum[12]}}</text>
+        <text class="inputCommon">{{keyBoardNum[13]}}</text>
+        <text  class="inputCommon input1">{{keyBoardNum[9]}}</text>
+      </div>
+      <div class="keyBoardBox">
+        <input onclick="exit" class="inputCommon input1" value="退出"></input>
+        <text class="inputCommon">{{keyBoardNum[16]}}</text>
+        <text class="inputCommon">{{keyBoardNum[17]}}</text>
+        <text class="inputCommon input1">{{keyBoardNum[18]}}</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import app from '@system.app';
+import device from '@system.device';
+const MinusIcon = '+/-';
+const DelIcon = ' ';
+
+export default {
+  data: {
+    resultShow: '0',
+    keyBoardNum: ['C', '7', '8', '9', MinusIcon, DelIcon, '4', '5', '6', '+', 'x', '1', '2', '3', '-', '/', '0', '.', '=', '%'],
+    commonColorList: ['#F53333', '#505050', '#505050', '#505050', '#505050', '#FFA626', '#505050', '#505050', '#505050', '#FFA626', '#FFA626', '#505050', '#505050', '#505050', '#FFA626', '#FFA626', '#505050', '#505050', '#FFA626'],
+    clickColorList: [],
+    signColorList: ['#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFFFF']
+  },
+
+  onInit() {
+    const that = this
+    this.clickColorList = this.commonColorList.slice();
+  },
+
+  exit() {
+    app.terminate();
+  },
+
+};
+</script>
+
+<style>
+@import "./circle.css" screen and (shape: circle);
+@import "./rect.css" screen and (shape: rect);
+@import "./pillShaped.css" screen and (shape: pill-shaped);
+.container {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resultShow {
+  color: rgb(254, 243, 232);
+  font-size: 40px;
+  text-align: right;
+}
+
+</style>

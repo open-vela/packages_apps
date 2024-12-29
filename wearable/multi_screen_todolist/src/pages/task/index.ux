@@ -1,0 +1,212 @@
+<template>
+  <div class="list" onswipe="touchMove">
+    <text class="today-text" onclick="toPrev">{{showPrev ? '上一页' : '今日任务'}}</text>
+    <div class="item-box">
+      <div for="{{(index, task) in pageTasks}}" class="item-wrapper">
+        <div class="content-common">
+          <image src="/common/checkbox.png" class="image"></image>
+          <text class="title-text" onclick="toDetail(task)">{{task.title}}</text>
+        </div>
+        <div class="date-text-box" onclick="toDetail(task)">
+          <text class="date-text">{{task.dateString}}</text>
+        </div>
+      </div>
+    </div>
+    <text show="{{showNext}}" onclick="toNext" class="more-text">下一页</text>
+  </div>
+</template>
+
+<script>
+import router from "@system.router";
+import app from "@system.app";
+
+export default {
+  data: {
+    tasks: [
+      {
+        title: '参观南京市红山动物园',
+        dateString: '9月24日',
+        desc: '在南京市红山动物园看熊猫、天鹅、长颈鹿、兔子、海豚、孔雀......',
+        checklistItem: [
+          {   
+            title: '任务一：看海豚展',
+            dateString: '9月24日',
+            desc: '9月24日上午在海豚馆观看海豚表演',
+          },{
+            title: '任务二：参加教育活动',
+            dateString: '9月24日',
+            desc: '9月24日上午参加红山动物园的教育活动，如动物讲座、观察动物的行为和生态，了解如何保护野生动物等',
+          },{
+            title: '任务三：购买纪念品',
+            dateString: '9月24日',
+            desc: '9月24日下午购买动物园纪念品，如T恤、玩具、明信片等。',
+          }
+        ]
+      }, 
+      {
+        title: '逛苏州园林',
+        dateString: '9月24日',
+        desc: '苏州园林有着悠久的历史和文化遗产，如虎丘、拙政园等。可以通过参观这些古迹了解园林的历史和文化。',
+        checklistItem: 
+        [
+          {   
+            title: '任务一：欣赏园林建筑',
+            dateString: '9月24日',
+            desc: '苏州园林以其独特的风格和美丽的景色而闻名。可以在园林中漫步，欣赏各种建筑、山水、花卉和文化遗产。',
+          },
+          {   
+            title: '任务二：参加传统文化活动',
+            dateString: '9月24日',
+            desc: '尝试传统文化活动：苏州园林是中国传统文化的重要组成部分，您可以在园林中尝试传统文化活动，如品茶、品味苏州小吃、体验园林文化等。',
+          },
+          { 
+            title: '任务三：拍照留念园林景色',
+            dateString: '9月24日',
+            desc: '苏州园林是拍照的好地方，可以在园林中拍摄美丽的风景和建筑，留下美好的回忆。',
+          }
+        ]
+      }, 
+      {
+        title: '参观南京博物馆',
+        dateString: '9月24日',
+        desc: '南京博物馆定期举办各种文化活动，包括讲座、展览、文艺表演等，可以参加这些活动丰富自己的文化生活。',
+      }, 
+      {
+        title: '南京紫金山登山活动',
+        dateString: '9月24日',
+        desc: '南京钟山林风景区景色优美，徒步紫金山可以登高望远，锻炼身体。',
+      }, 
+      {
+        title: '逛夫子庙',
+        dateString: '9月24日',
+        desc: '夫子庙周边有许多有名的美食街和小吃摊，如鸭血粉丝汤、臭豆腐、糖葫芦等，可以品尝地道的南京小吃。',
+      }
+    ],
+    pageTasks: [],
+    showPrev: false,
+    showNext: true,
+    showMore: false,
+    isShow: false,
+    page: 0
+  },
+
+  onShow() {
+    this.updatePageTask()
+  },
+
+  updatePageTask() {
+    const start = this.page * 3
+    const end = (this.page + 1) * 3
+    this.pageTasks = this.tasks.slice(start, end)
+    if (end >= this.tasks.length) this.showNext = false
+  },
+
+  toPrev() {
+    if (this.page === 0) return
+    this.page--
+    if (this.page === 0) this.showPrev = false
+
+    this.updatePageTask()
+    if (this.page !== 5) this.showNext = true
+  },
+
+  toNext() {
+    this.page++
+    if (this.page > 0) this.showPrev = true
+    if (this.page === 5) this.showNext = false
+    this.updatePageTask()
+  },
+  toDetail(task) {
+    router.push({
+      uri: "pages/detail",
+      params: {
+        pushTask: task
+      },
+    });
+  },
+  touchMove: function (e) {
+    if (e.direction == "right") {
+      app.terminate();
+    }
+  },
+};
+</script>
+
+<style>
+@import "./radioLessThanHalf.css" screen and (aspect-ratio < 1/2);
+@import "./radioMoreThanHalf.css" screen and (aspect-ratio > 1/2) and (aspect-ratio < 1/1);
+@import "./radioMoreThanOne.css" screen and (aspect-ratio >= 1);
+
+.list {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.today-text {
+  width: 100%;
+  text-align: center;
+  color: #ff6a24;
+}
+
+.complete-text {
+  width: 100%;
+  text-align: center;
+  color: #6f6f6f;
+}
+
+text {
+  font-size: 30px;
+  color: white;
+  text-overflow: ellipsis;
+  lines: 1;
+}
+
+.item-box {
+  flex: 1;
+  flex-direction: column;
+}
+
+.content-common {
+  width: 100%;
+  height: 50%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.date-text-box {
+  width: 100%;
+  height: 50%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.item-wrapper {
+  width: 100%;
+  height: 30%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.image {
+  margin-right: 10px;
+}
+
+.content-wrapper {
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  border:1px solid pink;
+}
+
+.date-text {
+  color: #6f6f6f;
+}
+
+.more-text {
+  width: 100%;
+  text-align: center;
+  color: #ff6a24;
+}
+</style>
