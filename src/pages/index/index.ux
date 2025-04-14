@@ -1,0 +1,178 @@
+<template>
+  <div class="container">
+    <image class="background" src="/common/icons/bg.jpg"></image>
+    <div class="page" >
+      <!-- 头部城市信息 -->
+      <div class="title">
+        <text class="time">{{time}}</text>
+        <text class="title-text">{{title}}</text>
+      </div>
+      <div class="body">
+        <div class="scroll-container">
+          <!-- 未来7天天气 -->
+          <scroll class="list" scroll-y="true"  style="scroll-snap-type: y proximity;">
+            <div class="item" for="{{list}}" >
+              <text class="date">{{$item.fxDate}}</text>
+              <div class="temp-wrapper">
+                <text class="temp">{{$item.tempMin}}°~{{$item.tempMax}}°</text>
+                <image class="icon" src="/common/icons/{{$item.iconDay}}.png"></image>
+              </div>
+            </div>
+          </scroll>
+        </div>
+      </div>
+    </div>
+  </div>  
+</template>
+
+
+<script>
+export default {
+  private: {
+    time:'12:00',
+    title:'未来天气',
+    list: [
+      {
+        "fxDate": "今天",
+        "tempMax": "12",
+        "tempMin": "1",
+        "iconDay": "101",
+        "textDay": "多云",
+      },
+      {
+        "fxDate": "明天",
+        "tempMax": "13",
+        "tempMin": "0",
+        "iconDay": "100",
+        "textDay": "晴"
+      },
+      {
+        "fxDate": "周二",
+        "tempMax": "13",
+        "tempMin": "0",
+        "iconDay": "302",
+        "textDay": "晴",
+        "iconNight": "150",
+        "textNight": "晴"
+      },
+      {
+        "fxDate": "周三",
+        "tempMax": "12",
+        "tempMin": "1",
+        "iconDay": "101",
+        "textDay": "多云",
+      },
+      {
+        "fxDate": "周四",
+        "tempMax": "13",
+        "tempMin": "1",
+        "iconDay": "100",
+        "textDay": "晴"
+      },
+      {
+        "fxDate": "周五",
+        "tempMax": "13",
+        "tempMin": "2",
+        "iconDay": "302",
+        "textDay": "晴",
+        "iconNight": "150",
+        "textNight": "晴"
+      },
+      {
+        "fxDate": "周六",
+        "tempMax": "13",
+        "tempMin": "1",
+        "iconDay": "302",
+        "textDay": "晴",
+        "iconNight": "150",
+        "textNight": "晴"
+      }
+    ]
+  }
+}
+</script>
+
+
+<style>
+.container{
+  /* 容器尺寸需占满屏幕 */
+  width: 100%;
+  height: 100%;
+  /* 禁止滚动 */
+  overflow-x: hidden;
+  color: #fff; /* 全局字体基准色 */
+}
+
+.background {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: blur(1px);
+}
+.page {
+  /* 交叉轴居中 */
+   align-items: center;
+   /* 纵向排列 */
+   flex-direction: column;
+}
+
+.title {
+    flex-direction: column;
+    align-items: center;
+  }
+.title-text {
+    font-size: 72px;
+}
+
+ /* 天气数据样式 */
+.body {
+  flex: 1;
+}
+
+/* 在.scroll-container添加溢出控制 */
+.scroll-container {
+  width: 100%; /* 限制容器宽度 */
+  overflow: hidden; /* 禁止溢出滚动 */
+}
+
+
+/* 未来7天天气 */
+.list {
+  width: 450px;
+  height: 95%;
+  /* 纵向排列 */
+  flex-direction: column;
+  padding-left: 60px; /* 容器左侧留白 */
+}
+
+.item {
+  width: 95%;
+  height: 230px;
+  background-color: rgba(255, 255, 255, 0.01);
+  /* 内部元素定位 */
+  position: relative;
+  /* 纵向排列 */
+  flex-direction: column;
+}
+
+.temp-wrapper {
+  display: flex;
+  flex-direction: row;  /* 横向排列元素*/
+  align-items: center;  /* 垂直居中 */
+  gap: 50px;            /* 元素间距 */
+}
+.date {
+  font-size: 80px;
+}
+
+.temp {
+  font-size: 70px;
+}
+
+.icon {
+  width: 150px;
+  height: 150px;
+}
+
