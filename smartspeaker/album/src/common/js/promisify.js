@@ -1,5 +1,5 @@
 /**
- * Convert Vela's asynchronous API into Promise.
+ * 将Vela的异步 API 转换成 Promise
  * @param {Object} feature
  * @param {String} methodName
  * @example

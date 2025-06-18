@@ -1,0 +1,139 @@
+<template>
+  <div class="home">
+    <div class="header">
+      <text class="header-title">长列表滚动示例</text>
+    </div>
+    <scroll class="w-full relative flex-col overflow-auto" scroll-y="true" style="height:{{scrollHeight}}px" @scroll="handleScroll">
+      <div class="w-full relative flex-col overflow-auto" style="{{ getStyle }}">
+        <div class="h-100 w-full flex-col pl-0" for="{{showList}}">
+          <text class="w-full text-center lh-100">{{$item}}</text>
+        </div>
+      </div>
+    </scroll>
+  </div>
+</template>
+
+<script>
+import device from '@system.device' 
+
+const ITEM_HEIGHT = 100
+const SHOW_NUM = 32
+const MARGIN_TOP = 40
+const HEADER_TEXT = 60
+let arrStart = [0]
+let lastScrollX = 0
+export default {
+  private: {
+    data: new Array(100).fill(1).map((item, index) => index),
+    start: 0,
+    scrollY: 0,
+    scrollHeight: 380,
+  },
+  onInit() {
+    device.getInfo({
+      success: (data) => {
+        const {screenWidth, screenHeight, screenShape} = data
+        if(screenShape === 'circle' || screenShape === 'pill-shaped') {
+          // 减去头部的100px
+          this.scrollHeight = screenHeight - MARGIN_TOP - HEADER_TEXT
+        }
+        else if(screenShape === 'rect') {
+          // 减去头部的60px
+          this.scrollHeight = screenHeight  - HEADER_TEXT
+        }
+        console.log("[album] [list.ux] ### onInit ### getInfo ",data)
+      },
+      fail: (data, code) => {}
+    })
+    console.log("[album] [list.ux] ### onInit ### ", this.data.slice(this.start, Math.min(this.start + SHOW_NUM, this.data.length)))
+  },
+  computed: {
+    paddingTop() {
+      return this.start * ITEM_HEIGHT
+    },
+    showList() {
+      return this.data.slice(this.start, Math.min(this.start + SHOW_NUM, this.data.length))
+    },
+    getStyle() {
+      return {
+        paddingTop: `${this.paddingTop}px`
+      }
+    }
+  },
+  // 可视区域渲染数据计算
+  async handleScroll(e) {
+    try {
+      const {scrollY} = e
+      // console.log("### handleScroll ### start scrollY ", this.start, scrollY)
+      //左滑ITEM_HEIGHT
+      if (scrollY > lastScrollX) {
+        if (scrollY + this.scrollHeight >= ITEM_HEIGHT * (this.start + SHOW_NUM)) {
+          const newStart = Math.floor(scrollY / ITEM_HEIGHT)
+          let st = Math.min(this.data.length - SHOW_NUM, newStart >= 0 ? newStart : 0)
+          this.start = st >= 0 ? st : 0
+          arrStart.push(this.start)
+          console.log(
+            "[album] [list.ux] ### handleScroll ### zuohua ###: ",
+            this.start,
+            scrollY,
+            arrStart
+          )
+        }
+      } else {
+        if (
+          
+          scrollY < ITEM_HEIGHT * arrStart[arrStart.length - 1]
+        ) {
+          // scrollY - this.scrollHeight < ITEM_HEIGHT * this.start &&
+          arrStart.pop()
+          let newStart = arrStart[arrStart.length - 1] < 0 ? 0 : arrStart[arrStart.length - 1]
+          let st = Math.min(this.data.length - SHOW_NUM, newStart >= 0 ? newStart : 0)
+          this.start = st >= 0 ? st : 0
+          console.log(
+            "[album] [list.ux] ### handleScroll ### youhua ###: ",
+            this.start,
+            scrollY,
+            arrStart
+          )
+        }
+      }
+      lastScrollX = scrollY
+    } catch (error) {
+      console.log("[album] [list.ux] handleScrollcatch error", error)
+    }
+  }
+}
+</script>
+
+<style>
+@media (shape: circle) {
+  .header{
+    margin-top: 40px;
+  }
+  .header-title{
+    font-size: 30px;
+  }
+}
+@media (shape: pill-shaped) {
+  .header{
+    margin-top: 40px;
+  }
+  .header-title{
+    font-size: 25px;
+  }
+}
+.home {
+  background-color: #000000;
+  color: white;
+  flex-direction: column;
+}
+.header {
+  width: 100%;
+  height: 60px;
+  flex-direction: row;
+  justify-content: center;
+}
+.header-title{
+    font-size: 30px;
+  }
+</style>

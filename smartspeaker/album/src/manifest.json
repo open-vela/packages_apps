@@ -5,18 +5,10 @@
   "versionCode": 1,
   "minPlatformVersion": 1000,
   "icon": "/common/logo.png",
-  "deviceTypeList": [
-    "watch"
-  ],
+  "deviceTypeList": ["watch"],
   "features": [
     {
       "name": "system.router"
-    },
-    {
-      "name": "system.folme"
-    },
-    {
-      "name": "service.internal.miot"
     },
     {
       "name": "system.storage"
@@ -28,20 +20,17 @@
       "name": "system.exchange"
     },
     {
+      "name": "system.fetch"
+    },
+    {
       "name": "system.network"
-    },
-    {
-      "name": "system.internal.settings"
-    },
-    {
-      "name": "service.internal.account"
     }
   ],
   "config": {
     "logLevel": "log",
-    "microFmkMode": true,
+    "microFmkMode": false,
     "imageCache": 5242880,
-    "designWidth": 800
+    "designWidth": "device-width"
   },
   "router": {
     "entry": "pages/home",
@@ -50,19 +39,10 @@
         "component": "index",
         "launchMode": "singleTask"
       },
-      "pages/manual": {
-        "component": "index"
-      },
-      "pages/screenSaver": {
-        "component": "index"
-      },
-      "pages/empty": {
-        "component": "index"
-      },
       "pages/preview": {
         "component": "index"
       },
-      "pages/upload": {
+      "pages/list": {
         "component": "index"
       }
     }

@@ -2,14 +2,15 @@
 import {dataList} from "@common/js/constants"
 
 export default {
-  bigThumbnailInfo: dataList,
-  thumbnailInfo: dataList,
-  isLastPage: true,
-  setDeviceAlbumStatus:true,
+  bigThumbnailInfo: dataList, // 大图url链接
+  thumbnailInfo: dataList, // 缩略图url
+  isLastPage: true, // 是否是最后一页
+  screenWidth:0,
+  screenHeight:0,
+  screenShape:"",
   time:0,
-  isScreensaver: false,
   async onCreate() {
-    console.log("### 🚀Album ~ app.ux ~ onCreate ###")
+    console.log("[album] [list.ux] ### 🚀Album ~ ### onCreate ###")
   },
   onDestroy() {
     console.log("app destroyed")
