@@ -19,24 +19,24 @@ import router from "@system.router";
 export default {
 	data: {
 		songList: [
-			{
-				id: 1,
-				name: "静止",
-				artists: "花儿乐队",
-				playUrl: "http://music.163.com/song/media/outer/url?id=357424.mp3",
-			},
-			{
-				id: 2,
-				name: "生活因你而火热",
-				artists: "新裤子",
-				playUrl: "http://music.163.com/song/media/outer/url?id=406737702.mp3",
-			},
-			{
-				id: 3,
-				name: "你要跳舞吗",
-				artists: "新裤子",
-				playUrl: "http://music.163.com/song/media/outer/url?id=408055928.mp3",
-			},
+    {
+        id: 1,
+        name: "静止",
+        artists: "花儿乐队",
+        playUrl: "http://music.163.com/song/media/outer/url?id=357424.mp3",
+      },
+      {
+        id: 2,
+        name: "生活因你而火热",
+        artists: "新裤子",
+        playUrl: "http://music.163.com/song/media/outer/url?id=406737702.mp3",
+      },
+      {
+        id: 3,
+        name: "你要跳舞吗",
+        artists: "新裤子",
+        playUrl: "http://music.163.com/song/media/outer/url?id=408055928.mp3",
+      },
 		],
 	},
 
@@ -88,6 +88,7 @@ export default {
 	width: 60px;
 	height: 100%;
 	text-align: center;
+  color:white;
 }
 
 .detail {
@@ -115,7 +116,7 @@ export default {
 	lines: 1;
 	text-overflow: ellipsis;
 }
-@media (max-width: 212) {
+@media (shape: pill-shaped) or (max-width: 106) {
 	.list-container {
 		padding: 10px;
 	}

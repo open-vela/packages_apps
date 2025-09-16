@@ -213,7 +213,7 @@ export default {
 	align-items: center;
 }
 
-@media (max-width: 212) {
+@media (shape: pill-shaped) or (max-width: 106) {
 	.footer {
 		width: 100%;
 	}
