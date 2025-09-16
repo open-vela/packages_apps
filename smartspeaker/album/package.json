@@ -30,7 +30,7 @@
     "@aiot-toolkit/velasim": "0.1.27-x4b-beta.2",
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
-    "aiot-toolkit": "^1.1.4",
+    "aiot-toolkit": "^2.0.5",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.0.0",
     "eslint-config-prettier": "^6.0.0",
