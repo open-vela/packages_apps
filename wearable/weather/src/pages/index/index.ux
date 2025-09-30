@@ -1,0 +1,241 @@
+<template>
+  <div class="Bottom_page">
+
+      <div class="page column" id="page_t" ontouchstart="onTouchStart" ontouchmove="onTouchMove" ontouchend="onTouchEnd" style="{{'margin-top:' + translateY + 'px; opacity:' + opacity }}">
+          <div class="header column center">
+            <text class="city">{{city}}</text>
+            <text class="province">{{province}}/{{country}}</text>
+          </div>
+      
+          <div class="body column center">
+            <div class="info row center">
+              <image class="icon" src="/common/icon/weather/{{weather.icon}}.png"></image>
+              <div class="temp-info column center">
+                <text class="temp">{{weather.temp}}°</text>
+                <text class="weather">{{weather.text}}</text>
+              </div>
+            </div>
+      
+            <div class="more-info row">
+              <div class="item column center">
+                <text class="value">{{weather.feelsLike}}°</text>
+                <text class="label">体感温度</text>
+              </div>
+              <div class="item column center">
+                <div class="value-container">
+                  <text class="value">{{weather.humidity}}</text>
+                  <text class="sub">%</text>
+                </div>
+                <text class="label">湿度</text>
+              </div>
+              <div class="item column center">
+                <div class="value-container">
+                  <text class="value">{{weather.vis}}</text>
+                  <text class="sub">%</text>
+                </div>
+                <text class="label">能见度</text>
+              </div>
+            </div>
+          </div>
+      
+          <div class="footer column center">
+            <text class="update-time">数据更新于 {{weather.obsTime}}</text>
+          </div>
+      
+      </div>
+
+  </div>
+  
+</template>
+
+<script>
+  import TouchHelper, {resetPagePosition} from '../../common/utils/common'
+  const router = require('@system.router')
+  
+  export default {
+    data: {
+      touchStartY: 0,
+      touchEndY: 0,
+      opacity: 0,
+      translateY: 600,
+      city: '西安市',
+      province: '陕西省',
+      country: '中国',
+      weather: {
+        obsTime: "12-21 09:05",
+        temp: "13",
+        feelsLike: "10",
+        icon: "101",
+        text: "多云",
+        humidity: "72",
+        vis: "16"
+      }
+    },
+
+  onShow() {
+  // 页面显示时刷新数据
+    console.log('天气主页显示')
+    setTimeout(() => {
+          this.translateY = 0
+          this.opacity = 1
+        }, 50)
+  },
+
+  onTouchStart(event) {
+      TouchHelper.onTouchStart(event, this)
+  },
+
+  onTouchMove(event) {
+      TouchHelper.onTouchMove(event, this)
+  },
+
+  onTouchEnd(event) {
+      const direction = TouchHelper.onTouchEnd(event, this)
+      if (direction === 1) {
+          console.log('上滑了，可以切换页面')
+          this.navigateToForecast()
+      } else if(direction != 2){
+          console.log('滑动不足，取消切换')
+          resetPagePosition(this)
+      }
+  },
+
+  navigateToForecast() {
+      router.push({
+      uri: '/pages/seven',
+      params: {
+          city: this.city,
+          province: this.province,
+          country: this.country
+      }
+      })
+  }
+}
+</script>
+
+<style>
+
+  .Bottom_page {
+      width:480px;
+      height:480px;
+      background-color: #000000;
+  }
+
+  .page {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      padding: 30px 25px;
+      transition: margin-top 0.2s, opacity 0.1s;
+  }
+
+  .header {
+  margin-bottom: 30px;
+  }
+
+  .city {
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  }
+
+  .province {
+  font-size: 18px;
+  color: #888888;
+  }
+
+  .column {
+  flex-direction: column;
+  }
+
+  .row {
+  flex-direction: row;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+  }
+
+  .body {
+  flex: 1;
+  justify-content: space-around;
+  }
+
+  .info {
+  height:290px;
+  margin-bottom: 30px;
+  /* background-color: aqua; */
+}
+
+.icon {
+  width: 170px;
+  height: 170px;
+  margin-right: 20px;
+}
+
+.temp-info {
+  align-items: flex-start;
+}
+
+.temp {
+  font-size: 55px;
+  font-weight: 320;
+  line-height: 60px;
+}
+
+.weather {
+  font-size: 18px;
+  color: #cccccc;
+  margin-top: 5px;
+}
+
+.more-info {
+  width: 85%;
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 0 15px;
+}
+
+.value-container {
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.item {
+  flex: 1;
+}
+
+.value {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.sub {
+  font-size: 20px;
+  color: #cccccc;
+  margin-left: 2px;
+}
+
+.label {
+  color: #888888;
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+  /* 底部样式 */
+  .footer {
+  margin-top: 30px;
+}
+
+.update-time {
+  color: #666666;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+</style>
+
+
+
