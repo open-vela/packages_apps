@@ -12,6 +12,9 @@
   "features": [
     {
       "name": "system.router"
+    },
+    {
+      "name": "system.app"
     }
   ],
   "config": {
