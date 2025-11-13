@@ -32,7 +32,7 @@
           <input type="button" class="inputCommon" style="background-color: {{clickColorList[18]}};" value="{{keyBoardNum[18]}}">
       </div>
       <input type="button"  class="clearAll" style="background-color: {{clickColorList[0]}};" value="{{keyBoardNum[0]}}">
-      <image src="../../res/textures/del.png" class="delIcon" ></image>
+      <image src="/res/textures/del.png" class="delIcon" ></image>
     </div>
     <div else class="container" if="{{$app.$def.screenShape === 'rect'}}">
       <div class="resultBox">

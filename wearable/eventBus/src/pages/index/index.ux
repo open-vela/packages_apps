@@ -1,0 +1,57 @@
+<template>
+  <div class="home-page">
+     <text>app.ux中name的值是：{{ name }}</text>
+     <text class="change" onclick="change">change</text>
+  </div>
+</template>
+
+<script>
+export default {
+  data: {
+    name: -1
+  },
+  onInit() {
+    this.name = this.$app.$def.name;
+    this.$app.$def.eventBus.$off('change');
+    // 监听app.ux中name值的变化
+    this.$app.$def.eventBus.$on('change',() => {
+      this.name = this.$app.$def.name
+    })
+  },
+  change() {
+    console.log('#### change')
+    this.$app.$def.change()
+  }
+};
+</script>
+
+<style>
+.home-page {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+text {
+  color: #ffffff;
+}
+.loading {
+  width: 100px;
+  height: 100px;
+  rotate: 1000ms;
+}
+.reply-btn-emoji {
+  height: 104px;
+  width: 104px;
+  background-color: #07c160;
+  border-radius: 52px;
+  object-fit: none;
+}
+.change {
+  width: 120px;
+  height: 50px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #3498db;
+  border-radius: 5px;
+}
+</style>

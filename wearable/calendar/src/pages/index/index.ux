@@ -182,15 +182,16 @@ export default {
 	height: 100%;
 	border-radius: 240px;
 	flex-direction: column;
+  align-items: center;
 }
 
-@media not (width <= 212) {
+@media screen and (shape: pill-shaped) {
 	.home-page {
 		width: 100%;
 		height: 100%;
 		border-radius: 240px;
 		flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 	}
 }
 
