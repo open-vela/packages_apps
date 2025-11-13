@@ -22,7 +22,6 @@ export default {
   margin-top: 4px;
 }
 .list-item {
-  display: list-item;
 }
 .bg-black {
   background-color: rgba(0, 0, 0, 1);

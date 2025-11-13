@@ -1,0 +1,18 @@
+<script>
+import pubSub from './common/pubSub'
+export default {
+  name: 0,
+  eventBus: new pubSub(),
+  onCreate() {
+    console.log("app created");
+  },
+  onDestroy() {
+    console.log("app destroyed")
+  },
+  change() {
+    console.log('change');
+    this.name ++;
+    this.eventBus.$emit('change');
+  }
+}
+</script>
