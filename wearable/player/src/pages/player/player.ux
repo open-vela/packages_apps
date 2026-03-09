@@ -46,19 +46,19 @@ export default {
 				id: 1,
 				name: "record1",
 				artists: "syx",
-				playUrl: "/common/music/record1.mp3", // 可替换为在线播放地址
+				playUrl: "/common/music/record1.mp3", // Can be replaced with an online playback address
 			},
 			{
 				id: 2,
 				name: "record2",
 				artists: "syx",
-				playUrl: "/common/music/record2.mp3", // 可替换为在线播放地址
+				playUrl: "/common/music/record2.mp3", // Can be replaced with an online playback address
 			},
 			{
 				id: 3,
 				name: "record3",
 				artists: "syx",
-				playUrl: "/common/music/record3.mp3", // 可替换为在线播放地址
+				playUrl: "/common/music/record3.mp3", // Can be replaced with an online playback address
 			},
 		],
 		// 是否在播放
