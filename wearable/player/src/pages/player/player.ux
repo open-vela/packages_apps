@@ -42,23 +42,23 @@ export default {
 		currSong: null,
 		// 需要播放的歌曲列表
 		songList: [
-			{
+      {
 				id: 1,
-				name: "静止",
-				artists: "花儿乐队",
-				playUrl: "http://music.163.com/song/media/outer/url?id=357424.mp3",
+				name: "record1",
+				artists: "syx",
+				playUrl: "/common/music/record1.mp3", // Can be replaced with an online playback address
 			},
 			{
 				id: 2,
-				name: "生活因你而火热",
-				artists: "新裤子",
-				playUrl: "http://music.163.com/song/media/outer/url?id=406737702.mp3",
+				name: "record2",
+				artists: "syx",
+				playUrl: "/common/music/record2.mp3", // Can be replaced with an online playback address
 			},
 			{
 				id: 3,
-				name: "你要跳舞吗",
-				artists: "新裤子",
-				playUrl: "http://music.163.com/song/media/outer/url?id=408055928.mp3",
+				name: "record3",
+				artists: "syx",
+				playUrl: "/common/music/record3.mp3", // Can be replaced with an online playback address
 			},
 		],
 		// 是否在播放
