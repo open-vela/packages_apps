@@ -1,0 +1,59 @@
+<!-- 国际化 i18n 示例 -->
+<template>
+  <div class="column page">
+    <text class="header">国际化 i18n</text>
+
+    <!-- 基础文本 -->
+    <text class="label">1. $t 基础取值</text>
+    <text>{{$t('appName')}}</text>
+    <text>{{$t('greeting')}}</text>
+
+    <!-- 命名插值 -->
+    <text class="label">2. 命名插值</text>
+    <text>{{$t('welcome', { name: 'Vela' })}}</text>
+
+    <!-- 列表插值 -->
+    <text class="label">3. 列表插值</text>
+    <text>{{$t('itemCount', [5])}}</text>
+    <text>{{$t('itemCount', [100])}}</text>
+
+    <!-- 单复数 $tc -->
+    <text class="label">4. $tc 单复数</text>
+    <text>$tc('car', 1): {{$tc('car', 1)}}</text>
+    <text>$tc('car', 2): {{$tc('car', 2)}}</text>
+
+    <!-- 三段式单复数 -->
+    <text class="label">5. 三段式单复数</text>
+    <text>apple(0): {{$tc('apple', 0)}}</text>
+    <text>apple(1): {{$tc('apple', 1)}}</text>
+    <text>apple(6): {{$tc('apple', 2, {count: 6})}}</text>
+
+    <!-- 当前语言 -->
+    <text class="label">6. 当前语言</text>
+    <text>locale: {{locale}}</text>
+  </div>
+</template>
+
+<script>
+import configuration from '@system.configuration'
+
+export default {
+  private: {
+    locale: ''
+  },
+
+  onReady() {
+    const locale = configuration.getLocale()
+    this.locale = locale.language + '-' + locale.countryOrRegion
+    console.log('[i18n] locale: ' + this.locale)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.page {
+  padding-left: 100px;
+}
+</style>

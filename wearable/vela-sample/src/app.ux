@@ -1,0 +1,36 @@
+<script>
+export default {
+  globalData: {
+    appName: 'Vela Sample',
+    version: '1.0.0',
+    theme: 'light'
+  },
+
+  getAppInfo() {
+    return `${this.globalData.appName} v${this.globalData.version}`
+  },
+
+  onCreate() {
+    console.log('[lifecycle] [app] onCreate')
+  },
+
+  onShow() {
+    console.log('[lifecycle] [app] onShow')
+  },
+
+  onHide() {
+    console.log('[lifecycle] [app] onHide')
+  },
+
+  onDestroy() {
+    console.log('[lifecycle] [app] onDestroy')
+  },
+
+  onError(err) {
+    console.log(`[lifecycle] [app] onError: ${err.message}`)
+  }
+}
+</script>
+
+<style>
+</style>

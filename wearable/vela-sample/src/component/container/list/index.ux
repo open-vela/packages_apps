@@ -1,0 +1,98 @@
+<!-- list 容器组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">list / list-item</text>
+
+    <text class="label">1. 基本列表</text>
+    <list id="myList" class="list" bounces="true"
+      onscroll="onScroll" onscrollbottom="onScrollBottom" onscrolltop="onScrollTop">
+      <list-item class="item" type="item" for="{{items}}">
+        <text style="color: #ffffff;">{{$item}}</text>
+      </list-item>
+    </list>
+    <text class="code" if="{{scrollInfo}}">{{scrollInfo}}</text>
+
+    <text class="label">2. scrollTo / scrollBy</text>
+    <div class="row" style="flex-wrap: wrap;">
+      <input type="button" class="btn-sm" onclick="scrollToTop" value="到顶部" />
+      <input type="button" class="btn-sm" onclick="scrollToIndex(5)" value="到第6项" />
+      <input type="button" class="btn-sm" onclick="scrollBy(100)" value="下滑100" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    items: [],
+    scrollInfo: ''
+  },
+
+  onInit() {
+    for (var i = 1; i <= 20; i++) {
+      this.items.push('列表项 ' + i)
+    }
+  },
+
+  onScroll(e) {
+    this.scrollInfo = 'Y:' + Math.round(e.scrollY) + ' state:' + e.scrollState
+    console.log('[list] scroll Y:' + Math.round(e.scrollY))
+  },
+
+  onScrollBottom() {
+    this.scrollInfo = '已到底部'
+    console.log('[list] scrollBottom')
+  },
+
+  onScrollTop() {
+    this.scrollInfo = '已到顶部'
+    console.log('[list] scrollTop')
+  },
+
+  scrollToTop() {
+    this.$element('myList').scrollTo({ index: 0, behavior: 'smooth' })
+    console.log('[list] scrollTo index:0')
+  },
+
+  scrollToIndex(idx) {
+    this.$element('myList').scrollTo({ index: idx, behavior: 'smooth' })
+    console.log('[list] scrollTo index:' + idx)
+  },
+
+  scrollBy(top) {
+    this.$element('myList').scrollBy({ top: top, behavior: 'smooth' })
+    console.log('[list] scrollBy top:' + top)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.list {
+  width: 360px;
+  height: 300px;
+  border: 1px solid #cccccc;
+  margin-top: 10px;
+}
+
+.item {
+  width: 360px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  background-color: #0faeff;
+  border-bottom: 1px solid #ffffff;
+}
+
+.btn-sm {
+  height: 50px;
+  width: 110px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 24px;
+  background-color: #0faeff;
+}
+</style>

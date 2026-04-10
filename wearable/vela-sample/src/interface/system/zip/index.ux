@@ -1,0 +1,120 @@
+<!-- 解压 zip 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">解压 zip</text>
+
+    <text class="label">1. 复制 zip 到 files</text>
+    <input type="button" class="btn" onclick="copyZip" value="复制 zip 文件" />
+    <text class="result" if="{{copyResult}}">{{copyResult}}</text>
+
+    <text class="label">2. decompress 解压</text>
+    <input type="button" class="btn" onclick="doDecompress" value="执行解压" />
+    <text class="result" if="{{decompressResult}}">{{decompressResult}}</text>
+
+    <text class="label">3. 验证解压结果</text>
+    <input type="button" class="btn" onclick="listUnzipped" value="查看解压文件" />
+    <text class="result" if="{{listResult}}">{{listResult}}</text>
+  </div>
+</template>
+
+<script>
+import zip from '@system.zip'
+import file from '@system.file'
+
+export default {
+  private: {
+    copyResult: '',
+    decompressResult: '',
+    listResult: ''
+  },
+
+  copyZip() {
+    this.copyResult = '复制中...'
+    file.readArrayBuffer({
+      uri: '/Common/hello.zip',
+      success: (data) => {
+        console.log('[zip] 读取成功 length: ' + data.buffer.length)
+        file.writeArrayBuffer({
+          uri: 'internal://files/hello.zip',
+          buffer: data.buffer,
+          success: () => {
+            this.copyResult = '复制成功 (' + data.buffer.length + ' bytes)'
+            console.log('[zip] 写入成功')
+          },
+          fail: (d, code) => {
+            this.copyResult = '写入失败: ' + code
+            console.log('[zip] 写入失败: ' + code)
+          }
+        })
+      },
+      fail: (data, code) => {
+        this.copyResult = '读取失败: ' + code
+        console.log('[zip] 读取失败: ' + code)
+      }
+    })
+  },
+
+  doDecompress() {
+    this.decompressResult = '解压中...'
+    zip.decompress({
+      srcUri: 'internal://files/hello.zip',
+      dstUri: 'internal://files/unzip',
+      success: () => {
+        this.decompressResult = '解压成功'
+        console.log('[zip] 解压成功')
+      },
+      fail: (data, code) => {
+        this.decompressResult = '解压失败: ' + code
+        console.log('[zip] 解压失败: ' + code)
+      }
+    })
+  },
+
+  listUnzipped() {
+    // 先试直接读解压后的文件
+    file.readText({
+      uri: 'internal://files/unzip/hello.txt',
+      success: (data) => {
+        this.listResult = '解压文件内容: ' + data.text
+        console.log('[zip] readText: ' + data.text)
+      },
+      fail: (data, code) => {
+        console.log('[zip] readText 失败: ' + code + ', 尝试 list')
+        // 读不到就 list 目录
+        file.list({
+          uri: 'internal://files/unzip/',
+          success: (d) => {
+            console.log('[zip] list: ' + JSON.stringify(d))
+            this.listResult = JSON.stringify(d.fileList)
+          },
+          fail: (d, c) => {
+            console.log('[zip] list 失败: ' + c + ', 尝试 files 根目录')
+            // 可能解压到了 files 根目录
+            file.list({
+              uri: 'internal://files/',
+              success: (d2) => {
+                console.log('[zip] list files/: ' + JSON.stringify(d2))
+                var names = d2.fileList.map(function(f) { return f.uri })
+                this.listResult = names.join('\n')
+              },
+              fail: (d2, c2) => {
+                this.listResult = '全部失败: ' + c2
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 5px;
+}
+</style>

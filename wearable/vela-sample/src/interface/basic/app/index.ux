@@ -1,0 +1,62 @@
+<!-- 应用上下文 app 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">应用上下文 app</text>
+
+    <!-- getInfo -->
+    <text class="label">1. 获取应用信息</text>
+    <input type="button" class="btn" onclick="getInfo" value="app.getInfo()" />
+    <text>包名: {{packageName}}</text>
+    <text>应用名: {{appName}}</text>
+    <text>版本: {{versionName}} ({{versionCode}})</text>
+
+    <!-- terminate -->
+    <text class="label">2. 退出应用</text>
+    <input type="button" class="btn" onclick="terminate" value="app.terminate()" />
+
+    <!-- canIUse -->
+    <text class="label">3. 能力查询 canIUse</text>
+    <input type="button" class="btn" onclick="checkAbility" value="查询 system.router" />
+    <text>router 支持: {{routerSupport}}</text>
+    <text>router.push 支持: {{pushSupport}}</text>
+  </div>
+</template>
+
+<script>
+import app from '@system.app'
+
+export default {
+  private: {
+    packageName: '',
+    appName: '',
+    versionName: '',
+    versionCode: '',
+    routerSupport: '',
+    pushSupport: ''
+  },
+
+  getInfo() {
+    const info = app.getInfo()
+    console.log('[app] getInfo: ' + JSON.stringify(info))
+    this.packageName = info.packageName
+    this.appName = info.name
+    this.versionName = info.versionName
+    this.versionCode = info.versionCode
+  },
+
+  terminate() {
+    console.log('[app] terminate')
+    app.terminate()
+  },
+
+  checkAbility() {
+    this.routerSupport = app.canIUse('@system.router') ? '是' : '否'
+    this.pushSupport = app.canIUse('@system.router.push') ? '是' : '否'
+    console.log('[app] canIUse router:' + this.routerSupport + ' push:' + this.pushSupport)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

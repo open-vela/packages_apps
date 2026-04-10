@@ -1,0 +1,67 @@
+<template>
+  <div class="column page">
+    <text class="header">slider 滑块</text>
+
+    <text class="label">默认 (step=1)</text>
+    <slider class="slider" min="0" max="100" step="1" value="{{val1}}" onchange="onChange1"></slider>
+    <text class="code">值: {{val1}}</text>
+
+    <text class="label">步长 step=10</text>
+    <slider class="slider" min="0" max="100" step="10" value="{{val2}}" onchange="onChange2"></slider>
+    <text class="code">值: {{val2}}</text>
+
+    <text class="label">自定义颜色</text>
+    <slider class="slider slider-custom" min="0" max="100" step="5" value="{{val3}}" onchange="onChange3"></slider>
+    <text class="code">值: {{val3}}</text>
+
+    <text class="label">范围 0-255</text>
+    <slider class="slider" min="0" max="255" step="1" value="{{val4}}" onchange="onChange4"></slider>
+    <div style="width: 100px; height: 40px; border-radius: 5px; margin-top: 5px; background-color: rgb({{val4}}, 100, 100);"></div>
+    <text class="code">R: {{val4}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    val1: 50,
+    val2: 30,
+    val3: 60,
+    val4: 128
+  },
+  onChange1(e) {
+    this.val1 = e.progress
+    console.log('[slider] val1: ' + e.progress)
+  },
+  onChange2(e) {
+    this.val2 = e.progress
+    console.log('[slider] val2: ' + e.progress)
+  },
+  onChange3(e) {
+    this.val3 = e.progress
+    console.log('[slider] val3: ' + e.progress)
+  },
+  onChange4(e) {
+    this.val4 = e.progress
+    console.log('[slider] val4: ' + e.progress)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.slider {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.slider-custom {
+  color: #e0e0e0;
+  selected-color: #e74c3c;
+  block-color: #c0392b;
+}
+</style>

@@ -1,0 +1,21 @@
+<!-- a 组件示例：展示页面跳转链接 -->
+<template>
+  <div class="column page">
+    <text class="header">a 组件</text>
+    <text class="tips">a 组件用于页面间跳转</text>
+
+    <text class="label">1. 页面内跳转</text>
+    <a href="/component/basic/text">跳转到 text 示例页</a>
+
+    <text class="label">2. 带参数跳转</text>
+    <a href="/component/basic/text?id=1">带参数跳转</a>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

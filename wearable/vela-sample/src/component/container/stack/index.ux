@@ -1,0 +1,123 @@
+<template>
+  <div class="column page">
+    <text class="header">stack 层叠容器</text>
+
+    <stack class="stack-box">
+      <div class="box box1" show="{{layers[0]}}"></div>
+      <div class="box box2" show="{{layers[1]}}"></div>
+      <div class="box box3" show="{{layers[2]}}"></div>
+    </stack>
+
+    <div class="row" style="margin-top: 10px; flex-wrap: wrap;">
+      <input type="button" class="btn-sm" onclick="toggleLayer(0)" value="{{layers[0] ? '隐藏' : '显示'}}红" />
+      <input type="button" class="btn-sm" onclick="toggleLayer(1)" value="{{layers[1] ? '隐藏' : '显示'}}绿" />
+      <input type="button" class="btn-sm" onclick="toggleLayer(2)" value="{{layers[2] ? '隐藏' : '显示'}}蓝" />
+    </div>
+
+    <input type="button" class="btn" style="margin-top: 15px;" onclick="resetAll" value="重置全部" />
+
+    <text class="header" style="margin-top: 20px;">不同对齐</text>
+
+    <text class="label">左上 (默认)</text>
+    <stack class="stack-sm">
+      <div class="bg-layer"></div>
+      <div class="fg-layer"></div>
+    </stack>
+
+    <text class="label">居中</text>
+    <stack class="stack-sm" style="justify-content: center; align-items: center;">
+      <div class="bg-layer"></div>
+      <div class="fg-layer"></div>
+    </stack>
+
+    <text class="label">右下</text>
+    <stack class="stack-sm" style="justify-content: flex-end; align-items: flex-end;">
+      <div class="bg-layer"></div>
+      <div class="fg-layer"></div>
+    </stack>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    layers: [true, true, true]
+  },
+  toggleLayer(idx) {
+    var arr = this.layers.slice()
+    arr[idx] = !arr[idx]
+    this.layers = arr
+    console.log('[stack] toggleLayer ' + idx + ': ' + arr[idx])
+  },
+  resetAll() {
+    this.layers = [true, true, true]
+    console.log('[stack] resetAll')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.stack-box {
+  width: 250px;
+  height: 250px;
+}
+
+.box {
+  border-radius: 8px;
+}
+
+.box1 {
+  width: 250px;
+  height: 250px;
+  background-color: #ff6b6b;
+}
+
+.box2 {
+  width: 180px;
+  height: 180px;
+  left: 20px;
+  top: 20px;
+  background-color: #51cf66;
+}
+
+.box3 {
+  width: 110px;
+  height: 110px;
+  left: 50px;
+  top: 50px;
+  background-color: #339af0;
+}
+
+.stack-sm {
+  width: 200px;
+  height: 100px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+}
+
+.bg-layer {
+  width: 200px;
+  height: 100px;
+  background-color: #f0f0f0;
+}
+
+.fg-layer {
+  width: 80px;
+  height: 50px;
+  background-color: #0faeff;
+  border-radius: 5px;
+}
+
+.btn-sm {
+  height: 50px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 26px;
+  background-color: #0faeff;
+}
+</style>

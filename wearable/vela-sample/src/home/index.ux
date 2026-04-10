@@ -1,0 +1,113 @@
+<template>
+  <div class="page home-page">
+    <block for="{{tabs}}">
+      <div class="chapter">
+        <text class="h1">{{$item.name}}</text>
+        <block for="{{$item.groupList}}">
+          <div class="header" @click="toggleGroup($item.name)">
+            <image class="arrow" src="/Common/arrow-{{expandedGroups[$item.name] ? 1 : 0}}.png"></image>
+            <text class="h2">{{$item.name}}</text>
+          </div>
+          <block if="{{expandedGroups[$item.name]}}">
+            <text class="link" for="{{$item.caseList}}" @click="route($item.path)">{{$item.name}}</text>
+          </block>
+        </block>
+      </div>
+    </block>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+import { tabsData } from './data.js'
+
+export default {
+  private: {
+    tabs: [tabsData.framework, tabsData.component, tabsData.interface],
+    expandedGroups: {}
+  },
+
+  route(uri) {
+    router.push({ uri })
+  },
+
+  toggleGroup(name) {
+    this.expandedGroups[name] = !this.expandedGroups[name]
+  }
+}
+</script>
+
+<style>
+@import '../style/comm.css';
+
+.home-page {
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 60px 80px;
+}
+
+.chapter {
+  margin-bottom: 30px;
+  flex-direction: column;
+}
+
+.h1 {
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.h2 {
+  margin-top: 15px;
+  font-size: 30px;
+}
+
+.header {
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+  margin-top: 7px;
+  margin-right: 3px;
+}
+
+.link {
+  height: 40px;
+  margin-left: 23px;
+  text-overflow: ellipsis;
+  font-size: 30px;
+  margin: 5px 0;
+}
+
+text {
+  font-size: 30px;
+  margin: 5px 0;
+}
+
+@media (shape: pill-shaped) {
+  .home-page {
+    padding: 60px 10px;
+  }
+
+  .link {
+    height: 70px;
+    margin-left: 15px;
+  }
+
+  .h1 {
+    font-size: 52px;
+  }
+
+  text {
+    font-size: 48px;
+  }
+
+  .arrow {
+    width: 30px;
+    height: 36px;
+  }
+}
+</style>

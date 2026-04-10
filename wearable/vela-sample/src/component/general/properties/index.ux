@@ -1,0 +1,34 @@
+<!-- 通用属性示例：id、class、style、for、if、show、data-* -->
+<template>
+  <div class="column page">
+    <text class="header">通用属性</text>
+
+    <text class="label">1. id</text>
+    <text id="myText">通过 id 标识组件</text>
+
+    <text class="label">2. class / style</text>
+    <text class="highlight">class 样式</text>
+    <text style="color: #ff6b6b;">inline style</text>
+
+    <text class="label">3. data-* 自定义数据</text>
+    <div data-id="123" @click="onTap">
+      <text>点击获取 data-id</text>
+    </div>
+    <text>{{dataResult}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: { dataResult: '' },
+  onTap(e) {
+    this.dataResult = 'data-id: ' + (e.target?.dataSet?.id || '123')
+    console.log('[properties] onTap data-id: ' + this.dataResult)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+.highlight { color: #0faeff; font-weight: bold; }
+</style>

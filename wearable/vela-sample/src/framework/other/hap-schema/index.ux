@@ -1,0 +1,68 @@
+<!-- hap 链接示例 -->
+<template>
+  <div class="column page">
+    <text class="header">hap 链接</text>
+
+    <text class="label">1. 跳转到本应用首页</text>
+    <input type="button" class="btn" onclick="goHome" value="hap://app/{包名}" />
+
+    <text class="label">2. 跳转到指定页面</text>
+    <input type="button" class="btn" onclick="goPage" value="跳转到 i18n 页面" />
+
+    <text class="label">3. 带参数跳转</text>
+    <input type="button" class="btn" onclick="goWithParams" value="带参数跳转到 page-data" />
+
+    <text class="label">4. 当前页面信息</text>
+    <text>包名: {{packageName}}</text>
+    <text>当前路径: {{currentPath}}</text>
+    <text>页面栈深度: {{stackLength}}</text>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  private: {
+    packageName: 'com.xiaomi.vela.sample',
+    currentPath: '',
+    stackLength: 0
+  },
+
+  onReady() {
+    const state = router.getState()
+    this.currentPath = state.path
+    this.stackLength = router.getLength()
+  },
+
+  goHome() {
+    console.log('[hap-schema] push hap://app/com.xiaomi.vela.sample')
+    router.push({
+      uri: 'hap://app/com.xiaomi.vela.sample'
+    })
+  },
+
+  goPage() {
+    console.log('[hap-schema] push hap://app/.../i18n')
+    router.push({
+      uri: 'hap://app/com.xiaomi.vela.sample/framework/other/i18n'
+    })
+  },
+
+  goWithParams() {
+    console.log('[hap-schema] push hap://app/.../page-data with params')
+    router.push({
+      uri: 'hap://app/com.xiaomi.vela.sample/framework/script/page-data',
+      params: {
+        pubNum: 88,
+        proNum: 88,
+        priNum: 88
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,93 @@
+<!-- 数据存储 storage 示例：展示数据的增删查清操作 -->
+<template>
+  <div class="column page">
+    <text class="header">数据存储 storage</text>
+
+    <!-- 存储数据 -->
+    <text class="label">存储数据</text>
+    <input type="button" class="btn" onclick="setData" value="存储 name=Vela" />
+
+    <!-- 读取数据 -->
+    <text class="label">读取数据</text>
+    <input type="button" class="btn" onclick="getData" value="读取 key=name" />
+    <text>读取结果：{{result}}</text>
+
+    <!-- 删除数据 -->
+    <text class="label">删除数据</text>
+    <input type="button" class="btn" onclick="deleteData" value="删除 key=name" />
+
+    <!-- 清空数据 -->
+    <text class="label">清空数据</text>
+    <input type="button" class="btn" onclick="clearData" value="清空所有数据" />
+  </div>
+</template>
+
+<script>
+import storage from '@system.storage'
+
+export default {
+  private: {
+    result: ''
+  },
+
+  // 存储数据
+  setData() {
+    storage.set({
+      key: 'name',
+      value: 'Vela',
+      success: () => {
+        console.log('存储成功')
+        this.result = '存储成功: name=Vela'
+      },
+      fail: (data, code) => {
+        console.log(`存储失败, code=${code}`)
+      }
+    })
+  },
+
+  // 读取数据
+  getData() {
+    storage.get({
+      key: 'name',
+      success: (data) => {
+        console.log('读取成功:', data)
+        this.result = data || '(空)'
+      },
+      fail: (data, code) => {
+        console.log(`读取失败, code=${code}`)
+      }
+    })
+  },
+
+  // 删除数据
+  deleteData() {
+    storage.delete({
+      key: 'name',
+      success: () => {
+        console.log('删除成功')
+        this.result = '已删除 key=name'
+      },
+      fail: (data, code) => {
+        console.log(`删除失败, code=${code}`)
+      }
+    })
+  },
+
+  // 清空所有数据
+  clearData() {
+    storage.clear({
+      success: () => {
+        console.log('清空成功')
+        this.result = '已清空所有数据'
+      },
+      fail: (data, code) => {
+        console.log(`清空失败, code=${code}`)
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,60 @@
+<!-- 通用样式示例：展示 width/height、border、margin/padding、opacity 等 -->
+<template>
+  <div class="column page">
+    <text class="header">通用样式</text>
+
+    <text class="label">1. width / height</text>
+    <div style="width: 200px; height: 60px; background-color: #0faeff;"></div>
+
+    <text class="label">2. border</text>
+    <div style="width: 200px; height: 60px; border: 2px solid #ff6b6b; border-radius: 10px;"></div>
+
+    <text class="label">3. margin / padding</text>
+    <div style="background-color: #f0f0f0; padding: 20px; margin-top: 10px;">
+      <text>padding: 20px</text>
+    </div>
+
+    <text class="label">4. opacity</text>
+    <div style="flex-direction: row;">
+      <div style="width: 80px; height: 60px; background-color: #0faeff; opacity: 1; margin: 5px;"></div>
+      <div style="width: 80px; height: 60px; background-color: #0faeff; opacity: 0.5; margin: 5px;"></div>
+      <div style="width: 80px; height: 60px; background-color: #0faeff; opacity: 0.2; margin: 5px;"></div>
+    </div>
+
+    <text class="label">5. display / visibility</text>
+    <div style="flex-direction: row; align-items: center;">
+      <div style="width: 80px; height: 60px; background-color: #4CAF50; margin: 5px; justify-content: center; align-items: center;">
+        <text style="color: #ffffff; font-size: 20px;">可见</text>
+      </div>
+      <div style="width: 80px; height: 60px; background-color: #FF9800; margin: 5px; visibility: hidden;"></div>
+      <div style="width: 80px; height: 60px; background-color: #E91E63; margin: 5px; justify-content: center; align-items: center;">
+        <text style="color: #ffffff; font-size: 20px;">可见</text>
+      </div>
+    </div>
+    <text class="desc">中间橙色块 visibility: hidden（占位但不可见）</text>
+    <div style="flex-direction: row; align-items: center; margin-top: 10px;">
+      <div style="width: 80px; height: 60px; background-color: #4CAF50; margin: 5px; justify-content: center; align-items: center;">
+        <text style="color: #ffffff; font-size: 20px;">可见</text>
+      </div>
+      <div style="width: 80px; height: 60px; background-color: #FF9800; margin: 5px; display: none;"></div>
+      <div style="width: 80px; height: 60px; background-color: #E91E63; margin: 5px; justify-content: center; align-items: center;">
+        <text style="color: #ffffff; font-size: 20px;">可见</text>
+      </div>
+    </div>
+    <text class="desc">中间橙色块 display: none（不占位也不可见）</text>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.desc {
+  color: #888888;
+  font-size: 20px;
+  margin-top: 5px;
+}
+</style>

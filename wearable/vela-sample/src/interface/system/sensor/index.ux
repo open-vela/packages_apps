@@ -1,0 +1,113 @@
+<!-- 传感器 sensor 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">传感器 sensor</text>
+
+    <!-- 加速度传感器 -->
+    <text class="label">1. 加速度传感器</text>
+    <input type="button" class="btn" onclick="subAccel" value="订阅加速度" />
+    <input type="button" class="btn" onclick="unsubAccel" value="取消订阅" />
+    <text>x: {{ax}} y: {{ay}} z: {{az}}</text>
+
+    <!-- 气压传感器 -->
+    <text class="label">2. 气压传感器</text>
+    <input type="button" class="btn" onclick="subPressure" value="订阅气压" />
+    <input type="button" class="btn" onclick="unsubPressure" value="取消订阅" />
+    <text>气压: {{pressure}} hPa</text>
+
+    <!-- 罗盘传感器 -->
+    <text class="label">3. 罗盘传感器</text>
+    <input type="button" class="btn" onclick="subCompass" value="订阅罗盘" />
+    <input type="button" class="btn" onclick="unsubCompass" value="取消订阅" />
+    <text>方向: {{direction}}</text>
+    <text>精度: {{accuracy}}</text>
+  </div>
+</template>
+
+<script>
+import sensor from '@system.sensor'
+
+export default {
+  private: {
+    ax: '', ay: '', az: '',
+    pressure: '',
+    direction: '', accuracy: ''
+  },
+
+  subAccel() {
+    console.log('[sensor] subscribeAccelerometer')
+    sensor.subscribeAccelerometer({
+      callback: (data) => {
+        this.ax = data.x?.toFixed(2)
+        this.ay = data.y?.toFixed(2)
+        this.az = data.z?.toFixed(2)
+        console.log('[sensor] accel x:' + this.ax + ' y:' + this.ay + ' z:' + this.az)
+      },
+      fail: (data, code) => {
+        console.log('[sensor] subscribeAccelerometer fail code:' + code + ' data:' + data)
+        this.ax = '失败: ' + code
+      }
+    })
+  },
+
+  unsubAccel() {
+    sensor.unsubscribeAccelerometer()
+    this.ax = ''
+    this.ay = ''
+    this.az = ''
+    console.log('[sensor] unsubscribeAccelerometer')
+  },
+
+  subPressure() {
+    console.log('[sensor] subscribePressure')
+    sensor.subscribePressure({
+      callback: (data) => {
+        this.pressure = data.pressure?.toFixed(1)
+        console.log('[sensor] pressure: ' + this.pressure)
+      },
+      fail: (data, code) => {
+        console.log('[sensor] subscribePressure fail code:' + code + ' data:' + data)
+        this.pressure = '不支持(' + code + ')'
+      }
+    })
+  },
+
+  unsubPressure() {
+    sensor.unsubscribePressure()
+    this.pressure = ''
+    console.log('[sensor] unsubscribePressure')
+  },
+
+  subCompass() {
+    console.log('[sensor] subscribeCompass')
+    sensor.subscribeCompass({
+      callback: (data) => {
+        this.direction = data.direction
+        this.accuracy = data.accuracy
+        console.log('[sensor] compass direction:' + this.direction + ' accuracy:' + this.accuracy)
+      },
+      fail: (data, code) => {
+        console.log('[sensor] subscribeCompass fail code:' + code + ' data:' + data)
+        this.direction = '不支持(' + code + ')'
+      }
+    })
+  },
+
+  unsubCompass() {
+    sensor.unsubscribeCompass()
+    this.direction = ''
+    this.accuracy = ''
+    console.log('[sensor] unsubscribeCompass')
+  },
+
+  onDestroy() {
+    sensor.unsubscribeAccelerometer()
+    sensor.unsubscribePressure()
+    sensor.unsubscribeCompass()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

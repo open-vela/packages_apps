@@ -1,0 +1,27 @@
+<!-- 颜色示例 -->
+<template>
+  <div class="column page">
+    <text class="header">颜色</text>
+
+    <text class="label">1. 十六进制</text>
+    <text style="color: #ff6b6b;">#ff6b6b</text>
+    <text style="color: #51cf66;">#51cf66</text>
+
+    <text class="label">2. rgb / rgba</text>
+    <text style="color: rgb(51, 154, 240);">rgb(51, 154, 240)</text>
+    <text style="color: rgba(255, 107, 107, 0.5);">rgba 半透明</text>
+
+    <text class="label">3. 颜色名称</text>
+    <text style="color: red;">red</text>
+    <text style="color: blue;">blue</text>
+    <text style="color: green;">green</text>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

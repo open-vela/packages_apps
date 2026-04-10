@@ -1,0 +1,47 @@
+<template>
+  <div class="column page">
+    <text class="header">background-size</text>
+
+    <text class="label">contain</text>
+    <div class="bg-box" style="background-size: contain;"></div>
+
+    <text class="label">cover</text>
+    <div class="bg-box" style="background-size: cover;"></div>
+
+    <text class="label">100% 100%</text>
+    <div class="bg-box" style="background-size: 100% 100%;"></div>
+
+    <text class="header">background-position</text>
+
+    <text class="label">left top</text>
+    <div class="bg-box bg-small" style="background-position: left top;"></div>
+
+    <text class="label">center</text>
+    <div class="bg-box bg-small" style="background-position: center;"></div>
+
+    <text class="label">right bottom</text>
+    <div class="bg-box bg-small" style="background-position: right bottom;"></div>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.bg-box {
+  width: 300px;
+  height: 120px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #999;
+  background-image: url(/Common/logo.png);
+  background-repeat: no-repeat;
+}
+
+.bg-small {
+  background-size: 60px 60px;
+}
+</style>

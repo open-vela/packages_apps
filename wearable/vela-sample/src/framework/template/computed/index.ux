@@ -1,0 +1,44 @@
+<!-- computed 计算属性示例 -->
+<template>
+  <div class="column page">
+    <text class="header">computed 计算属性</text>
+    <text class="tips">计算属性会根据依赖的数据自动更新</text>
+
+    <text class="label">单价：</text>
+    <input type="button" class="btn" onclick="addPrice" value="单价 +1 (当前: {{price}})" />
+
+    <text class="label">数量：</text>
+    <input type="button" class="btn" onclick="addCount" value="数量 +1 (当前: {{count}})" />
+
+    <text class="label" style="margin-top: 20px;">总价（computed）：{{total}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    price: 10,
+    count: 1
+  },
+
+  computed: {
+    total() {
+      return this.price * this.count
+    }
+  },
+
+  addPrice() {
+    this.price++
+    console.log('[computed] price:' + this.price + ' total:' + this.total)
+  },
+
+  addCount() {
+    this.count++
+    console.log('[computed] count:' + this.count + ' total:' + this.total)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

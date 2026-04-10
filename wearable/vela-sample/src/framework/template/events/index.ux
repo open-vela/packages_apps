@@ -1,0 +1,86 @@
+<!-- 事件绑定示例：展示事件绑定方式、事件对象参数和冒泡机制 -->
+<template>
+  <div class="column page">
+    <text class="header">事件绑定</text>
+
+    <!-- onclick 方式 -->
+    <text class="label">1. onclick 绑定</text>
+    <input id="btn1" type="button" class="btn" onclick="handleClick" value="onclick 点击" />
+
+    <!-- @click 方式 -->
+    <text class="label">2. @click 绑定</text>
+    <input id="btn2" type="button" class="btn" @click="handleClickWithParam('Vela')" value="@click 带参数" />
+
+    <!-- 事件信息展示 -->
+    <text class="label">事件信息：</text>
+    <text class="code">{{eventInfo}}</text>
+
+    <!-- 事件对象参数 -->
+    <text class="label" style="margin-top: 20px;">事件对象属性：</text>
+    <text class="code" if="{{eventDetail}}">pageX/Y: {{eventDetail.pageX}}, {{eventDetail.pageY}}</text>
+    <text class="code" if="{{eventDetail}}">clientX/Y: {{eventDetail.clientX}}, {{eventDetail.clientY}}</text>
+    <text class="code" if="{{eventDetail}}">offsetX/Y: {{eventDetail.offsetX}}, {{eventDetail.offsetY}}</text>
+
+    <!-- 事件冒泡 -->
+    <text class="label" style="margin-top: 20px;">3. 事件冒泡</text>
+    <div style="padding: 20px; background-color: #e0e0e0;" @click="onBubble('外层')">
+      <text>外层 div</text>
+      <div style="padding: 20px; margin-top: 10px; background-color: #b0b0b0;" @click="onBubble('内层')">
+        <text>内层 div（点击观察冒泡）</text>
+      </div>
+    </div>
+    <text class="code">{{bubbleInfo}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    eventInfo: '',
+    bubbleInfo: '',
+    eventDetail: null
+  },
+
+  handleClick(e) {
+    this.eventInfo = 'onclick 触发'
+    this.updateEventDetail(e)
+  },
+
+  handleClickWithParam(name, e) {
+    this.eventInfo = `@click 触发，参数: ${name}`
+    this.updateEventDetail(e)
+  },
+
+  updateEventDetail(e) {
+    if (e) {
+      this.eventDetail = {
+        pageX: e.pageX !== undefined ? e.pageX : '-',
+        pageY: e.pageY !== undefined ? e.pageY : '-',
+        clientX: e.clientX !== undefined ? e.clientX : '-',
+        clientY: e.clientY !== undefined ? e.clientY : '-',
+        offsetX: e.offsetX !== undefined ? e.offsetX : '-',
+        offsetY: e.offsetY !== undefined ? e.offsetY : '-'
+      }
+      console.log('事件对象:', JSON.stringify(e))
+    }
+  },
+
+  onBubble(layer) {
+    // 使用时间戳判断是否是同一次点击的冒泡
+    const now = Date.now()
+    if (!this._lastBubbleTime || now - this._lastBubbleTime > 50) {
+      // 新的点击，清空重新开始
+      this.bubbleInfo = layer
+    } else {
+      // 同一次点击的冒泡，追加
+      this.bubbleInfo = `${this.bubbleInfo} → ${layer}`
+    }
+    this._lastBubbleTime = now
+    console.log(`事件冒泡: ${layer}`)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,125 @@
+<!-- 动画样式示例 -->
+<template>
+  <div class="column page">
+    <text class="header">动画样式</text>
+
+    <!-- transform -->
+    <text class="label">1. transform</text>
+    <div style="flex-direction: row;">
+      <div class="anim-box" style="transform: rotate(30deg);">
+        <text class="anim-text">rotate</text>
+      </div>
+      <div class="anim-box" style="transform: scale(0.7);">
+        <text class="anim-text">scale</text>
+      </div>
+      <div class="anim-box" style="transform: translateX(20px);">
+        <text class="anim-text">translate</text>
+      </div>
+    </div>
+
+    <!-- transform-origin -->
+    <text class="label">2. transform-origin</text>
+    <div style="flex-direction: row;">
+      <div class="anim-box" style="transform: rotate(30deg); transform-origin: 0% 0%;">
+        <text class="anim-text">左上</text>
+      </div>
+      <div class="anim-box" style="transform: rotate(30deg); transform-origin: 50% 50%;">
+        <text class="anim-text">中心</text>
+      </div>
+    </div>
+
+    <!-- transition -->
+    <text class="label">3. transition</text>
+    <div class="trans-box" style="width: {{transWidth}}px; background-color: {{transColor}};" @click="toggleTransition">
+      <text class="anim-text">点击过渡</text>
+    </div>
+
+    <!-- animation @keyframes -->
+    <text class="label">4. @keyframes 动画</text>
+    <div class="anim-box breathe-anim">
+      <text class="anim-text">呼吸</text>
+    </div>
+
+    <!-- 多属性 animation -->
+    <text class="label">5. 旋转动画</text>
+    <div class="anim-box spin-anim">
+      <text class="anim-text">旋转</text>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    transWidth: 150,
+    transColor: '#0faeff'
+  },
+
+  toggleTransition() {
+    if (this.transWidth === 150) {
+      this.transWidth = 300
+      this.transColor = '#E91E63'
+    } else {
+      this.transWidth = 150
+      this.transColor = '#0faeff'
+    }
+    console.log('[animation] transition width:' + this.transWidth)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.anim-box {
+  width: 100px;
+  height: 70px;
+  background-color: #0faeff;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 5px;
+  border-radius: 8px;
+}
+
+.anim-text {
+  color: #ffffff;
+  font-size: 22px;
+}
+
+.trans-box {
+  height: 70px;
+  background-color: #0faeff;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  border-radius: 8px;
+  transition-property: width, background-color;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+}
+
+.breathe-anim {
+  animation-name: Breathe;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes Breathe {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.spin-anim {
+  animation-name: Spin;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes Spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>

@@ -1,0 +1,24 @@
+<!-- span 组件示例：展示行内文本样式 -->
+<template>
+  <div class="column page">
+    <text class="header">span 组件</text>
+
+    <text class="label">1. 基本用法（嵌套在 text 中）</text>
+    <text><span>普通文字</span><span style="color: #ff6b6b;">红色 span</span><span>普通文字</span></text>
+
+    <text class="label">2. 字体样式</text>
+    <text><span style="font-size: 20px;">20px</span><span> </span><span style="font-size: 30px;">30px</span></text>
+    <text><span style="font-weight: bold;">粗体</span><span> </span><span style="font-style: italic;">斜体</span></text>
+
+    <text class="label">3. 文本装饰</text>
+    <text><span style="text-decoration: underline;">下划线</span><span> </span><span style="text-decoration: line-through;">删除线</span></text>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

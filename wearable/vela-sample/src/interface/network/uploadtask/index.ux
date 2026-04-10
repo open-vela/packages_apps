@@ -1,0 +1,111 @@
+<!-- 上传 uploadtask 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">上传 uploadtask</text>
+
+    <text class="label">1. 准备上传文件</text>
+    <input type="button" class="btn" onclick="prepareFile" value="创建测试文件" />
+    <text class="code" if="{{fileStatus}}">{{fileStatus}}</text>
+
+    <text class="label">2. uploadFile 上传</text>
+    <input type="button" class="btn" onclick="startUpload" value="开始上传" />
+    <text class="code" if="{{uploadStatus}}">{{uploadStatus}}</text>
+
+    <text class="label">3. onProgressUpdate 进度</text>
+    <text>进度: {{progress}}%</text>
+    <text class="code" if="{{progressDetail}}">{{progressDetail}}</text>
+
+    <text class="label">4. abort 中断上传</text>
+    <input type="button" class="btn" onclick="abortUpload" value="中断上传" />
+
+    <text class="result" if="{{msg}}">{{msg}}</text>
+  </div>
+</template>
+
+<script>
+import uploadtask from '@system.uploadtask'
+import file from '@system.file'
+
+export default {
+  private: {
+    fileStatus: '',
+    uploadStatus: '',
+    progress: 0,
+    progressDetail: '',
+    msg: '',
+    task: null
+  },
+
+  prepareFile() {
+    file.writeText({
+      uri: 'internal://cache/test.txt',
+      text: 'Hello Vela Upload Test ' + Date.now(),
+      success: () => {
+        console.log('[uploadtask] 文件已创建')
+        this.fileStatus = '文件已创建: cache/test.txt'
+      },
+      fail: (data, code) => {
+        console.log('[uploadtask] 创建文件失败: ' + code)
+        this.fileStatus = '创建失败: ' + code
+      }
+    })
+  },
+
+  startUpload() {
+    this.progress = 0
+    this.uploadStatus = '上传中...'
+    this.msg = ''
+    console.log('[uploadtask] uploadFile start')
+
+    this.task = uploadtask.uploadFile({
+      url: 'http://httpbin.org/post',
+      filePath: 'internal://cache/test.txt',
+      name: 'file',
+      header: {
+        'Content-Type': 'multipart/form-data'
+      },
+      formData: {
+        source: 'vela-sample'
+      },
+      timeout: 30000,
+      success: (res) => {
+        this.uploadStatus = '上传成功 status: ' + res.statusCode
+        console.log('[uploadtask] success status:' + res.statusCode)
+      },
+      fail: (data, code) => {
+        this.uploadStatus = '上传失败: ' + code
+        console.log('[uploadtask] fail: ' + code)
+      }
+    })
+
+    if (this.task) {
+      this.task.onProgressUpdate((res) => {
+        this.progress = res.progress
+        this.progressDetail = 'sent: ' + res.totalBytesSent + ' / ' + res.totalBytesExpectedToSend
+        console.log('[uploadtask] progress: ' + res.progress + '%')
+      })
+    }
+  },
+
+  abortUpload() {
+    if (this.task) {
+      this.task.abort()
+      this.msg = '上传已中断'
+      this.task = null
+      console.log('[uploadtask] abort')
+    } else {
+      this.msg = '没有进行中的上传任务'
+    }
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 10px;
+}
+</style>

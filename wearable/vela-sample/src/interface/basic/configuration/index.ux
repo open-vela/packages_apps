@@ -1,0 +1,27 @@
+<!-- 应用配置 configuration 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">应用配置 configuration</text>
+    <input type="button" class="btn" onclick="getLocale" value="获取语言配置" />
+    <text>语言: {{language}}</text>
+    <text>地区: {{countryOrRegion}}</text>
+  </div>
+</template>
+
+<script>
+import configuration from '@system.configuration'
+
+export default {
+  private: { language: '', countryOrRegion: '' },
+  getLocale() {
+    const locale = configuration.getLocale()
+    console.log('[configuration] getLocale: ' + JSON.stringify(locale))
+    this.language = locale.language
+    this.countryOrRegion = locale.countryOrRegion
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

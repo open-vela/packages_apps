@@ -1,0 +1,115 @@
+<!-- 屏幕亮度 brightness 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">屏幕亮度</text>
+
+    <text class="label">1. getValue 获取亮度</text>
+    <input type="button" class="btn" onclick="getValue" value="获取当前亮度" />
+    <text>亮度值: {{value}} (0-255)</text>
+
+    <text class="label">2. setValue 设置亮度</text>
+    <slider min="0" max="255" value="{{targetValue}}" onchange="onSliderChange" style="width: 300px; margin: 15px 0;"></slider>
+    <input type="button" class="btn" onclick="setBrightness" value="设置亮度 {{targetValue}}" />
+    <text class="result" if="{{setMsg}}">{{setMsg}}</text>
+
+    <text class="label">3. getMode 亮度模式</text>
+    <input type="button" class="btn" onclick="getMode" value="获取亮度模式" />
+    <text>模式: {{modeText}}</text>
+
+    <text class="label">4. setMode 切换模式</text>
+    <input type="button" class="btn" onclick="toggleMode" value="切换为{{mode === 0 ? '自动' : '手动'}}" />
+
+    <text class="label">5. setKeepScreenOn</text>
+    <input type="button" class="btn" onclick="toggleKeepOn" value="常亮: {{keepOn ? '开' : '关'}}" />
+
+    <text class="result" if="{{msg}}">{{msg}}</text>
+  </div>
+</template>
+
+<script>
+import brightness from '@system.brightness'
+
+export default {
+  private: {
+    value: 0,
+    targetValue: 128,
+    mode: -1,
+    modeText: '',
+    keepOn: false,
+    msg: '',
+    setMsg: ''
+  },
+
+  getValue() {
+    brightness.getValue({
+      success: (data) => {
+        this.value = data.value
+        this.targetValue = data.value
+      },
+      fail: (data, code) => { this.msg = '获取失败: ' + code }
+    })
+  },
+
+  onSliderChange(e) {
+    this.targetValue = e.progress
+    console.log('[brightness] slider: ' + e.progress)
+  },
+
+  setBrightness() {
+    console.log('[brightness] setValue: ' + this.targetValue)
+    brightness.setValue({
+      value: this.targetValue,
+      success: () => {
+        this.value = this.targetValue
+        this.setMsg = '设置成功: ' + this.targetValue
+        console.log('[brightness] setValue 成功: ' + this.targetValue)
+      },
+      fail: (data, code) => {
+        this.setMsg = '设置失败: ' + code
+        console.log('[brightness] setValue 失败: ' + code)
+      }
+    })
+  },
+
+  getMode() {
+    brightness.getMode({
+      success: (data) => {
+        this.mode = data.mode
+        this.modeText = data.mode === 0 ? '手动' : '自动'
+      },
+      fail: (data, code) => { this.msg = '获取模式失败: ' + code }
+    })
+  },
+
+  toggleMode() {
+    const newMode = this.mode === 0 ? 1 : 0
+    brightness.setMode({
+      mode: newMode,
+      success: () => {
+        this.mode = newMode
+        this.modeText = newMode === 0 ? '手动' : '自动'
+      },
+      fail: (data, code) => { this.msg = '设置模式失败: ' + code }
+    })
+  },
+
+  toggleKeepOn() {
+    this.keepOn = !this.keepOn
+    brightness.setKeepScreenOn({
+      keepScreenOn: this.keepOn,
+      success: () => { this.msg = '常亮: ' + (this.keepOn ? '开启' : '关闭') },
+      fail: (data, code) => { this.msg = '设置常亮失败: ' + code }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 10px;
+}
+</style>

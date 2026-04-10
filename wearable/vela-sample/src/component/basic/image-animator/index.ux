@@ -1,0 +1,85 @@
+<template>
+  <div class="column page">
+    <text class="header">image-animator</text>
+
+    <image-animator id="animator" class="animator" images="{{frames}}" duration="{{duration}}" iteration="infinite" fixedsize="true"></image-animator>
+    <text class="code" style="margin-top: 10px;">状态: {{state}}</text>
+
+    <div class="row" style="margin-top: 10px; flex-wrap: wrap;">
+      <input type="button" class="btn-sm" onclick="handleStart" value="start" />
+      <input type="button" class="btn-sm" onclick="handlePause" value="pause" />
+      <input type="button" class="btn-sm" onclick="handleResume" value="resume" />
+      <input type="button" class="btn-sm" onclick="handleStop" value="stop" />
+    </div>
+
+    <text class="label">播放速度</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="setDuration('2s')" value="慢 2s" />
+      <input type="button" class="btn-sm" onclick="setDuration('1s')" value="中 1s" />
+      <input type="button" class="btn-sm" onclick="setDuration('500ms')" value="快 0.5s" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    state: 'stopped',
+    duration: '1s',
+    frames: [
+      { src: '/Common/logo.png' },
+      { src: '/Common/arrow-0.png' },
+      { src: '/Common/arrow-1.png' },
+      { src: '/Common/logo.png' },
+      { src: '/Common/arrow-0.png' }
+    ]
+  },
+  handleStart() {
+    this.$element('animator').start()
+    this.state = 'playing'
+    console.log('[image-animator] start')
+  },
+  handlePause() {
+    this.$element('animator').pause()
+    this.state = 'paused'
+    console.log('[image-animator] pause')
+  },
+  handleResume() {
+    this.$element('animator').resume()
+    this.state = 'playing'
+    console.log('[image-animator] resume')
+  },
+  handleStop() {
+    this.$element('animator').stop()
+    this.state = 'stopped'
+    console.log('[image-animator] stop')
+  },
+  setDuration(d) {
+    this.$element('animator').stop()
+    this.duration = d
+    this.state = 'stopped'
+    console.log('[image-animator] setDuration: ' + d)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.animator {
+  width: 120px;
+  height: 120px;
+  margin-top: 10px;
+}
+
+.btn-sm {
+  height: 50px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 26px;
+  background-color: #0faeff;
+}
+</style>

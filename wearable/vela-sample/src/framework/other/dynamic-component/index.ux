@@ -1,0 +1,34 @@
+<!-- 动态组件示例：通过 <component is="xxx"> 切换组件 -->
+<import name="part-red" src="./part-red.ux"></import>
+<import name="part-green" src="./part-green.ux"></import>
+<import name="part-blue" src="./part-blue.ux"></import>
+
+<template>
+  <div class="column page">
+    <text class="header">动态组件</text>
+
+    <text class="label">当前: {{currentName}}</text>
+    <component is="{{currentName}}"></component>
+
+    <input type="button" class="btn" onclick="switchComponent" value="切换组件" />
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    currentName: 'part-red',
+    components: ['part-red', 'part-green', 'part-blue']
+  },
+
+  switchComponent() {
+    const idx = (this.components.indexOf(this.currentName) + 1) % this.components.length
+    this.currentName = this.components[idx]
+    console.log('[dynamic-component] switch to: ' + this.currentName)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

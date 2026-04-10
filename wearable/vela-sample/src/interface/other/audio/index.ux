@@ -1,0 +1,118 @@
+<!-- 音频 audio 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">音频 audio</text>
+
+    <!-- 基本控制 -->
+    <text class="label">1. 播放控制</text>
+    <input type="button" class="btn" onclick="play" value="播放" />
+    <input type="button" class="btn" onclick="pause" value="暂停" />
+    <input type="button" class="btn" onclick="stop" value="停止" />
+
+    <!-- 获取播放状态 -->
+    <text class="label">2. 播放状态</text>
+    <input type="button" class="btn" onclick="getState" value="获取播放状态" />
+    <text>状态: {{state}}</text>
+    <text>进度: {{currentTime}}s / {{duration}}s</text>
+
+    <!-- 属性设置 -->
+    <text class="label">3. 属性控制</text>
+    <input type="button" class="btn" onclick="toggleLoop" value="循环: {{loop ? '开' : '关'}}" />
+    <input type="button" class="btn" onclick="toggleMuted" value="静音: {{muted ? '开' : '关'}}" />
+
+    <!-- 事件监听 -->
+    <text class="label">4. 事件</text>
+    <text>{{eventInfo}}</text>
+  </div>
+</template>
+
+<script>
+import audio from '@system.audio'
+
+export default {
+  private: {
+    state: '',
+    currentTime: '',
+    duration: '',
+    loop: false,
+    muted: false,
+    eventInfo: ''
+  },
+
+  onReady() {
+    // 注册事件监听
+    audio.onplay = () => {
+      this.eventInfo = '事件: play 触发'
+      console.log('[audio] onplay')
+    }
+    audio.onpause = () => {
+      this.eventInfo = '事件: pause 触发'
+      console.log('[audio] onpause')
+    }
+    audio.onstop = () => {
+      this.eventInfo = '事件: stop 触发'
+      console.log('[audio] onstop')
+    }
+    audio.onended = () => {
+      this.eventInfo = '事件: ended 播放结束'
+      console.log('[audio] onended')
+    }
+    audio.onerror = () => {
+      this.eventInfo = '事件: error 播放出错'
+      console.log('[audio] onerror')
+    }
+  },
+
+  play() {
+    audio.src = '/Common/mp3/m2.mp3'
+    audio.play()
+    console.log('[audio] play')
+  },
+
+  pause() {
+    audio.pause()
+    console.log('[audio] pause')
+  },
+
+  stop() {
+    audio.stop()
+    console.log('[audio] stop')
+  },
+
+  getState() {
+    audio.getPlayState({
+      success: (data) => {
+        this.state = data.state
+        this.currentTime = data.currentTime
+        this.duration = data.duration
+        console.log('[audio] getPlayState: ' + data.state + ' ' + data.currentTime + '/' + data.duration)
+      }
+    })
+  },
+
+  toggleLoop() {
+    this.loop = !this.loop
+    audio.loop = this.loop
+    console.log('[audio] loop: ' + this.loop)
+  },
+
+  toggleMuted() {
+    this.muted = !this.muted
+    audio.muted = this.muted
+    console.log('[audio] muted: ' + this.muted)
+  },
+
+  onDestroy() {
+    audio.stop()
+    audio.onplay = null
+    audio.onpause = null
+    audio.onstop = null
+    audio.onended = null
+    audio.onerror = null
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

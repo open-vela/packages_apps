@@ -1,0 +1,70 @@
+<!-- 地理位置 geolocation 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">地理位置 geolocation</text>
+
+    <!-- getLocation -->
+    <text class="label">1. 获取位置（单次）</text>
+    <input type="button" class="btn" onclick="getLocation" value="获取当前位置" />
+    <text>经度: {{longitude}}</text>
+    <text>纬度: {{latitude}}</text>
+
+    <!-- subscribe -->
+    <text class="label">2. 持续监听位置</text>
+    <input type="button" class="btn" onclick="subscribe" value="开始监听" />
+    <input type="button" class="btn" onclick="unsubscribe" value="停止监听" />
+    <text>{{subscribeInfo}}</text>
+  </div>
+</template>
+
+<script>
+import geolocation from '@system.geolocation'
+
+export default {
+  private: {
+    longitude: '',
+    latitude: '',
+    subscribeInfo: ''
+  },
+
+  getLocation() {
+    console.log('[geolocation] getLocation')
+    geolocation.getLocation({
+      success: (data) => {
+        this.longitude = data.longitude
+        this.latitude = data.latitude
+        console.log('[geolocation] lon:' + data.longitude + ' lat:' + data.latitude)
+      },
+      fail: (data, code) => {
+        this.longitude = '获取失败: ' + code
+        console.log('[geolocation] getLocation fail: ' + code)
+      }
+    })
+  },
+
+  subscribe() {
+    this.subscribeInfo = '监听中...'
+    console.log('[geolocation] subscribe')
+    geolocation.subscribe({
+      callback: (data) => {
+        this.subscribeInfo = '经度: ' + data.longitude + ', 纬度: ' + data.latitude
+        console.log('[geolocation] 位置变化 lon:' + data.longitude + ' lat:' + data.latitude)
+      }
+    })
+  },
+
+  unsubscribe() {
+    geolocation.unsubscribe()
+    this.subscribeInfo = '已停止监听'
+    console.log('[geolocation] unsubscribe')
+  },
+
+  onDestroy() {
+    geolocation.unsubscribe()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

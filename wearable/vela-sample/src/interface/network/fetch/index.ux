@@ -1,0 +1,77 @@
+<!-- 数据请求 fetch 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">数据请求 fetch</text>
+
+    <!-- GET 请求 -->
+    <text class="label">1. GET 请求</text>
+    <input type="button" class="btn" onclick="doGet" value="发起 GET 请求" />
+    <text>状态: {{getStatus}}</text>
+    <text class="code" if="{{getResult}}">{{getResult}}</text>
+
+    <!-- POST 请求 -->
+    <text class="label">2. POST 请求</text>
+    <input type="button" class="btn" onclick="doPost" value="发起 POST 请求" />
+    <text>状态: {{postStatus}}</text>
+    <text class="code" if="{{postResult}}">{{postResult}}</text>
+  </div>
+</template>
+
+<script>
+import fetch from '@system.fetch'
+
+export default {
+  private: {
+    getStatus: '',
+    getResult: '',
+    postStatus: '',
+    postResult: ''
+  },
+
+  doGet() {
+    this.getStatus = '请求中...'
+    this.getResult = ''
+    console.log('[fetch] GET https://httpbin.org/get')
+    fetch.fetch({
+      url: 'https://httpbin.org/get',
+      method: 'GET',
+      responseType: 'text',
+      success: (res) => {
+        this.getStatus = 'code: ' + res.code
+        this.getResult = (res.data || '').substring(0, 150)
+        console.log('[fetch] GET success code:' + res.code)
+      },
+      fail: (data, code) => {
+        this.getStatus = '失败 code: ' + code
+        this.getResult = data
+        console.log('[fetch] GET fail: ' + code)
+      }
+    })
+  },
+
+  doPost() {
+    this.postStatus = '请求中...'
+    this.postResult = ''
+    console.log('[fetch] POST https://httpbin.org/post')
+    fetch.fetch({
+      url: 'https://httpbin.org/post',
+      method: 'POST',
+      data: { key: 'vela', value: 'sample' },
+      success: (res) => {
+        this.postStatus = 'code: ' + res.code
+        this.postResult = (res.data || '').substring(0, 150)
+        console.log('[fetch] POST success code:' + res.code)
+      },
+      fail: (data, code) => {
+        this.postStatus = '失败 code: ' + code
+        this.postResult = data
+        console.log('[fetch] POST fail: ' + code)
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,46 @@
+<!-- image 组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">image 组件</text>
+
+    <!-- 本地图片 -->
+    <text class="label">1. 本地图片</text>
+    <image src="/Common/logo.png" style="width: 100px; height: 100px;"></image>
+
+    <!-- object-fit 缩放模式 -->
+    <text class="label">2. object-fit 缩放模式</text>
+    <text>contain（完整显示）</text>
+    <image src="/Common/logo.png" style="width: 150px; height: 80px; object-fit: contain; background-color: #f0f0f0;"></image>
+    <text>cover（裁剪填充）</text>
+    <image src="/Common/logo.png" style="width: 150px; height: 80px; object-fit: cover; background-color: #f0f0f0;"></image>
+    <text>none（原始大小居中）</text>
+    <image src="/Common/logo.png" style="width: 150px; height: 80px; object-fit: none; background-color: #f0f0f0;"></image>
+
+    <!-- alt 占位图 -->
+    <text class="label">3. alt 占位图</text>
+    <image src="https://invalid-url.example.com/none.png" alt="/Common/logo.png" style="width: 100px; height: 100px;"></image>
+
+    <!-- 事件 -->
+    <text class="label">4. 加载事件</text>
+    <image src="/Common/logo.png" style="width: 100px; height: 100px;" oncomplete="onComplete" onerror="onError"></image>
+    <text>{{loadInfo}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: { loadInfo: '' },
+  onComplete(e) {
+    this.loadInfo = '加载完成: ' + e.width + 'x' + e.height
+    console.log('[image] onComplete: ' + e.width + 'x' + e.height)
+  },
+  onError() {
+    this.loadInfo = '加载失败'
+    console.log('[image] onError')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

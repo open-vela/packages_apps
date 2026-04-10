@@ -1,0 +1,8 @@
+{
+  "appName": "Vela Sample",
+  "greeting": "Hello, World",
+  "welcome": "Welcome to {name}",
+  "itemCount": "{0} items",
+  "car": "car | cars",
+  "apple": "no apples | one apple | {count} apples"
+}

@@ -1,0 +1,55 @@
+<!-- 条件指令 if 示例：展示条件渲染 -->
+<template>
+  <div class="column page">
+    <text class="header">条件指令 if / show</text>
+
+    <!-- if 指令 -->
+    <text class="label">1. if 条件渲染</text>
+    <input type="button" class="btn" onclick="toggleVisible" value="切换显示" />
+    <text if="{{visible}}">这段文字通过 if 控制显示</text>
+
+    <!-- if / elif / else -->
+    <text class="label">2. if / elif / else</text>
+    <input type="button" class="btn" onclick="changeStatus" value="切换状态 (当前: {{status}})" />
+    <text if="{{status === 'loading'}}">加载中...</text>
+    <text elif="{{status === 'success'}}">加载成功</text>
+    <text elif="{{status === 'error'}}">加载失败</text>
+    <text else>未知状态</text>
+
+    <!-- show 指令 -->
+    <text class="label">3. show 指令（不销毁节点）</text>
+    <input type="button" class="btn" onclick="toggleShow" value="切换 show" />
+    <text show="{{showText}}">这段文字通过 show 控制显示</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    visible: true,
+    showText: true,
+    status: 'loading'
+  },
+
+  toggleVisible() {
+    this.visible = !this.visible
+    console.log('[if] toggleVisible: ' + this.visible)
+  },
+
+  toggleShow() {
+    this.showText = !this.showText
+    console.log('[if] toggleShow: ' + this.showText)
+  },
+
+  changeStatus() {
+    const states = ['loading', 'success', 'error']
+    const idx = (states.indexOf(this.status) + 1) % states.length
+    this.status = states[idx]
+    console.log('[if] changeStatus: ' + this.status)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,104 @@
+<!-- 启动模式示例：standard vs singleTask -->
+<template>
+  <div class="column page">
+    <text class="header">启动模式</text>
+
+    <text class="label">当前页面栈</text>
+    <text>深度: {{stackLength}}</text>
+    <text>当前: {{currentName}} ({{currentPath}})</text>
+
+    <!-- standard 模式：每次创建新实例 -->
+    <text class="label">1. standard 模式</text>
+    <input type="button" class="btn" onclick="pushStandard" value="push 本页 (standard)" />
+    <text class="desc">每次都创建新实例，栈深度 +1</text>
+
+    <!-- singleTask 模式 -->
+    <text class="label">2. singleTask 模式</text>
+    <input type="button" class="btn" onclick="pushSingleTask" value="push singleTask 页面" />
+    <text class="desc">已存在则复用，清除其上方页面</text>
+
+    <!-- clearTask 动态声明 -->
+    <text class="label">3. clearTask 动态声明</text>
+    <input type="button" class="btn" onclick="pushClearTask" value="push + clearTask" />
+    <text class="desc">清除其他所有页面，只保留目标页</text>
+
+    <!-- 导航 -->
+    <text class="label">4. 导航操作</text>
+    <input type="button" class="btn" onclick="goBack" value="返回上一页" />
+    <input type="button" class="btn" onclick="goHome" value="回到首页" />
+
+    <text class="label" if="{{refreshMsg}}">onRefresh: {{refreshMsg}}</text>
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  private: {
+    stackLength: 0,
+    currentName: '',
+    currentPath: '',
+    refreshMsg: ''
+  },
+
+  onReady() {
+    this.updateState()
+  },
+
+  onRefresh() {
+    this.refreshMsg = '页面被复用，触发 onRefresh'
+    this.updateState()
+  },
+
+  updateState() {
+    const state = router.getState()
+    this.currentName = state.name
+    this.currentPath = state.path
+    this.stackLength = router.getLength()
+  },
+
+  pushStandard() {
+    console.log('[launch-mode] push standard')
+    router.push({
+      uri: 'framework/other/launch-mode'
+    })
+  },
+
+  pushSingleTask() {
+    console.log('[launch-mode] push singleTask')
+    router.push({
+      uri: 'framework/other/launch-mode-target'
+    })
+  },
+
+  pushClearTask() {
+    console.log('[launch-mode] push clearTask')
+    router.push({
+      uri: 'framework/other/launch-mode',
+      params: {
+        ___PARAM_LAUNCH_FLAG___: 'clearTask'
+      }
+    })
+  },
+
+  goBack() {
+    console.log('[launch-mode] back')
+    router.back()
+  },
+
+  goHome() {
+    console.log('[launch-mode] back to home')
+    router.back({ path: '/home' })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.desc {
+  color: #888888;
+  font-size: 22px;
+}
+</style>

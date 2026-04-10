@@ -1,0 +1,34 @@
+<!-- 电量 battery 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">电量 battery</text>
+    <input type="button" class="btn" onclick="getStatus" value="获取电量信息" />
+    <text>电量：{{level}}%</text>
+    <text>充电状态：{{charging ? '充电中' : '未充电'}}</text>
+  </div>
+</template>
+
+<script>
+import battery from '@system.battery'
+
+export default {
+  private: { level: '', charging: false },
+  getStatus() {
+    battery.getStatus({
+      success: (data) => {
+        this.level = data.level
+        this.charging = data.charging
+        console.log('[battery] level:' + data.level + ' charging:' + data.charging)
+      },
+      fail: (data, code) => {
+        this.level = '获取失败: ' + code
+        console.log('[battery] getStatus fail: ' + code)
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

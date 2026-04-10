@@ -1,0 +1,40 @@
+<!-- 录音 record 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">录音 record</text>
+    <input type="button" class="btn" onclick="startRecord" value="开始录音" />
+    <input type="button" class="btn" onclick="stopRecord" value="停止录音" />
+    <text>{{result}}</text>
+  </div>
+</template>
+
+<script>
+import record from '@system.record'
+
+export default {
+  private: { result: '' },
+  startRecord() {
+    record.start({
+      success: (data) => {
+        this.result = '录音文件: ' + data.uri
+        console.log('[record] start success: ' + data.uri)
+      },
+      fail: (data, code) => {
+        this.result = '录音失败: ' + code
+        console.log('[record] start fail: ' + code)
+      }
+    })
+    this.result = '录音中...'
+    console.log('[record] start')
+  },
+  stopRecord() {
+    record.stop()
+    this.result = '录音已停止'
+    console.log('[record] stop')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

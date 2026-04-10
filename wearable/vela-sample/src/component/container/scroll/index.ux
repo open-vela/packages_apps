@@ -1,0 +1,106 @@
+<template>
+  <div class="column page">
+    <text class="header">scroll 滚动容器</text>
+
+    <text class="label">纵向滚动</text>
+    <scroll id="scrollY" class="scroll-box" scroll-y="true" onscroll="onScrollY" onscrolltop="onTop" onscrollbottom="onBottom">
+      <div class="scroll-item" for="{{listY}}">
+        <text>{{$item}}</text>
+      </div>
+    </scroll>
+    <text class="code">{{scrollYInfo}}</text>
+
+    <div class="row" style="margin-top: 10px;">
+      <input type="button" class="btn-sm" onclick="scrollToTop" value="滚到顶部" />
+      <input type="button" class="btn-sm" onclick="scrollToBottom" value="滚到底部" />
+    </div>
+
+    <text class="label" style="margin-top: 15px;">横向滚动</text>
+    <scroll id="scrollX" class="scroll-box-x" scroll-x="true" onscroll="onScrollX">
+      <text class="scroll-item-x" for="{{listX}}">{{$item}}</text>
+    </scroll>
+    <text class="code">{{scrollXInfo}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    listY: ['北京', '上海', '广州', '深圳', '杭州', '成都', '武汉', '南京', '西安', '重庆'],
+    listX: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+    scrollYInfo: '',
+    scrollXInfo: ''
+  },
+  onScrollY(e) {
+    this.scrollYInfo = 'Y: ' + Math.round(e.scrollY)
+  },
+  onScrollX(e) {
+    this.scrollXInfo = 'X: ' + Math.round(e.scrollX)
+  },
+  onTop() {
+    this.scrollYInfo = '已到顶部'
+    console.log('[scroll] scrollTop')
+  },
+  onBottom() {
+    this.scrollYInfo = '已到底部'
+    console.log('[scroll] scrollBottom')
+  },
+  scrollToTop() {
+    this.$element('scrollY').scrollTo({ top: 0, behavior: 'smooth' })
+    console.log('[scroll] scrollTo top:0')
+  },
+  scrollToBottom() {
+    this.$element('scrollY').scrollTo({ top: 9999, behavior: 'smooth' })
+    console.log('[scroll] scrollTo top:9999')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.scroll-box {
+  height: 180px;
+  width: 100%;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+
+.scroll-item {
+  width: 100%;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.scroll-box-x {
+  height: 80px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+
+.scroll-item-x {
+  width: 120px;
+  height: 80px;
+  text-align: center;
+  background-color: #0faeff;
+  color: #fff;
+  margin-right: 5px;
+}
+
+.btn-sm {
+  height: 50px;
+  width: 140px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 26px;
+  background-color: #0faeff;
+}
+</style>

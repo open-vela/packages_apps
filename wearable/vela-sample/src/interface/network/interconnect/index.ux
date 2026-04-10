@@ -1,0 +1,103 @@
+<!-- 设备通信 interconnect 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">设备通信 interconnect</text>
+    <text class="tips">用于和搭配使用的手机 App 进行通信</text>
+
+    <!-- 获取连接状态 -->
+    <text class="label">1. 连接状态</text>
+    <input type="button" class="btn" onclick="checkState" value="获取连接状态" />
+    <text>{{stateInfo}}</text>
+
+    <!-- 诊断连接 -->
+    <text class="label">2. 诊断连接</text>
+    <input type="button" class="btn" onclick="diagnose" value="诊断连接" />
+    <text>{{diagInfo}}</text>
+
+    <!-- 发送数据 -->
+    <text class="label">3. 发送数据</text>
+    <input type="button" class="btn" onclick="sendData" value="发送测试数据" />
+    <text>{{sendInfo}}</text>
+
+    <!-- 接收数据 -->
+    <text class="label">4. 接收数据</text>
+    <text>{{receiveInfo}}</text>
+  </div>
+</template>
+
+<script>
+import interconnect from '@system.interconnect'
+
+export default {
+  private: {
+    connect: null,
+    stateInfo: '',
+    diagInfo: '',
+    sendInfo: '',
+    receiveInfo: '等待接收...'
+  },
+
+  onReady() {
+    this.connect = interconnect.instance()
+
+    // 监听连接事件
+    this.connect.onmessage = (data) => {
+      this.receiveInfo = '收到数据: ' + data.data
+    }
+    this.connect.onopen = (data) => {
+      console.log('连接打开, 重连: ' + data.isReconnected)
+    }
+    this.connect.onclose = (data) => {
+      console.log('连接关闭: ' + data.code)
+    }
+    this.connect.onerror = (data) => {
+      console.log('连接错误: ' + data.code + ' ' + data.data)
+    }
+  },
+
+  checkState() {
+    this.connect.getReadyState({
+      success: (data) => {
+        this.stateInfo = data.status === 1 ? '已连接' : '已断开'
+      },
+      fail: (data, code) => {
+        this.stateInfo = '获取失败: ' + code
+      }
+    })
+  },
+
+  diagnose() {
+    this.diagInfo = '诊断中...'
+    this.connect.diagnosis({
+      success: (data) => {
+        const statusMap = { 0: '连接正常', 204: '连接超时', 1001: '对端未安装', 1000: '其他错误' }
+        this.diagInfo = statusMap[data.status] || '未知状态'
+      },
+      fail: (data, code) => {
+        this.diagInfo = '诊断失败: ' + code
+      }
+    })
+  },
+
+  sendData() {
+    this.connect.send({
+      data: { msg: 'hello from vela', timestamp: Date.now() },
+      success: () => { this.sendInfo = '发送成功' },
+      fail: (data, code) => { this.sendInfo = '发送失败: ' + code }
+    })
+  },
+
+  onDestroy() {
+    if (this.connect) {
+      this.connect.onmessage = null
+      this.connect.onopen = null
+      this.connect.onclose = null
+      this.connect.onerror = null
+    }
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

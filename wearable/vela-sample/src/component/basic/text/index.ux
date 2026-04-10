@@ -1,0 +1,56 @@
+<!-- text 组件示例：展示文本的常用样式和属性 -->
+<template>
+  <div class="column page">
+    <!-- 基本用法：包含 span 子组件 -->
+    <text class="header">1. 基本用法</text>
+    <text><span>text 包含 span 子组件</span></text>
+    <text>普通文本内容</text>
+
+    <!-- 字体大小 -->
+    <text class="header">2. font-size</text>
+    <text style="font-size: 16px;">16px 字体</text>
+    <text style="font-size: 26px;">26px 字体</text>
+
+    <!-- 字体样式 -->
+    <text class="header">3. font-style</text>
+    <text>normal 样式</text>
+    <text style="font-style: italic;">italic 斜体</text>
+
+    <!-- 字体粗细 -->
+    <text class="header">4. font-weight</text>
+    <text style="font-weight: normal;">normal</text>
+    <text style="font-weight: bold;">bold 粗体</text>
+
+    <!-- 文本装饰 -->
+    <text class="header">5. text-decoration</text>
+    <text style="text-decoration: underline;">下划线 underline</text>
+    <text style="text-decoration: line-through;">删除线 line-through</text>
+
+    <!-- 文本对齐 -->
+    <text class="header">6. text-align</text>
+    <text style="text-align: left;">左对齐 left</text>
+    <text style="text-align: center;">居中 center</text>
+    <text style="text-align: right;">右对齐 right</text>
+
+    <!-- 文本溢出 -->
+    <text class="header">7. text-overflow</text>
+    <text style="lines: 1; text-overflow: ellipsis;">这是一段很长的文本，用于演示文本溢出时显示省略号的效果，超出一行后会被截断并显示省略号</text>
+    <text style="lines: 2; text-overflow: ellipsis;">这是一段很长的文本，用于演示两行限制时文本溢出显示省略号的效果，超出两行后会被截断并显示省略号，这里需要足够多的文字来触发溢出</text>
+
+    <!-- 行高 -->
+    <text class="header">8. line-height</text>
+    <text style="line-height: 40px;">行高 40px 的文本示例</text>
+
+    <!-- 首行缩进 -->
+    <text class="header">9. text-indent</text>
+    <text style="text-indent: 60px;">首行缩进 60px，这是一段用于演示首行缩进效果的文本内容</text>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

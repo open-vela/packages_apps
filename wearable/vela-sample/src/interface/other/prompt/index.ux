@@ -1,0 +1,32 @@
+<!-- 弹窗 prompt 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">弹窗 prompt</text>
+
+    <text class="label">1. showToast</text>
+    <input type="button" class="btn" onclick="showToast" value="显示 Toast" />
+
+    <text class="label">2. 不同时长</text>
+    <input type="button" class="btn" onclick="showToastLong" value="长时间 Toast" />
+  </div>
+</template>
+
+<script>
+import prompt from '@system.prompt'
+
+export default {
+  showToast() {
+    prompt.showToast({ message: '这是一条 Toast 消息' })
+    console.log('[prompt] showToast')
+  },
+
+  showToastLong() {
+    prompt.showToast({ message: '长时间显示的 Toast', duration: 1 })
+    console.log('[prompt] showToast duration:1')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

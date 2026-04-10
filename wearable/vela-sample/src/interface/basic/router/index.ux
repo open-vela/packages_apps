@@ -1,0 +1,82 @@
+<!-- 页面路由 router 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">页面路由 router</text>
+
+    <!-- push -->
+    <text class="label">1. push 跳转</text>
+    <input type="button" class="btn" onclick="pushPage" value="跳转到 text 示例" />
+
+    <!-- push 带参数 -->
+    <text class="label">2. push 带参数</text>
+    <input type="button" class="btn" onclick="pushWithParams" value="带参数跳转" />
+
+    <!-- replace -->
+    <text class="label">3. replace 替换当前页</text>
+    <input type="button" class="btn" onclick="replacePage" value="替换为首页" />
+
+    <!-- back -->
+    <text class="label">4. back 返回</text>
+    <input type="button" class="btn" onclick="goBack" value="返回上一页" />
+
+    <!-- getLength / getState -->
+    <text class="label">5. 页面栈信息</text>
+    <input type="button" class="btn" onclick="getStackInfo" value="获取页面栈信息" />
+    <text>页面栈长度: {{stackLength}}</text>
+    <text>当前页面: {{currentPage}}</text>
+
+    <!-- clear -->
+    <text class="label">6. clear 清空页面栈</text>
+    <input type="button" class="btn" onclick="clearStack" value="清空历史页面" />
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  private: {
+    stackLength: '',
+    currentPage: ''
+  },
+
+  pushPage() {
+    console.log('[router] push component/basic/text')
+    router.push({ uri: 'component/basic/text' })
+  },
+
+  pushWithParams() {
+    console.log('[router] push with params')
+    router.push({
+      uri: 'component/basic/text',
+      params: { from: 'router-sample' }
+    })
+  },
+
+  replacePage() {
+    console.log('[router] replace /')
+    router.replace({ uri: '/' })
+  },
+
+  goBack() {
+    console.log('[router] back')
+    router.back()
+  },
+
+  getStackInfo() {
+    this.stackLength = router.getLength()
+    const state = router.getState()
+    this.currentPage = state.name + ' (' + state.path + ')'
+    console.log('[router] length:' + this.stackLength + ' state:' + JSON.stringify(state))
+  },
+
+  clearStack() {
+    console.log('[router] clear')
+    router.clear()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,50 @@
+<!-- 页面生命周期示例：展示页面各生命周期钩子的执行顺序 -->
+<template>
+  <div class="column page">
+    <text class="header">页面生命周期</text>
+    <text class="tips">请查看控制台日志，观察生命周期钩子的执行顺序</text>
+
+    <text class="label">生命周期执行顺序：</text>
+    <text>1. onInit — 数据初始化</text>
+    <text>2. onReady — 模板编译完成</text>
+    <text>3. onShow — 页面显示</text>
+    <text>4. onHide — 页面隐藏</text>
+    <text>5. onDestroy — 页面销毁</text>
+
+    <text class="label" style="margin-top: 20px;">当前页面状态：{{status}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    status: '初始化中...'
+  },
+
+  onInit() {
+    console.log('[lifecycle] onInit — 数据已初始化')
+  },
+
+  onReady() {
+    console.log('[lifecycle] onReady — 模板编译完成')
+    this.status = '页面就绪'
+  },
+
+  onShow() {
+    console.log('[lifecycle] onShow — 页面显示')
+    this.status = '页面显示中'
+  },
+
+  onHide() {
+    console.log('[lifecycle] onHide — 页面隐藏')
+  },
+
+  onDestroy() {
+    console.log('[lifecycle] onDestroy — 页面销毁')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

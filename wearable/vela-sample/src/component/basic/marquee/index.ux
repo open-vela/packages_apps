@@ -1,0 +1,55 @@
+<template>
+  <div class="column page">
+    <text class="header">marquee 跑马灯</text>
+
+    <text class="label">速度: 6 (默认)</text>
+    <marquee id="m1" class="marquee" scrollamount="6">跑马灯文字 scrollamount=6 默认速度</marquee>
+
+    <text class="label">速度: 15</text>
+    <marquee id="m2" class="marquee" scrollamount="15">跑马灯文字 scrollamount=15 快速滚动</marquee>
+
+    <text class="label">速度: 3</text>
+    <marquee id="m3" class="marquee" scrollamount="3">跑马灯文字 scrollamount=3 慢速滚动</marquee>
+
+    <text class="label">向右滚动</text>
+    <marquee id="m4" class="marquee" scrollamount="8" direction="right">direction=right 向右滚动</marquee>
+
+    <div class="row" style="margin-top: 15px;">
+      <input type="button" class="btn" onclick="startAll" value="全部开始" />
+      <input type="button" class="btn" onclick="stopAll" value="全部停止" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  onReady() {
+    this.startAll()
+  },
+  startAll() {
+    this.$element('m1').start()
+    this.$element('m2').start()
+    this.$element('m3').start()
+    this.$element('m4').start()
+    console.log('[marquee] startAll')
+  },
+  stopAll() {
+    this.$element('m1').stop()
+    this.$element('m2').stop()
+    this.$element('m3').stop()
+    this.$element('m4').stop()
+    console.log('[marquee] stopAll')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.marquee {
+  color: #333;
+  font-size: 28px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+</style>

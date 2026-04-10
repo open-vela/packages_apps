@@ -1,0 +1,80 @@
+<template>
+  <div class="column page">
+    <text class="header">通用方法</text>
+
+    <text class="label">1. getBoundingRect</text>
+    <div id="targetBox" class="target-box">
+      <text style="color: #fff;">目标元素</text>
+    </div>
+    <input type="button" class="btn" onclick="getRect" value="获取位置信息" />
+    <text class="code" if="{{rectInfo}}">{{rectInfo}}</text>
+
+    <text class="label">2. focus / blur</text>
+    <div id="focusBox" class="focus-box">
+      <text style="color: #fff;">焦点元素</text>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+      <input type="button" class="btn" onclick="doFocus" value="focus" />
+      <input type="button" class="btn" onclick="doBlur" value="blur" />
+    </div>
+    <text class="code">{{focusState}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    rectInfo: '',
+    focusState: '未操作'
+  },
+  getRect() {
+    const el = this.$element('targetBox')
+    if (el) {
+      el.getBoundingClientRect({
+        success: (rect) => {
+          this.rectInfo = JSON.stringify(rect)
+          console.log('[methods] getBoundingClientRect: ' + this.rectInfo)
+        },
+        fail: (err, code) => {
+          this.rectInfo = 'fail: ' + code
+          console.log('[methods] getBoundingClientRect fail: ' + code)
+        }
+      })
+    }
+  },
+  doFocus() {
+    this.$element('focusBox').focus({ focus: true })
+    this.focusState = '已聚焦'
+    console.log('[methods] focus')
+  },
+  doBlur() {
+    this.$element('focusBox').focus({ focus: false })
+    this.focusState = '已失焦'
+    console.log('[methods] blur')
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.target-box {
+  width: 200px;
+  height: 80px;
+  background-color: #0faeff;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.focus-box {
+  width: 200px;
+  height: 80px;
+  background-color: #47cc47;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+</style>

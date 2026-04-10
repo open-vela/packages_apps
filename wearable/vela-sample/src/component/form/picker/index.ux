@@ -1,0 +1,55 @@
+<template>
+  <div class="column page">
+    <text class="header">picker 选择器</text>
+
+    <text class="label">文本选择器</text>
+    <picker class="picker" type="text" range="{{fruits}}" selected="{{fruitIdx}}" onchange="onFruitChange"></picker>
+    <text class="code">选中: {{fruits[fruitIdx]}}</text>
+
+    <text class="label" style="margin-top: 15px;">时间选择器</text>
+    <picker class="picker" type="time" selected="{{timeVal}}" onchange="onTimeChange"></picker>
+    <text class="code">选中: {{timeVal}}</text>
+
+    <text class="label" style="margin-top: 15px;">颜色选择器</text>
+    <picker class="picker" type="text" range="{{colors}}" selected="{{colorIdx}}" onchange="onColorChange"></picker>
+    <div style="width: 100px; height: 50px; margin-top: 5px; border-radius: 5px; background-color: {{colorValues[colorIdx]}};"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    fruits: ['苹果', '香蕉', '橘子', '葡萄', '西瓜'],
+    fruitIdx: 0,
+    timeVal: '12:00',
+    colors: ['红色', '绿色', '蓝色', '橙色'],
+    colorValues: ['#e74c3c', '#2ecc71', '#3498db', '#e67e22'],
+    colorIdx: 0
+  },
+  onFruitChange(e) {
+    this.fruitIdx = e.newSelected
+    console.log('[picker] fruit: ' + this.fruits[this.fruitIdx])
+  },
+  onTimeChange(e) {
+    this.timeVal = e.hour + ':' + (e.minute < 10 ? '0' + e.minute : e.minute)
+    console.log('[picker] time: ' + this.timeVal)
+  },
+  onColorChange(e) {
+    this.colorIdx = e.newSelected
+    console.log('[picker] color: ' + this.colors[this.colorIdx])
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.picker {
+  font-size: 25px;
+  color: #000;
+  selected-font-size: 30px;
+  selected-color: #09f;
+  selected-background-color: #ccc;
+  margin-top: 5px;
+}
+</style>

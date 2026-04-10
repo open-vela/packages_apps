@@ -1,0 +1,63 @@
+<!-- singleTask 目标页面 -->
+<template>
+  <div class="column page">
+    <text class="header">singleTask 页面</text>
+
+    <text class="label">页面栈信息</text>
+    <text>深度: {{stackLength}}</text>
+    <text>当前: {{currentPath}}</text>
+
+    <text class="label" if="{{refreshMsg}}">{{refreshMsg}}</text>
+
+    <input type="button" class="btn" onclick="pushLaunchMode" value="再打开启动模式页" />
+    <input type="button" class="btn" onclick="pushSelf" value="再打开本页 (singleTask)" />
+    <input type="button" class="btn" onclick="goBack" value="返回" />
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  private: {
+    stackLength: 0,
+    currentPath: '',
+    refreshMsg: ''
+  },
+
+  onReady() {
+    this.updateState()
+  },
+
+  onRefresh() {
+    this.refreshMsg = 'onRefresh 被触发，页面被复用'
+    this.updateState()
+  },
+
+  updateState() {
+    const state = router.getState()
+    this.currentPath = state.path
+    this.stackLength = router.getLength()
+  },
+
+  pushLaunchMode() {
+    router.push({
+      uri: 'framework/other/launch-mode'
+    })
+  },
+
+  pushSelf() {
+    router.push({
+      uri: 'framework/other/launch-mode-target'
+    })
+  },
+
+  goBack() {
+    router.back()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

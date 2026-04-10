@@ -1,0 +1,128 @@
+<!-- 全局数据和方法示例 -->
+<template>
+  <div class="column page">
+    <text class="header">全局数据和方法</text>
+
+    <!-- 全局数据 -->
+    <text class="label">1. $app.$def 全局数据</text>
+    <text>appName: {{appName}}</text>
+    <text>version: {{version}}</text>
+    <text>getAppInfo(): {{appInfo}}</text>
+
+    <!-- $valid -->
+    <text class="label">2. $valid 页面状态</text>
+    <text>页面是否有效: {{valid}}</text>
+
+    <!-- $page -->
+    <text class="label">3. $page 页面对象</text>
+    <text>name: {{pageName}}</text>
+    <text>path: {{pagePath}}</text>
+
+    <!-- $canIUse -->
+    <text class="label">4. $canIUse 能力查询</text>
+    <text>@system.router: {{canRouter}}</text>
+    <text>@system.fetch: {{canFetch}}</text>
+    <text>scroll 组件: {{canScroll}}</text>
+
+    <!-- $watch -->
+    <text class="label">5. $watch 数据监听</text>
+    <input type="button" class="btn" onclick="changeCount" value="count +1 (当前: {{count}})" />
+    <text if="{{watchLog}}">{{watchLog}}</text>
+
+    <!-- $element -->
+    <text class="label">6. $element 获取节点</text>
+    <div id="targetBox" class="target-box">
+      <text style="color: #ffffff;">目标节点</text>
+    </div>
+    <input type="button" class="btn" onclick="getElement" value="获取节点信息" />
+    <text if="{{elementInfo}}">{{elementInfo}}</text>
+
+    <!-- $app.exit -->
+    <text class="label">7. $app.exit()</text>
+    <input type="button" class="btn" onclick="exit" value="退出应用" />
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    appName: '',
+    version: '',
+    appInfo: '',
+    valid: false,
+    pageName: '',
+    pagePath: '',
+    canRouter: false,
+    canFetch: false,
+    canScroll: false,
+    count: 0,
+    watchLog: '',
+    elementInfo: ''
+  },
+
+  onInit() {
+    this.$watch('count', 'onCountChange')
+  },
+
+  onReady() {
+    // $app.$def
+    const appDef = this.$app.$def
+    this.appName = appDef.globalData.appName
+    this.version = appDef.globalData.version
+    this.appInfo = appDef.getAppInfo()
+
+    // $valid
+    this.valid = this.$valid
+
+    // $page
+    this.pageName = this.$page.name
+    this.pagePath = this.$page.path
+
+    // $canIUse
+    this.canRouter = this.$canIUse('@system.router')
+    this.canFetch = this.$canIUse('@system.fetch')
+    this.canScroll = this.$canIUse('scroll')
+  },
+
+  onCountChange(newVal, oldVal) {
+    this.watchLog = 'count: ' + oldVal + ' → ' + newVal
+    console.log('[global] $watch count: ' + oldVal + ' → ' + newVal)
+  },
+
+  changeCount() {
+    this.count++
+    console.log('[global] changeCount: ' + this.count)
+  },
+
+  getElement() {
+    const el = this.$element('targetBox')
+    if (el) {
+      el.getBoundingClientRect({
+        success: (rect) => {
+          this.elementInfo = 'width:' + rect.width + ' height:' + rect.height
+          console.log('[global] $element rect: ' + JSON.stringify(rect))
+        }
+      })
+    }
+  },
+
+  exit() {
+    console.log('[global] $app.exit()')
+    this.$app.exit()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.target-box {
+  width: 200px;
+  height: 60px;
+  background-color: #0faeff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+</style>

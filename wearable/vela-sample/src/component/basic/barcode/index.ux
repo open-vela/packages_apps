@@ -1,0 +1,55 @@
+<template>
+  <div class="column page">
+    <text class="header">barcode 条形码</text>
+
+    <barcode value="{{barValue}}" style="width: 300px; height: 100px; color: {{barColor}};"></barcode>
+    <text class="code" style="margin-top: 10px;">{{barValue}}</text>
+
+    <text class="label">切换内容</text>
+    <div class="row" style="flex-wrap: wrap;">
+      <input type="button" class="btn-sm" onclick="setContent(0)" value="1234567890" />
+      <input type="button" class="btn-sm" onclick="setContent(1)" value="ABCDEF" />
+      <input type="button" class="btn-sm" onclick="setContent(2)" value="Vela2025" />
+    </div>
+
+    <text class="label">切换颜色</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="setColor('#000000')" value="黑" />
+      <input type="button" class="btn-sm" onclick="setColor('#008cff')" value="蓝" />
+      <input type="button" class="btn-sm" onclick="setColor('#e74c3c')" value="红" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    barValue: '1234567890',
+    barColor: '#000000',
+    contents: ['1234567890', 'ABCDEF', 'Vela2025']
+  },
+  setContent(idx) {
+    this.barValue = this.contents[idx]
+    console.log('[barcode] setContent: ' + this.barValue)
+  },
+  setColor(c) {
+    this.barColor = c
+    console.log('[barcode] setColor: ' + c)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.btn-sm {
+  height: 50px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 26px;
+  background-color: #0faeff;
+}
+</style>

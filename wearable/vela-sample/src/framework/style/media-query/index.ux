@@ -1,0 +1,173 @@
+<!-- 媒体查询示例：展示不同屏幕形状的适配 -->
+<template>
+  <div class="column page">
+    <text class="header">媒体查询 @media</text>
+
+    <!-- 屏幕形状查询 -->
+    <text class="label">1. 屏幕形状 shape</text>
+    <div class="shape-box">
+      <text class="shape-text">当前屏幕形状</text>
+    </div>
+
+    <!-- 组合查询 -->
+    <text class="label">2. 组合查询 and</text>
+    <div class="combo-box">
+      <text class="combo-text">device-type + shape</text>
+    </div>
+
+    <!-- or 查询 -->
+    <text class="label">3. or 查询</text>
+    <div class="or-box">
+      <text class="or-text">circle or pill-shaped</text>
+    </div>
+
+    <!-- 标题栏适配示例 -->
+    <text class="label">4. 标题栏跨屏适配</text>
+    <div class="title-bar">
+      <text class="title-time">09:28</text>
+      <text class="title-desc">标题文案</text>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+/* 1. 屏幕形状 - 默认黑色 */
+.shape-box {
+  width: 360px;
+  height: 80px;
+  background-color: #333333;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+.shape-text {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+/* 2. 组合查询 - 默认灰色 */
+.combo-box {
+  width: 360px;
+  height: 80px;
+  background-color: #999999;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+.combo-text {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+/* 3. or 查询 - 默认灰色 */
+.or-box {
+  width: 360px;
+  height: 80px;
+  background-color: #999999;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+.or-text {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+/* 4. 标题栏 - 默认横排 */
+.title-bar {
+  width: 360px;
+  height: 80px;
+  background-color: #5c5c5c;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 0 20px;
+}
+.title-time {
+  color: #ffffff;
+  font-size: 28px;
+}
+.title-desc {
+  color: #ffffff;
+  font-size: 28px;
+}
+
+/* ===== 圆屏 ===== */
+@media (shape: circle) {
+  .shape-box {
+    background-color: #4CAF50;
+  }
+  .shape-text {
+    content: '';
+  }
+  .title-bar {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+  }
+}
+
+/* ===== 方屏 ===== */
+@media (shape: rect) {
+  .shape-box {
+    background-color: #2196F3;
+  }
+  .title-bar {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+}
+
+/* ===== 胶囊屏 ===== */
+@media (shape: pill-shaped) {
+  .shape-box {
+    background-color: #FF9800;
+  }
+  .shape-text {
+    font-size: 48px;
+  }
+  .combo-text {
+    font-size: 48px;
+  }
+  .or-text {
+    font-size: 48px;
+  }
+  .title-bar {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+  }
+  .title-time {
+    font-size: 56px;
+  }
+  .title-desc {
+    font-size: 56px;
+  }
+}
+
+/* 组合查询：手表 + 圆屏 */
+@media (device-type: watch) and (shape: circle) {
+  .combo-box {
+    background-color: #9C27B0;
+  }
+}
+
+/* or 查询：圆屏或胶囊屏 */
+@media (shape: circle) or (shape: pill-shaped) {
+  .or-box {
+    background-color: #E91E63;
+  }
+}
+</style>

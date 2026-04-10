@@ -1,0 +1,175 @@
+<!-- 加密算法 crypto 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">加密算法 crypto</text>
+
+    <!-- hashDigest -->
+    <text class="label">1. hashDigest 哈希摘要</text>
+    <input type="button" class="btn" onclick="doHash" value="MD5('Hello Vela')" />
+    <text class="code" if="{{hashResult}}">{{hashResult}}</text>
+
+    <!-- btoa / atob -->
+    <text class="label">2. btoa / atob Base64</text>
+    <input type="button" class="btn" onclick="doBase64" value="Base64 编解码" />
+    <text class="code" if="{{b64Encode}}">编码: {{b64Encode}}</text>
+    <text class="code" if="{{b64Decode}}">解码: {{b64Decode}}</text>
+
+    <!-- encrypt / decrypt -->
+    <text class="label">3. AES 加密/解密</text>
+    <text>原文: {{plainText}}</text>
+    <input type="button" class="btn" onclick="doEncrypt" value="加密" />
+    <text class="code" if="{{encrypted}}">密文: {{encrypted}}</text>
+    <input type="button" class="btn" onclick="doDecrypt" value="解密" />
+    <text class="code" if="{{decrypted}}">解密: {{decrypted}}</text>
+
+    <!-- RSA -->
+    <text class="label">4. RSA 加密/解密</text>
+    <input type="button" class="btn" onclick="doRsaEncrypt" value="RSA 公钥加密" />
+    <text class="result" if="{{rsaEncrypted}}">密文: {{rsaEncrypted}}</text>
+    <input type="button" class="btn" onclick="doRsaDecrypt" value="RSA 私钥解密" />
+    <text class="result" if="{{rsaDecrypted}}">解密: {{rsaDecrypted}}</text>
+
+    <!-- hmacDigest -->
+    <text class="label">5. hmacDigest HMAC</text>
+    <input type="button" class="btn" onclick="doHmac" value="HMAC-SHA256" />
+    <text class="code" if="{{hmacResult}}">{{hmacResult}}</text>
+
+    <text class="result" if="{{msg}}">{{msg}}</text>
+  </div>
+</template>
+
+<script>
+import crypto from '@system.crypto'
+
+export default {
+  private: {
+    plainText: 'Hello Vela',
+    hashResult: '',
+    b64Encode: '',
+    b64Decode: '',
+    encrypted: '',
+    decrypted: '',
+    rsaEncrypted: '',
+    rsaDecrypted: '',
+    hmacResult: '',
+    msg: '',
+    rsaPublicKey: '-----BEGIN PUBLIC KEY-----\n'
+      + 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4UzwMkTQT/LPcuULP1WHnA6Z9\n'
+      + 'TXR55zawlW0INVri+gP1f1DeDUHH6B2BNeuF0b13t74fU+GcObfKaM7Cc2tjBP66\n'
+      + 'cQy5Gh4OBaVn2B9m9Gv+an2NBAB+PASbAq92L/rMXcHiW8jhWTA7HeVCtOtxvkJm\n'
+      + 'aOG8CEteuNR3kYNpgQIDAQAB\n'
+      + '-----END PUBLIC KEY-----',
+    rsaPrivateKey: '-----BEGIN PRIVATE KEY-----\n'
+      + 'MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALhTPAyRNBP8s9y5\n'
+      + 'Qs/VYecDpn1NdHnnNrCVbQg1WuL6A/V/UN4NQcfoHYE164XRvXe3vh9T4Zw5t8po\n'
+      + 'zsJza2ME/rpxDLkaHg4FpWfYH2b0a/5qfY0EAH48BJsCr3Yv+sxdweJbyOFZMDsd\n'
+      + '5UK063G+QmZo4bwIS1641HeRg2mBAgMBAAECgYA8Gd+1lU7uyXH4IWwYilIO2lDa\n'
+      + 'AHxfFzXs4/wWNhd5dN3/mVDL5nSxcwzTyboO+zGVLJNQcbBZmTRFSmFIZAv6Qb/Y\n'
+      + 'Ol/EqcWjJrFRC2KFk8QZjXMHbOhSAGfOhhVADXljEfgUoHa1Oymco9jyjvGCIDiU\n'
+      + 'eo7rjxA6CGHxJGMaNQJBAPUeh55+AHBup2JWUwCQbeqwTuBgrpF2OiLKp/vVZnDw\n'
+      + 'TjP9uoUZfrULPMl6MBQ4Cgz5k9VuSKfhbE0oOgJxJJMCQQDAgdtFLpHUS1halbr+\n'
+      + '7gva6EV2Vr7kl6w1MJ4mZdSIVc3r6W4eW3URZEk5GM0rTuqNkE+GggFEgMqm2qsl\n'
+      + 'z/obAkEAxnEl+HEn594dkuYyIlXLNuHvqYV8LnVZkYshvibA3ZQeq8axd0nxo55q\n'
+      + 'Yu6R9/x6XpC7V2IGXiuIo1p6xDlXEwJAHL4GuBCY82KAgZ3jepaeLIQLgvy2qbi/\n'
+      + 'nH1yz3bawbRV94g1ydCL7RnVGPJMB9BTkuleBk441DqKh1kUvqOLywJAd9c+7CLd\n'
+      + 'EiFSUMPtDveTdcA5jozZ3I6i9+14I85fegGItoX4MVbtLjrUo5H0irXyqepk+4U9\n'
+      + 'wCtEFG8O6rAtCA==\n'
+      + '-----END PRIVATE KEY-----'
+  },
+
+  doHash() {
+    const result = crypto.hashDigest({
+      data: this.plainText,
+      algo: 'MD5'
+    })
+    this.hashResult = result
+  },
+
+  doBase64() {
+    this.b64Encode = crypto.btoa(this.plainText)
+    this.b64Decode = crypto.atob(this.b64Encode)
+  },
+
+  doEncrypt() {
+    const key = crypto.btoa('KEYKEYKEYKEYKEYK')
+    crypto.encrypt({
+      data: this.plainText,
+      key: key,
+      algo: 'AES',
+      success: (res) => { this.encrypted = res.data },
+      fail: (data, code) => { this.msg = '加密失败: ' + code }
+    })
+  },
+
+  doDecrypt() {
+    if (!this.encrypted) {
+      this.msg = '请先加密'
+      return
+    }
+    const key = crypto.btoa('KEYKEYKEYKEYKEYK')
+    crypto.decrypt({
+      data: this.encrypted,
+      key: key,
+      algo: 'AES',
+      success: (res) => { this.decrypted = res.data },
+      fail: (data, code) => { this.msg = '解密失败: ' + code }
+    })
+  },
+
+  doRsaEncrypt() {
+    crypto.encrypt({
+      data: this.plainText,
+      key: this.rsaPublicKey,
+      algo: 'RSA',
+      success: (res) => {
+        this.rsaEncrypted = res.data
+        console.log('[crypto] RSA 加密成功')
+      },
+      fail: (d, code) => {
+        this.msg = 'RSA加密失败: ' + code
+        console.log('[crypto] RSA 加密失败: ' + code)
+      }
+    })
+  },
+
+  doRsaDecrypt() {
+    if (!this.rsaEncrypted) {
+      this.msg = '请先 RSA 加密'
+      return
+    }
+    crypto.decrypt({
+      data: this.rsaEncrypted,
+      key: this.rsaPrivateKey,
+      algo: 'RSA',
+      success: (res) => {
+        this.rsaDecrypted = res.data
+        console.log('[crypto] RSA 解密成功: ' + res.data)
+      },
+      fail: (d, code) => {
+        this.msg = 'RSA解密失败: ' + code
+        console.log('[crypto] RSA 解密失败: ' + code)
+      }
+    })
+  },
+
+  doHmac() {
+    crypto.hmacDigest({
+      data: this.plainText,
+      algo: 'SHA256',
+      key: 'secret-key',
+      success: (res) => { this.hmacResult = res.data },
+      fail: (data, code) => { this.msg = 'HMAC失败: ' + code }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 10px;
+}
+</style>

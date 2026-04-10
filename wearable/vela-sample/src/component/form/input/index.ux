@@ -1,0 +1,57 @@
+<!-- input 表单组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">input 组件</text>
+
+    <!-- button 类型 -->
+    <text class="label">1. type="button"</text>
+    <input type="button" class="btn" value="按钮" onclick="onBtnClick" />
+    <text>{{btnMsg}}</text>
+
+    <!-- checkbox 类型 -->
+    <text class="label">2. type="checkbox"</text>
+    <input type="checkbox" checked="{{checkboxChecked}}" onchange="onCheckboxChange" style="width: 40px; height: 40px;" />
+    <text>勾选状态: {{checkboxChecked}}</text>
+
+    <!-- radio 类型 -->
+    <text class="label">3. type="radio"</text>
+    <div>
+      <input type="radio" name="fruit" value="apple" checked="{{radioValue === 'apple'}}" onchange="onRadioChange" style="width: 40px; height: 40px;" />
+      <text>苹果</text>
+    </div>
+    <div>
+      <input type="radio" name="fruit" value="banana" checked="{{radioValue === 'banana'}}" onchange="onRadioChange" style="width: 40px; height: 40px;" />
+      <text>香蕉</text>
+    </div>
+    <text>选中: {{radioValue}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    btnMsg: '',
+    checkboxChecked: false,
+    radioValue: 'apple'
+  },
+
+  onBtnClick() {
+    this.btnMsg = '按钮被点击'
+    console.log('[input] button click')
+  },
+
+  onCheckboxChange(e) {
+    this.checkboxChecked = e.checked
+    console.log('[input] checkbox: ' + e.checked)
+  },
+
+  onRadioChange(e) {
+    this.radioValue = e.value
+    console.log('[input] radio: ' + e.value)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

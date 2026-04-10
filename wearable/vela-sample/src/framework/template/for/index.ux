@@ -1,0 +1,59 @@
+<!-- 循环指令 for 示例：展示列表渲染 -->
+<template>
+  <div class="column page">
+    <text class="header">循环指令 for</text>
+
+    <!-- 方式1：默认 $idx, $item -->
+    <text class="label">1. for="list"</text>
+    <div class="column group">
+      <text for="list">{{$idx}}: {{$item.name}}</text>
+    </div>
+
+    <!-- 方式2：自定义元素变量名 -->
+    <text class="label">2. for="value in list"</text>
+    <div class="column group">
+      <text for="value in list">{{$idx}}: {{value.name}}</text>
+    </div>
+
+    <!-- 方式3：自定义索引和元素名 -->
+    <text class="label">3. for="(i, item) in list"</text>
+    <div class="column group">
+      <text for="(i, item) in list">{{i}}: {{item.name}}</text>
+    </div>
+
+    <!-- 动态列表 -->
+    <text class="label">4. 动态添加</text>
+    <input type="button" class="btn" onclick="addItem" value="添加水果" />
+    <div class="column group">
+      <text class="list-item" for="dynamicList">{{$idx + 1}}. {{$item}}</text>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    list: [
+      { name: '苹果' },
+      { name: '香蕉' },
+      { name: '橘子' }
+    ],
+    dynamicList: ['苹果']
+  },
+
+  addItem() {
+    const items = ['香蕉', '橘子', '葡萄', '西瓜', '芒果']
+    const item = items[this.dynamicList.length % items.length]
+    this.dynamicList.push(item)
+    console.log('[for] addItem: ' + item + ' total:' + this.dynamicList.length)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.list-item {
+  padding-left: 20px;
+}
+</style>

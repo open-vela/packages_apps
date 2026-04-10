@@ -1,0 +1,259 @@
+<!-- 文件存储 file 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">文件存储 file</text>
+
+    <text class="label">1. writeText 写入</text>
+    <input type="button" class="btn" onclick="writeFile" value="写入文件" />
+    <text class="result" if="{{r1}}">{{r1}}</text>
+
+    <text class="label">2. readText 读取</text>
+    <input type="button" class="btn" onclick="readFile" value="读取文件" />
+    <text class="result" if="{{r2}}">{{r2}}</text>
+
+    <text class="label">3. access 判断存在</text>
+    <input type="button" class="btn" onclick="accessFile" value="文件是否存在" />
+    <text class="result" if="{{r3}}">{{r3}}</text>
+
+    <text class="label">4. get 文件信息</text>
+    <input type="button" class="btn" onclick="getFileInfo" value="获取文件信息" />
+    <text class="result" if="{{r4}}">{{r4}}</text>
+
+    <text class="label">5. copy 复制</text>
+    <input type="button" class="btn" onclick="copyFile" value="复制文件" />
+    <text class="result" if="{{r5}}">{{r5}}</text>
+
+    <text class="label">6. move 移动</text>
+    <input type="button" class="btn" onclick="moveFile" value="移动文件" />
+    <text class="result" if="{{r6}}">{{r6}}</text>
+
+    <text class="label">7. mkdir / rmdir</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="mkDir" value="创建目录" />
+      <input type="button" class="btn-sm" onclick="rmDir" value="删除目录" />
+    </div>
+    <text class="result" if="{{r7}}">{{r7}}</text>
+
+    <text class="label">8. list 文件列表</text>
+    <input type="button" class="btn" onclick="listFiles" value="列出文件" />
+    <text class="result" if="{{r8}}">{{r8}}</text>
+
+    <text class="label">9. ArrayBuffer 读写</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="writeBuffer" value="写Buffer" />
+      <input type="button" class="btn-sm" onclick="readBuffer" value="读Buffer" />
+    </div>
+    <text class="result" if="{{r9}}">{{r9}}</text>
+
+    <text class="label">10. delete 删除</text>
+    <input type="button" class="btn" onclick="deleteFile" value="删除文件" />
+    <text class="result" if="{{r10}}">{{r10}}</text>
+  </div>
+</template>
+
+<script>
+import file from '@system.file'
+
+export default {
+  private: {
+    r1: '', r2: '', r3: '', r4: '', r5: '',
+    r6: '', r7: '', r8: '', r9: '', r10: ''
+  },
+
+  writeFile() {
+    file.writeText({
+      uri: 'internal://files/demo.txt',
+      text: 'Hello Vela ' + Date.now(),
+      success: () => {
+        console.log('[file] writeText 成功')
+        this.r1 = '写入成功'
+      },
+      fail: (data, code) => {
+        console.log('[file] writeText 失败: ' + code)
+        this.r1 = '失败: ' + code
+      }
+    })
+  },
+
+  readFile() {
+    file.readText({
+      uri: 'internal://files/demo.txt',
+      success: (data) => {
+        console.log('[file] readText: ' + data.text)
+        this.r2 = data.text
+      },
+      fail: (data, code) => {
+        console.log('[file] readText 失败: ' + code)
+        this.r2 = '失败: ' + code
+      }
+    })
+  },
+
+  accessFile() {
+    file.access({
+      uri: 'internal://files/demo.txt',
+      success: () => {
+        console.log('[file] access 存在')
+        this.r3 = '文件存在'
+      },
+      fail: (data, code) => {
+        console.log('[file] access 不存在: ' + code)
+        this.r3 = '不存在: ' + code
+      }
+    })
+  },
+
+  getFileInfo() {
+    file.get({
+      uri: 'internal://files/demo.txt',
+      success: (data) => {
+        console.log('[file] get: ' + JSON.stringify(data))
+        this.r4 = 'size:' + data.length + 'B type:' + data.type
+      },
+      fail: (data, code) => {
+        console.log('[file] get 失败: ' + code)
+        this.r4 = '失败: ' + code
+      }
+    })
+  },
+
+  copyFile() {
+    file.copy({
+      srcUri: 'internal://files/demo.txt',
+      dstUri: 'internal://files/demo_copy.txt',
+      success: (uri) => {
+        console.log('[file] copy: ' + uri)
+        this.r5 = '成功: ' + uri
+      },
+      fail: (data, code) => {
+        console.log('[file] copy 失败: ' + code)
+        this.r5 = '失败: ' + code
+      }
+    })
+  },
+
+  moveFile() {
+    file.move({
+      srcUri: 'internal://files/demo_copy.txt',
+      dstUri: 'internal://files/demo_moved.txt',
+      success: (uri) => {
+        console.log('[file] move: ' + uri)
+        this.r6 = '成功: ' + uri
+      },
+      fail: (data, code) => {
+        console.log('[file] move 失败: ' + code)
+        this.r6 = '失败: ' + code
+      }
+    })
+  },
+
+  mkDir() {
+    file.mkdir({
+      uri: 'internal://files/testdir/',
+      success: () => {
+        console.log('[file] mkdir 成功')
+        this.r7 = '目录创建成功'
+      },
+      fail: (data, code) => {
+        console.log('[file] mkdir 失败: ' + code)
+        this.r7 = '创建失败: ' + code
+      }
+    })
+  },
+
+  rmDir() {
+    file.rmdir({
+      uri: 'internal://files/testdir/',
+      recursive: true,
+      success: () => {
+        console.log('[file] rmdir 成功')
+        this.r7 = '目录删除成功'
+      },
+      fail: (data, code) => {
+        console.log('[file] rmdir 失败: ' + code)
+        this.r7 = '删除失败: ' + code
+      }
+    })
+  },
+
+  listFiles() {
+    file.list({
+      uri: 'internal://files/',
+      success: (data) => {
+        console.log('[file] list: ' + JSON.stringify(data.fileList))
+        var names = data.fileList.map(function(f) { return f.uri })
+        this.r8 = names.join('\n')
+      },
+      fail: (data, code) => {
+        console.log('[file] list 失败: ' + code)
+        this.r8 = '失败: ' + code
+      }
+    })
+  },
+
+  writeBuffer() {
+    var buf = new Uint8Array([72, 101, 108, 108, 111])
+    file.writeArrayBuffer({
+      uri: 'internal://files/demo.bin',
+      buffer: buf,
+      success: () => {
+        console.log('[file] writeArrayBuffer 成功')
+        this.r9 = '写入成功 length:' + buf.length
+      },
+      fail: (data, code) => {
+        console.log('[file] writeArrayBuffer 失败: ' + code)
+        this.r9 = '写入失败: ' + code
+      }
+    })
+  },
+
+  readBuffer() {
+    file.readArrayBuffer({
+      uri: 'internal://files/demo.bin',
+      success: (data) => {
+        console.log('[file] readArrayBuffer length:' + data.buffer.length)
+        this.r9 = '读取成功 length:' + data.buffer.length
+      },
+      fail: (data, code) => {
+        console.log('[file] readArrayBuffer 失败: ' + code)
+        this.r9 = '读取失败: ' + code
+      }
+    })
+  },
+
+  deleteFile() {
+    file.delete({
+      uri: 'internal://files/demo.txt',
+      success: () => {
+        console.log('[file] delete 成功')
+        this.r10 = '删除成功'
+      },
+      fail: (data, code) => {
+        console.log('[file] delete 失败: ' + code)
+        this.r10 = '失败: ' + code
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 5px;
+}
+
+.btn-sm {
+  height: 50px;
+  width: 140px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 24px;
+  background-color: #0faeff;
+}
+</style>

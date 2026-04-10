@@ -1,0 +1,83 @@
+<!-- 震动 vibrator 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">震动 vibrator</text>
+
+    <!-- vibrate 基本震动 -->
+    <text class="label">1. 基本震动</text>
+    <input type="button" class="btn" onclick="vibrateLong" value="长震动 (long)" />
+    <input type="button" class="btn" onclick="vibrateShort" value="短震动 (short)" />
+
+    <!-- start 自定义震动 -->
+    <text class="label">2. 自定义震动</text>
+    <input type="button" class="btn" onclick="startCustom" value="自定义: 3次 500ms" />
+    <input type="button" class="btn" onclick="stopVibrate" value="停止震动" />
+    <text>{{result}}</text>
+
+    <!-- getSystemDefaultMode -->
+    <text class="label">3. 系统默认模式</text>
+    <input type="button" class="btn" onclick="getMode" value="获取默认振动模式" />
+    <text>模式: {{modeText}}</text>
+  </div>
+</template>
+
+<script>
+import vibrator from '@system.vibrator'
+
+export default {
+  private: {
+    result: '',
+    vibrateId: -1,
+    modeText: ''
+  },
+
+  vibrateLong() {
+    vibrator.vibrate({ mode: 'long' })
+    this.result = '长震动触发'
+    console.log('[vibrator] vibrate long')
+  },
+
+  vibrateShort() {
+    vibrator.vibrate({ mode: 'short' })
+    this.result = '短震动触发'
+    console.log('[vibrator] vibrate short')
+  },
+
+  startCustom() {
+    vibrator.start({
+      duration: 500,
+      interval: 300,
+      count: 3,
+      success: (data) => {
+        this.vibrateId = data.id
+        this.result = '自定义震动开始, id=' + data.id
+        console.log('[vibrator] start id:' + data.id)
+      },
+      fail: (data, code) => {
+        this.result = '失败: ' + code
+        console.log('[vibrator] start fail: ' + code)
+      }
+    })
+  },
+
+  stopVibrate() {
+    if (this.vibrateId !== -1) {
+      const ret = vibrator.stop(this.vibrateId)
+      this.result = ret ? '已停止' : '停止失败'
+      console.log('[vibrator] stop id:' + this.vibrateId + ' ret:' + ret)
+      this.vibrateId = -1
+    }
+  },
+
+  getMode() {
+    const mode = vibrator.getSystemDefaultMode()
+    const modeMap = { 0: '关闭振动', 1: '标准振动', 2: '加强振动' }
+    this.modeText = modeMap[mode] || '未知(' + mode + ')'
+    console.log('[vibrator] getSystemDefaultMode: ' + mode)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,55 @@
+<!-- 页面样式与布局示例 -->
+<template>
+  <div class="column page">
+    <text class="header">页面样式与布局</text>
+
+    <!-- flex 布局 -->
+    <text class="label">1. flex 布局（默认 row）</text>
+    <div style="flex-direction: row;">
+      <div class="box-small" style="background-color: #ff6b6b;"></div>
+      <div class="box-small" style="background-color: #51cf66;"></div>
+      <div class="box-small" style="background-color: #339af0;"></div>
+    </div>
+
+    <!-- flex column -->
+    <text class="label">2. flex-direction: column</text>
+    <div style="flex-direction: column;">
+      <div class="box-wide" style="background-color: #ff6b6b;"></div>
+      <div class="box-wide" style="background-color: #51cf66;"></div>
+    </div>
+
+    <!-- justify-content -->
+    <text class="label">3. justify-content: space-between</text>
+    <div style="flex-direction: row; justify-content: space-between;">
+      <div class="box-small" style="background-color: #ff6b6b;"></div>
+      <div class="box-small" style="background-color: #339af0;"></div>
+    </div>
+
+    <!-- align-items -->
+    <text class="label">4. align-items: center</text>
+    <div style="flex-direction: row; align-items: center; height: 100px; background-color: #f0f0f0;">
+      <div class="box-small" style="background-color: #ff6b6b; height: 40px;"></div>
+      <div class="box-small" style="background-color: #339af0; height: 80px;"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.box-small {
+  width: 80px;
+  height: 60px;
+  margin: 5px;
+}
+
+.box-wide {
+  width: 200px;
+  height: 40px;
+  margin: 5px;
+}
+</style>

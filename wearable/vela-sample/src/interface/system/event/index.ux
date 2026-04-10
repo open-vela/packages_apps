@@ -1,0 +1,115 @@
+<!-- 事件 event 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">事件 event</text>
+
+    <text class="label">1. 订阅系统事件</text>
+    <input type="button" class="btn" onclick="subscribeBattery" value="订阅电量变化" />
+    <text class="result" if="{{batterySubResult}}">{{batterySubResult}}</text>
+    <text class="result" if="{{batteryData}}">{{batteryData}}</text>
+
+    <text class="label">2. 自定义事件</text>
+    <input type="button" class="btn" onclick="subscribeCustom" value="订阅自定义事件" />
+    <text class="result" if="{{customSubResult}}">{{customSubResult}}</text>
+
+    <input type="button" class="btn" onclick="publishCustom" value="发布自定义事件" />
+    <text class="result" if="{{customData}}">{{customData}}</text>
+
+    <text class="label">3. 取消订阅</text>
+    <input type="button" class="btn" onclick="unsubscribeAll" value="取消全部订阅" />
+    <text class="result" if="{{unsubResult}}">{{unsubResult}}</text>
+  </div>
+</template>
+
+<script>
+import event from '@system.event'
+
+export default {
+  private: {
+    batterySubResult: '',
+    batteryData: '',
+    customSubResult: '',
+    customData: '',
+    unsubResult: '',
+    batteryId: -1,
+    customId: -1
+  },
+
+  subscribeBattery() {
+    this.batteryId = event.subscribe({
+      eventName: 'usual.event.BATTERY_CHANGED',
+      callback: (data) => {
+        console.log('[event] 电量变化: ' + JSON.stringify(data))
+        this.batteryData = '电量: ' + JSON.stringify(data.params)
+      }
+    })
+    if (this.batteryId !== undefined) {
+      this.batterySubResult = '已订阅 id:' + this.batteryId
+    } else {
+      this.batterySubResult = '订阅失败'
+    }
+    console.log('[event] subscribeBattery id: ' + this.batteryId)
+  },
+
+  subscribeCustom() {
+    this.customId = event.subscribe({
+      eventName: 'vela.sample.TEST_EVENT',
+      callback: (data) => {
+        console.log('[event] 自定义事件: ' + JSON.stringify(data))
+        this.customData = '收到: ' + JSON.stringify(data.params)
+      }
+    })
+    if (this.customId !== undefined) {
+      this.customSubResult = '已订阅 id:' + this.customId
+    } else {
+      this.customSubResult = '订阅失败'
+    }
+    console.log('[event] subscribeCustom id: ' + this.customId)
+  },
+
+  publishCustom() {
+    event.publish({
+      eventName: 'vela.sample.TEST_EVENT',
+      options: {
+        params: { msg: 'hello', time: Date.now() }
+      }
+    })
+    console.log('[event] publish vela.sample.TEST_EVENT')
+  },
+
+  unsubscribeAll() {
+    var count = 0
+    if (this.batteryId !== -1 && this.batteryId !== undefined) {
+      event.unsubscribe({ id: this.batteryId })
+      this.batteryId = -1
+      count++
+    }
+    if (this.customId !== -1 && this.customId !== undefined) {
+      event.unsubscribe({ id: this.customId })
+      this.customId = -1
+      count++
+    }
+    this.unsubResult = '已取消 ' + count + ' 个订阅'
+    console.log('[event] unsubscribeAll: ' + count)
+  },
+
+  onDestroy() {
+    if (this.batteryId !== -1 && this.batteryId !== undefined) {
+      event.unsubscribe({ id: this.batteryId })
+    }
+    if (this.customId !== -1 && this.customId !== undefined) {
+      event.unsubscribe({ id: this.customId })
+    }
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-top: 5px;
+}
+</style>

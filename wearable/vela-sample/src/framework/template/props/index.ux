@@ -1,0 +1,64 @@
+<!-- Props 传参示例：展示父子组件间的数据传递 -->
+<import name="my-child" src="./child.ux"></import>
+
+<template>
+  <div class="column page">
+    <text class="header">Props 传参</text>
+
+    <text class="label">父组件数据：</text>
+    <text>itemName = "{{itemName}}"</text>
+    <text>itemCount = {{itemCount}}</text>
+
+    <text class="label">子组件（接收 props）：</text>
+    <my-child name="{{itemName}}" count="{{itemCount}}" enabled="{{isEnabled}}" onchange="onChildChange"></my-child>
+    <text class="child-msg" if="{{childMessage}}">子组件消息: {{childMessage}}</text>
+
+    <text class="label">修改父组件数据：</text>
+    <input type="button" class="btn" onclick="changeName" value="修改名称" />
+    <input type="button" class="btn" onclick="addCount" value="数量 +1" />
+    <input type="button" class="btn" onclick="toggleEnabled" value="切换启用状态" />
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    itemName: '苹果',
+    itemCount: 5,
+    isEnabled: true,
+    childMessage: ''
+  },
+
+  changeName() {
+    this.itemName = this.itemName === '苹果' ? '香蕉' : '苹果'
+    console.log('[props] changeName: ' + this.itemName)
+  },
+
+  addCount() {
+    this.itemCount++
+    console.log('[props] addCount: ' + this.itemCount)
+  },
+
+  toggleEnabled() {
+    this.isEnabled = !this.isEnabled
+    console.log('[props] toggleEnabled: ' + this.isEnabled)
+  },
+
+  onChildChange(e) {
+    this.childMessage = e.detail.message
+    console.log('[props] onChildChange: ' + e.detail.message)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.child-msg {
+  background-color: #e8f5e9;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  color: #2e7d32;
+}
+</style>

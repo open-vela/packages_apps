@@ -1,0 +1,96 @@
+<!-- 通用事件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">通用事件</text>
+
+    <!-- click + MouseEvent -->
+    <text class="label">1. click (MouseEvent)</text>
+    <div class="event-box" @click="onClick">
+      <text style="color: #fff;">点击我</text>
+    </div>
+    <text class="code" if="{{clickInfo}}">{{clickInfo}}</text>
+
+    <!-- longpress -->
+    <text class="label">2. longpress</text>
+    <div class="event-box" style="background-color: #e67e22;" @longpress="onLongpress">
+      <text style="color: #fff;">长按我</text>
+    </div>
+    <text class="code" if="{{longpressInfo}}">{{longpressInfo}}</text>
+
+    <!-- touch + TouchEvent -->
+    <text class="label">3. touch (TouchEvent)</text>
+    <div class="event-box" style="background-color: #51cf66;" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
+      <text style="color: #fff;">触摸/滑动</text>
+    </div>
+    <text class="code" if="{{touchInfo}}">{{touchInfo}}</text>
+
+    <!-- swipe -->
+    <text class="label">4. swipe</text>
+    <div class="event-box" style="background-color: #9b59b6;" @swipe="onSwipe">
+      <text style="color: #fff;">快速滑动</text>
+    </div>
+    <text class="code" if="{{swipeInfo}}">{{swipeInfo}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    clickInfo: '',
+    longpressInfo: '',
+    touchInfo: '',
+    swipeInfo: ''
+  },
+
+  onClick(e) {
+    this.clickInfo = 'pageX:' + e.pageX + ' pageY:' + e.pageY
+      + ' clientX:' + e.clientX + ' clientY:' + e.clientY
+      + ' offsetX:' + e.offsetX + ' offsetY:' + e.offsetY
+    console.log('[events] click: ' + this.clickInfo)
+  },
+
+  onLongpress(e) {
+    this.longpressInfo = 'pageX:' + e.pageX + ' pageY:' + e.pageY
+    console.log('[events] longpress: ' + this.longpressInfo)
+  },
+
+  onTouchStart(e) {
+    var t = e.touches[0]
+    this.touchInfo = 'start id:' + t.identifier
+      + ' pageX:' + t.pageX + ' pageY:' + t.pageY
+    console.log('[events] touchstart: ' + this.touchInfo)
+  },
+
+  onTouchMove(e) {
+    var t = e.changedTouches[0]
+    this.touchInfo = 'move id:' + t.identifier
+      + ' pageX:' + Math.round(t.pageX) + ' pageY:' + Math.round(t.pageY)
+  },
+
+  onTouchEnd(e) {
+    var t = e.changedTouches[0]
+    this.touchInfo = 'end id:' + t.identifier
+      + ' offsetX:' + Math.round(t.offsetX) + ' offsetY:' + Math.round(t.offsetY)
+    console.log('[events] touchend: ' + this.touchInfo)
+  },
+
+  onSwipe(e) {
+    this.swipeInfo = 'direction: ' + e.direction
+    console.log('[events] swipe: ' + e.direction)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.event-box {
+  width: 250px;
+  height: 80px;
+  background-color: #0faeff;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+</style>

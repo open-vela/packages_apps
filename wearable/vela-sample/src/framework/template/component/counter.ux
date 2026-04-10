@@ -1,0 +1,71 @@
+<!-- 自定义计数器组件 -->
+<template>
+  <div class="counter">
+    <text class="counter-title">{{title}}</text>
+    <div class="counter-row">
+      <input type="button" class="counter-btn" onclick="decrease" value="-" />
+      <text class="counter-value">{{value}}</text>
+      <input type="button" class="counter-btn" onclick="increase" value="+" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    title: {
+      type: String,
+      default: '计数器'
+    },
+    value: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  increase() {
+    this.$emit('change', { value: this.value + 1 })
+  },
+
+  decrease() {
+    this.$emit('change', { value: this.value - 1 })
+  }
+}
+</script>
+
+<style>
+.counter {
+  flex-direction: column;
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.counter-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.counter-row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.counter-btn {
+  width: 60px;
+  height: 60px;
+  background-color: #0faeff;
+  color: #ffffff;
+  font-size: 36px;
+  border-radius: 30px;
+}
+
+.counter-value {
+  font-size: 48px;
+  margin: 0 30px;
+  min-width: 80px;
+  text-align: center;
+}
+</style>

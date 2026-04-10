@@ -1,0 +1,36 @@
+<!-- div 容器组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">div 容器</text>
+
+    <text class="label">1. flex-direction: row</text>
+    <div style="flex-direction: row;">
+      <div class="box" style="background-color: #ff6b6b;"><text style="color: #fff;">1</text></div>
+      <div class="box" style="background-color: #51cf66;"><text style="color: #fff;">2</text></div>
+      <div class="box" style="background-color: #339af0;"><text style="color: #fff;">3</text></div>
+    </div>
+
+    <text class="label">2. flex-direction: column</text>
+    <div style="flex-direction: column;">
+      <div class="box-wide" style="background-color: #ff6b6b;"><text style="color: #fff;">A</text></div>
+      <div class="box-wide" style="background-color: #51cf66;"><text style="color: #fff;">B</text></div>
+    </div>
+
+    <text class="label">3. 嵌套 div</text>
+    <div style="padding: 10px; background-color: #f0f0f0;">
+      <div style="padding: 10px; background-color: #d0d0d0;">
+        <text>嵌套的 div</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+.box { width: 80px; height: 60px; margin: 5px; justify-content: center; align-items: center; }
+.box-wide { width: 200px; height: 40px; margin: 5px; justify-content: center; align-items: center; }
+</style>

@@ -1,0 +1,48 @@
+<!-- progress 组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">progress 进度条</text>
+
+    <!-- 水平进度条 -->
+    <text class="label">1. 水平进度条 (horizontal)</text>
+    <progress type="horizontal" percent="{{percent}}" style="width: 300px; stroke-width: 12px;"></progress>
+    <text>当前进度: {{percent}}%</text>
+    <input type="button" class="btn" onclick="addProgress" value="增加进度" />
+    <input type="button" class="btn" onclick="resetProgress" value="重置" />
+
+    <!-- 弧形进度条 -->
+    <text class="label">2. 弧形进度条 (arc)</text>
+    <progress type="arc" percent="{{arcPercent}}" style="width: 150px; height: 150px; stroke-width: 10px; start-angle: 0; total-angle: 360;"></progress>
+    <text>弧形进度: {{arcPercent}}%</text>
+    <input type="button" class="btn" onclick="addArcProgress" value="增加弧形进度" />
+
+    <!-- 自定义颜色 -->
+    <text class="label">3. 自定义颜色</text>
+    <progress type="horizontal" percent="60" style="width: 300px; color: #ff6b6b; layer-color: #ffe0e0; stroke-width: 12px;"></progress>
+  </div>
+</template>
+
+<script>
+export default {
+  private: { percent: 30, arcPercent: 50 },
+
+  addProgress() {
+    this.percent = Math.min(100, this.percent + 10)
+    console.log('[progress] percent: ' + this.percent)
+  },
+
+  resetProgress() {
+    this.percent = 0
+    console.log('[progress] reset')
+  },
+
+  addArcProgress() {
+    this.arcPercent = Math.min(100, this.arcPercent + 10)
+    console.log('[progress] arcPercent: ' + this.arcPercent)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

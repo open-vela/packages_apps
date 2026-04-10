@@ -1,0 +1,67 @@
+<template>
+  <div class="column page">
+    <text class="header">qrcode 二维码</text>
+
+    <qrcode value="{{qrValue}}" style="width: {{qrSize}}px; height: {{qrSize}}px; color: {{qrColor}};"></qrcode>
+    <text class="code" style="margin-top: 10px;">{{qrValue}}</text>
+
+    <text class="label">切换内容</text>
+    <div class="row" style="flex-wrap: wrap;">
+      <input type="button" class="btn-sm" onclick="setContent(0)" value="mi.com" />
+      <input type="button" class="btn-sm" onclick="setContent(1)" value="Hello" />
+      <input type="button" class="btn-sm" onclick="setContent(2)" value="12345" />
+    </div>
+
+    <text class="label">切换尺寸</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="setSize(120)" value="小" />
+      <input type="button" class="btn-sm" onclick="setSize(180)" value="中" />
+      <input type="button" class="btn-sm" onclick="setSize(240)" value="大" />
+    </div>
+
+    <text class="label">切换颜色</text>
+    <div class="row">
+      <input type="button" class="btn-sm" onclick="setColor('#000000')" value="黑" />
+      <input type="button" class="btn-sm" onclick="setColor('#008cff')" value="蓝" />
+      <input type="button" class="btn-sm" onclick="setColor('#e74c3c')" value="红" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    qrValue: 'https://www.mi.com',
+    qrSize: 180,
+    qrColor: '#000000',
+    contents: ['https://www.mi.com', 'Hello Vela', '1234567890']
+  },
+  setContent(idx) {
+    this.qrValue = this.contents[idx]
+    console.log('[qrcode] setContent: ' + this.qrValue)
+  },
+  setSize(s) {
+    this.qrSize = s
+    console.log('[qrcode] setSize: ' + s)
+  },
+  setColor(c) {
+    this.qrColor = c
+    console.log('[qrcode] setColor: ' + c)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.btn-sm {
+  height: 50px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px;
+  color: #ffffff;
+  font-size: 26px;
+  background-color: #0faeff;
+}
+</style>

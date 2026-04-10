@@ -1,0 +1,121 @@
+<!-- 设备信息 device 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">设备信息 device</text>
+
+    <text class="label">1. getInfo</text>
+    <input type="button" class="btn" onclick="getInfo" value="获取设备信息" />
+    <text>品牌: {{brand}}</text>
+    <text>厂商: {{manufacturer}}</text>
+    <text>型号: {{model}}</text>
+    <text>代号: {{product}}</text>
+    <text>系统: {{osType}} {{osVersionName}}</text>
+    <text>平台: {{platformVersionName}}</text>
+    <text>语言: {{language}} / {{region}}</text>
+    <text>屏幕: {{screenWidth}}x{{screenHeight}} 密度:{{screenDensity}}</text>
+    <text>屏幕形状: {{screenShape}}</text>
+    <text>设备类型: {{deviceType}}</text>
+    <text>API Level: {{apiLevel}}</text>
+
+    <text class="label">2. 存储空间</text>
+    <input type="button" class="btn" onclick="getStorage" value="获取存储信息" />
+    <text>总空间: {{totalStorage}}</text>
+    <text>可用: {{availableStorage}}</text>
+
+    <text class="label">3. getDeviceId (需权限)</text>
+    <input type="button" class="btn" onclick="getDeviceId" value="获取设备ID" />
+    <text class="code" if="{{deviceId}}">{{deviceId}}</text>
+
+    <text class="label">4. getSerial (需权限)</text>
+    <input type="button" class="btn" onclick="getSerial" value="获取序列号" />
+    <text class="code" if="{{serial}}">{{serial}}</text>
+  </div>
+</template>
+
+<script>
+import device from '@system.device'
+
+export default {
+  private: {
+    brand: '', manufacturer: '', model: '', product: '',
+    osType: '', osVersionName: '', platformVersionName: '',
+    language: '', region: '',
+    screenWidth: '', screenHeight: '', screenDensity: '',
+    screenShape: '', deviceType: '', apiLevel: '',
+    totalStorage: '', availableStorage: '',
+    deviceId: '', serial: ''
+  },
+
+  getInfo() {
+    device.getInfo({
+      success: (data) => {
+        console.log('[device] getInfo: ' + JSON.stringify(data))
+        this.brand = data.brand
+        this.manufacturer = data.manufacturer
+        this.model = data.model
+        this.product = data.product
+        this.osType = data.osType
+        this.osVersionName = data.osVersionName
+        this.platformVersionName = data.platformVersionName
+        this.language = data.language
+        this.region = data.region
+        this.screenWidth = data.screenWidth
+        this.screenHeight = data.screenHeight
+        this.screenDensity = data.screenDensity
+        this.screenShape = data.screenShape
+        this.deviceType = data.deviceType
+        this.apiLevel = data.APILevel
+      },
+      fail: (data, code) => {
+        console.log('[device] getInfo fail: ' + code)
+        this.brand = '获取失败: ' + code
+      }
+    })
+  },
+
+  getStorage() {
+    device.getTotalStorage({
+      success: (data) => {
+        this.totalStorage = (data.totalStorage / 1024 / 1024).toFixed(1) + ' MB'
+        console.log('[device] totalStorage: ' + this.totalStorage)
+      }
+    })
+    device.getAvailableStorage({
+      success: (data) => {
+        this.availableStorage = (data.availableStorage / 1024 / 1024).toFixed(1) + ' MB'
+        console.log('[device] availableStorage: ' + this.availableStorage)
+      }
+    })
+  },
+
+  getDeviceId() {
+    device.getDeviceId({
+      success: (data) => {
+        console.log('[device] getDeviceId: ' + data.deviceId)
+        this.deviceId = data.deviceId
+      },
+      fail: (data, code) => {
+        console.log('[device] getDeviceId fail: ' + code)
+        this.deviceId = '失败: ' + code + ' (需要权限)'
+      }
+    })
+  },
+
+  getSerial() {
+    device.getSerial({
+      success: (data) => {
+        console.log('[device] getSerial: ' + data.serial)
+        this.serial = data.serial
+      },
+      fail: (data, code) => {
+        console.log('[device] getSerial fail: ' + code)
+        this.serial = '失败: ' + code + ' (需要权限)'
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

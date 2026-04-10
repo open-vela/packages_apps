@@ -1,0 +1,59 @@
+<!-- 页面数据对象示例：展示 public/protected/private 数据声明 -->
+<template>
+  <div class="column page">
+    <text class="header">页面数据对象</text>
+    <text class="tips">通过路由传参 pubNum=99, proNum=99, priNum=99</text>
+
+    <text class="label">1. public</text>
+    <text>pubNum = {{pubNum}}</text>
+    <text class="result">初始值 10{{pubNum === 99 ? '，已被传参覆盖为 99' : ''}}</text>
+
+    <text class="label">2. protected</text>
+    <text>proNum = {{proNum}}</text>
+    <text class="result">初始值 100{{proNum === 99 ? '，已被传参覆盖为 99' : ''}}</text>
+
+    <text class="label">3. private</text>
+    <text>priNum = {{priNum}}</text>
+    <text class="result">初始值 1000{{priNum === 99 ? '，已被传参覆盖为 99' : ''}}</text>
+
+    <input type="button" class="btn" onclick="testNavigate" value="带参数跳转到本页" />
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  public: {
+    pubNum: 10
+  },
+  protected: {
+    proNum: 100
+  },
+  private: {
+    priNum: 1000
+  },
+
+  testNavigate() {
+    console.log('[page-data] push with params pubNum=99 proNum=99 priNum=99')
+    router.push({
+      uri: 'framework/script/page-data',
+      params: {
+        pubNum: 99,
+        proNum: 99,
+        priNum: 99
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.result {
+  color: #888888;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+</style>

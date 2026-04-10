@@ -1,0 +1,84 @@
+<!-- 系统音量 volume 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">系统音量 volume</text>
+
+    <!-- getMediaValue -->
+    <text class="label">1. 获取音量</text>
+    <input type="button" class="btn" onclick="getVolume" value="获取当前音量" />
+    <text>当前音量: {{currentVolume}}</text>
+
+    <!-- setMediaValue -->
+    <text class="label">2. 设置音量</text>
+    <input type="button" class="btn" onclick="setVolume(0.3)" value="设为 30%" />
+    <input type="button" class="btn" onclick="setVolume(0.7)" value="设为 70%" />
+    <input type="button" class="btn" onclick="setVolume(1.0)" value="设为 100%" />
+
+    <!-- onMediaValueChanged -->
+    <text class="label">3. 音量变化监听</text>
+    <input type="button" class="btn" onclick="startListen" value="开始监听" />
+    <input type="button" class="btn" onclick="stopListen" value="停止监听" />
+    <text>{{listenInfo}}</text>
+  </div>
+</template>
+
+<script>
+import volume from '@system.volume'
+
+export default {
+  private: {
+    currentVolume: '',
+    listenInfo: ''
+  },
+
+  getVolume() {
+    volume.getMediaValue({
+      success: (data) => {
+        this.currentVolume = data.value
+        console.log('[volume] getMediaValue: ' + data.value)
+      },
+      fail: (data, code) => {
+        this.currentVolume = '获取失败: ' + code
+        console.log('[volume] getMediaValue fail: ' + code)
+      }
+    })
+  },
+
+  setVolume(val) {
+    volume.setMediaValue({
+      value: val,
+      success: () => {
+        this.currentVolume = val
+        console.log('[volume] setMediaValue: ' + val)
+      },
+      fail: (data, code) => {
+        this.currentVolume = '设置失败: ' + code
+        console.log('[volume] setMediaValue fail: ' + code)
+      }
+    })
+  },
+
+  startListen() {
+    volume.onMediaValueChanged = (res) => {
+      this.listenInfo = '音量变化: ' + res.value
+      console.log('[volume] onMediaValueChanged: ' + res.value)
+    }
+    this.listenInfo = '监听中...'
+    console.log('[volume] startListen')
+  },
+
+  stopListen() {
+    volume.onMediaValueChanged = null
+    this.listenInfo = '已停止监听'
+    console.log('[volume] stopListen')
+  },
+
+  onDestroy() {
+    volume.onMediaValueChanged = null
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

@@ -1,0 +1,49 @@
+<!-- switch 开关组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">switch 开关</text>
+
+    <text class="label">1. 基本用法</text>
+    <div class="row item">
+      <switch checked="{{checked}}" onchange="onChange"></switch>
+      <text style="margin-left: 20px;">{{checked ? '开' : '关'}}</text>
+    </div>
+
+    <text class="label">2. 自定义颜色</text>
+    <div class="row item">
+      <switch checked="true" style="thumb-color: #ff6b6b; track-color: #ffe0e0;"></switch>
+      <text style="margin-left: 20px;">红色</text>
+    </div>
+    <div class="row item">
+      <switch checked="true" style="thumb-color: #51cf66; track-color: #e0ffe0;"></switch>
+      <text style="margin-left: 20px;">绿色</text>
+    </div>
+    <div class="row item">
+      <switch checked="false" style="thumb-color: #339af0; track-color: #d0ebff;"></switch>
+      <text style="margin-left: 20px;">蓝色</text>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  private: { checked: false },
+  onChange(e) {
+    this.checked = e.checked
+    console.log('[switch] onChange: ' + e.checked)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+
+.page {
+  padding-left: 100px;
+}
+
+.item {
+  align-items: center;
+  margin: 8px 0;
+}
+</style>

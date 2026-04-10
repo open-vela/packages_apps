@@ -1,0 +1,65 @@
+<!-- 下载 request 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">下载 request</text>
+
+    <!-- download -->
+    <text class="label">1. 下载文件</text>
+    <input type="button" class="btn" onclick="download" value="开始下载" />
+    <text>{{downloadStatus}}</text>
+
+    <!-- onDownloadComplete -->
+    <text class="label">2. 监听下载完成</text>
+    <text>{{completeInfo}}</text>
+  </div>
+</template>
+
+<script>
+import request from '@system.request'
+
+export default {
+  private: {
+    downloadStatus: '',
+    completeInfo: '',
+    downloadToken: ''
+  },
+
+  download() {
+    this.downloadStatus = '下载中...'
+    console.log('[request] download start')
+    request.download({
+      url: 'https://httpbin.org/image/png',
+      filename: 'download_image.png',
+      success: (data) => {
+        this.downloadToken = data.token
+        this.downloadStatus = '下载成功, token: ' + data.token
+        console.log('[request] download success token:' + data.token)
+        // 监听下载完成
+        this.onComplete(data.token)
+      },
+      fail: (data, code) => {
+        this.downloadStatus = '下载失败: ' + code
+        console.log('[request] download fail: ' + code)
+      }
+    })
+  },
+
+  onComplete(token) {
+    request.onDownloadComplete({
+      token: token,
+      success: (data) => {
+        this.completeInfo = '文件路径: ' + data.uri
+        console.log('[request] onDownloadComplete: ' + data.uri)
+      },
+      fail: (data, code) => {
+        this.completeInfo = '完成回调失败: ' + code
+        console.log('[request] onDownloadComplete fail: ' + code)
+      }
+    })
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

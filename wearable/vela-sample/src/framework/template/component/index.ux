@@ -1,0 +1,40 @@
+<!-- 自定义组件示例 -->
+<import name="my-counter" src="./counter.ux"></import>
+
+<template>
+  <div class="column page">
+    <text class="header">自定义组件</text>
+
+    <text class="label">引入自定义组件：</text>
+    <my-counter title="苹果数量" value="{{appleCount}}" onchange="onAppleChange"></my-counter>
+    <my-counter title="香蕉数量" value="{{bananaCount}}" onchange="onBananaChange"></my-counter>
+
+    <text class="label">父组件汇总：</text>
+    <text>苹果: {{appleCount}} 个</text>
+    <text>香蕉: {{bananaCount}} 个</text>
+    <text>总计: {{appleCount + bananaCount}} 个</text>
+  </div>
+</template>
+
+<script>
+export default {
+  private: {
+    appleCount: 3,
+    bananaCount: 5
+  },
+
+  onAppleChange(e) {
+    this.appleCount = e.detail.value
+    console.log('[component] appleCount: ' + this.appleCount)
+  },
+
+  onBananaChange(e) {
+    this.bananaCount = e.detail.value
+    console.log('[component] bananaCount: ' + this.bananaCount)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

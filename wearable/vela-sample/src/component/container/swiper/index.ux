@@ -1,0 +1,51 @@
+<!-- swiper 容器组件示例 -->
+<template>
+  <div class="column page">
+    <text class="header">swiper 轮播</text>
+
+    <!-- 基本轮播 -->
+    <text class="label">1. 自动轮播</text>
+    <swiper id="mySwiper" style="width: 300px; height: 150px;"
+      autoplay="true" interval="3000" indicator="true" loop="true"
+      onchange="onChange">
+      <div style="background-color: #ff6b6b; justify-content: center; align-items: center;">
+        <text style="color: #fff; font-size: 30px;">第 1 页</text>
+      </div>
+      <div style="background-color: #51cf66; justify-content: center; align-items: center;">
+        <text style="color: #fff; font-size: 30px;">第 2 页</text>
+      </div>
+      <div style="background-color: #339af0; justify-content: center; align-items: center;">
+        <text style="color: #fff; font-size: 30px;">第 3 页</text>
+      </div>
+    </swiper>
+
+    <!-- change 事件 -->
+    <text class="label">2. 当前索引</text>
+    <text>当前页: {{currentIndex}}</text>
+
+    <!-- swipeTo 方法 -->
+    <text class="label">3. swipeTo 方法</text>
+    <input type="button" class="btn" onclick="swipeTo(0)" value="跳到第 1 页" />
+    <input type="button" class="btn" onclick="swipeTo(2)" value="跳到第 3 页" />
+  </div>
+</template>
+
+<script>
+export default {
+  private: { currentIndex: 0 },
+
+  onChange(e) {
+    this.currentIndex = e.index
+    console.log('[swiper] onChange index:' + e.index)
+  },
+
+  swipeTo(idx) {
+    this.$element('mySwiper').swipeTo({ index: idx })
+    console.log('[swiper] swipeTo index:' + idx)
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>

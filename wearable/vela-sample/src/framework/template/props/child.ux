@@ -1,0 +1,51 @@
+<!-- 子组件：接收父组件传递的 props -->
+<template>
+  <div class="child">
+    <text>名称: {{name}}</text>
+    <text>数量: {{count}}</text>
+    <text>启用: {{enabled ? '是' : '否'}}</text>
+    <input type="button" class="child-btn" onclick="notify" value="通知父组件" />
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    name: {
+      type: String,
+      default: '默认名称'
+    },
+    count: {
+      type: Number,
+      default: 0
+    },
+    enabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  notify() {
+    this.$emit('change', { message: '来自子组件的消息' })
+  }
+}
+</script>
+
+<style>
+.child {
+  flex-direction: column;
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+.child-btn {
+  height: 50px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: #ffffff;
+  border-radius: 5px;
+  font-size: 24px;
+}
+</style>

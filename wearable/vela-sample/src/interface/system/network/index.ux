@@ -1,0 +1,63 @@
+<!-- 网络状态 network 接口示例 -->
+<template>
+  <div class="column page">
+    <text class="header">网络状态 network</text>
+
+    <!-- getType -->
+    <text class="label">1. 获取网络类型</text>
+    <input type="button" class="btn" onclick="getType" value="获取网络类型" />
+    <text>网络类型: {{type}}</text>
+
+    <!-- subscribe -->
+    <text class="label">2. 监听网络变化</text>
+    <input type="button" class="btn" onclick="subscribe" value="开始监听" />
+    <input type="button" class="btn" onclick="unsubscribe" value="停止监听" />
+    <text>{{subscribeInfo}}</text>
+  </div>
+</template>
+
+<script>
+import network from '@system.network'
+
+export default {
+  private: { type: '', subscribeInfo: '' },
+
+  getType() {
+    network.getType({
+      success: (data) => {
+        this.type = data.type
+        console.log('[network] getType: ' + data.type)
+      },
+      fail: (data, code) => {
+        this.type = '获取失败: ' + code
+        console.log('[network] getType fail: ' + code)
+      }
+    })
+  },
+
+  subscribe() {
+    this.subscribeInfo = '监听中...'
+    console.log('[network] subscribe')
+    network.subscribe({
+      callback: (data) => {
+        this.subscribeInfo = '网络变化: ' + data.type
+        console.log('[network] 网络变化: ' + data.type)
+      }
+    })
+  },
+
+  unsubscribe() {
+    network.unsubscribe()
+    this.subscribeInfo = '已停止监听'
+    console.log('[network] unsubscribe')
+  },
+
+  onDestroy() {
+    network.unsubscribe()
+  }
+}
+</script>
+
+<style>
+@import '../../../style/comm.css';
+</style>
