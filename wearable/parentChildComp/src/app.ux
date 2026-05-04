@@ -1,10 +1,10 @@
 <script>
 export default {
   onCreate() {
-    console.log("app created")
+    console.log('app created')
   },
   onDestroy() {
-    console.log("app destroyed")
+    console.log('app destroyed')
   }
 }
 </script>

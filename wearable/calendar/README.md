@@ -17,10 +17,6 @@ npm run build
 npm run release
 ```
 
-#### 3. 调试
-```
-npm run watch
-```
 ### 项目目录结构（src）
 ```
 .

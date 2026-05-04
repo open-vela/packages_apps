@@ -1,101 +1,47 @@
-<import name="child-emit" src="../../components/child-emit.ux"></import>
-<import name="child-dispatch" src="../../components/child-dispatch.ux"></import>
-
 <template>
-  <div class="page-container">
-    <text class="page-title">Vela 父子组件通信</text>
-
-    <!-- 父组件状态展示 -->
-    <div class="status-bar">
-      <text class="status-text">父组件计数: {{ parentCount }}</text>
-      <text class="status-text">收到消息: {{ dispatchMsg }}</text>
-    </div>
-
-    <!-- 方式1: Props(父传子) + $emit(子传父) -->
-    <child-emit
-      message="{{ greeting }}"
-      count="{{ parentCount }}"
-      @count-change="incrementChange"
-    ></child-emit>
-
-    <!-- 方式2: $dispatch(子向上冒泡) + $on(父监听) -->
-    <child-dispatch></child-dispatch>
+  <div class="demo-page">
+    <text class="title">联系人</text>
+    <text class="message">{{message}}</text>
+    <avatar-card name="张伟" color="#E91E63" oncardtap="onCardTap"></avatar-card>
+    <avatar-card name="李娜" color="#2196F3" oncardtap="onCardTap"></avatar-card>
+    <avatar-card name="王磊" color="#4CAF50" oncardtap="onCardTap"></avatar-card>
+    <avatar-card name="赵敏" color="#FF9800" oncardtap="onCardTap"></avatar-card>
+    <avatar-card name="陈浩" color="#9C27B0" oncardtap="onCardTap"></avatar-card>
   </div>
 </template>
 
+<import name="avatar-card" src="../../components/avatar-card.ux"></import>
+
 <script>
 export default {
-  data: {
-    parentCount: 0,
-    greeting: "你好，子组件！",
-    dispatchMsg: "暂无",
-    broadcastIndex: 0
-  },
-  onInit() {
-    // 监听子组件2通过 $dispatch 冒泡上来的事件
-    this.$on("dispatchEvt", this.onDispatchReceived)
-  },
-  onDestroy() {
-    this.$off("dispatchEvt", this.onDispatchReceived)
+  private: {
+    message: '点击联系人查看信息'
   },
 
-  // 方式1: 响应子组件1的 $emit 事件
-  incrementChange(evt) {
-    this.parentCount = evt.detail.value
-    console.log("父组件收到子组件1的 $emit 事件，计数值: " + this.parentCount)
-    this.greeting = this.parentCount
-  },
-
-  // 方式2: 响应子组件2的 $dispatch 事件
-  onDispatchReceived(evt) {
-    this.dispatchMsg = evt.detail.message
-    evt.stop() // 停止继续冒泡
+  onCardTap(evt) {
+    this.message = '你选择了: ' + evt.detail.name
   }
 }
 </script>
 
 <style>
-.page-container {
+.demo-page {
   flex-direction: column;
-  padding: 16px;
-  background-color: #1a1a2e;
   align-items: center;
-}
-.page-title {
-  font-size: 22px;
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 12px;
-}
-.status-bar {
-  flex-direction: column;
-  background-color: #0f3460;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-.status-text {
-  font-size: 22px;
-  color: #e2e2e2;
-  margin-bottom: 4px;
-}
-.broadcast-btn {
-  width: 300px;
-  background-color: #a8e6cf;
-  color: #1a1a2e;
-  font-size: 24px;
-  height: 80px;
-  border-radius: 10px;
-  margin-top: 8px;
+  background-color: #000000;
+  padding-top: 32px;
 }
 
-@media (shape: pill-shaped) {
-  .page-container {
-    padding-top: 40px;
-  }
-  .broadcast-btn{
-    width:100%;
-    border-radius: 20px;
-  }
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.message {
+  font-size: 20px;
+  color: #aaaaaa;
+  margin-bottom: 16px;
 }
 </style>

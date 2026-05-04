@@ -1,9 +1,9 @@
 {
-  "package": "com.example.component-communication",
+  "package": "com.application.watch.demo",
   "name": "parentChildComp",
   "versionName": "1.0.0",
   "versionCode": 1,
-  "minPlatformVersion": 1000,
+  "minPlatformVersion": 1200,
   "icon": "/common/logo.png",
   "deviceTypeList": [
     "watch"
@@ -11,6 +11,9 @@
   "features": [
     {
       "name": "system.router"
+    },
+    {
+      "name": "system.configuration"
     }
   ],
   "config": {

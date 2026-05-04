@@ -14,11 +14,6 @@ npm run build
 npm run release
 ```
 
-### 3. 调试
-
-```
-npm run watch
-```
 
 ## 了解更多
 

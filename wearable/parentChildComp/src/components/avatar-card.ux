@@ -1,0 +1,59 @@
+<template>
+  <div class="avatar-card" onclick="handleClick">
+    <div class="avatar" style="background-color: {{color}}">
+      <text class="avatar-text">{{name[0]}}</text>
+    </div>
+    <text class="name">{{name}}</text>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    name: {
+      type: String,
+      default: '用户'
+    },
+    color: {
+      type: String,
+      default: '#E91E63'
+    }
+  },
+
+  handleClick() {
+    this.$emit('cardtap', { name: this.name })
+  }
+}
+</script>
+
+<style>
+.avatar-card {
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #1A1A1A;
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 90%;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.avatar-text {
+  font-size: 22px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.name {
+  font-size: 24px;
+  color: #ffffff;
+}
+</style>
