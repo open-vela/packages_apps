@@ -1,0 +1,113 @@
+<template>
+  <div class="card">
+    <text class="time">{{ time }}</text>
+    <text class="title">血氧</text>
+
+    <div class="chartwrap">
+      <div class="chartrow">
+        <stack class="chartbox">
+          <stack class="grid">
+            <div class="hgrid">
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hdwarn" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+            </div>
+            <div class="vgrid">
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+            </div>
+          </stack>
+          <chart
+            class="chartplot"
+            type="line"
+            options="{{ chartOpts }}"
+            datasets="{{ chartData }}"
+          ></chart>
+        </stack>
+        <div class="ylabels">
+          <text class="ylab">100</text>
+          <text class="ylab">90</text>
+          <text class="ylab">80</text>
+        </div>
+      </div>
+      <div class="xrow">
+        <text class="xlab">0</text>
+        <text class="xlab">20</text>
+        <text class="xlab">40</text>
+      </div>
+    </div>
+
+    <text if="{{ err }}" class="err">{{ err }}</text>
+    <text else class="val">{{ valText }}</text>
+    <text if="{{ !err }}" class="zone" style="color: {{ statusColor }};">{{ statusLabel }}</text>
+  </div>
+</template>
+
+<script>
+/**
+ * 血氧卡片（纯展示）。数据由父组件预处理后经 props 传入。
+ *
+ * - `time` {string} 顶部时间 `HH:mm`
+ * - `hseg` / `vseg` {number[]} 背景虚线网格的横 / 纵分段
+ * - `chartOpts` {object} chart 的 options（坐标轴量程，静态）
+ * - `chartData` {object[]} chart 的 datasets（实时血氧序列，最新在最左）
+ * - `valText` {string} 当前血氧值文本（带 %）
+ * - `statusLabel` {string} 状态标签
+ * - `statusColor` {string} 状态标签颜色
+ * - `err` {string} 错误文案（非空时优先显示）
+ */
+export default {
+  props: [
+    'time',
+    'hseg',
+    'vseg',
+    'chartOpts',
+    'chartData',
+    'valText',
+    'statusLabel',
+    'statusColor',
+    'err',
+  ],
+};
+</script>
+
+<style>
+@import './card.css';
+
+.hd {
+  width: 6px;
+  height: 1px;
+  background-color: #7a4c50;
+}
+.hdwarn {
+  width: 8px;
+  height: 2px;
+  background-color: #ff2750;
+}
+.vd {
+  width: 1px;
+  height: 6px;
+  background-color: #6a3c40;
+}
+.ylab {
+  font-size: 16px;
+  color: #b98a8e;
+  text-align: left;
+}
+.xlab {
+  font-size: 16px;
+  color: #b98a8e;
+}
+
+.val {
+  font-size: 60px;
+  color: #ffffff;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.zone {
+  font-size: 28px;
+  margin-top: 4px;
+}
+</style>

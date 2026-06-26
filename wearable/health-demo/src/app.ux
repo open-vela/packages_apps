@@ -1,0 +1,10 @@
+<script>
+export default {
+  onCreate() {
+    console.log('health-demo app created');
+  },
+  onDestroy() {
+    console.log('health-demo app destroyed');
+  },
+};
+</script>

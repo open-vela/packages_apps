@@ -1,0 +1,140 @@
+<template>
+  <div class="card">
+    <text class="time">{{ time }}</text>
+    <text class="title">心率</text>
+
+    <div class="chartwrap">
+      <div class="chartrow">
+        <stack class="chartbox">
+          <stack class="grid">
+            <div class="hgrid">
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+            </div>
+            <div class="vgrid">
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+            </div>
+          </stack>
+          <chart
+            class="chartplot"
+            type="line"
+            options="{{ chartOpts }}"
+            datasets="{{ chartData }}"
+          ></chart>
+        </stack>
+        <div class="ylabels">
+          <text class="ylab">180</text>
+          <text class="ylab">110</text>
+          <text class="ylab">40</text>
+        </div>
+      </div>
+      <div class="xrow">
+        <text class="xlab">0</text>
+        <text class="xlab">20</text>
+        <text class="xlab">40</text>
+      </div>
+    </div>
+
+    <div class="numrow">
+      <div class="numhalf">
+        <text class="bpm">{{ bpmText }}</text>
+      </div>
+      <div class="unithalf">
+        <text class="heart">♥</text>
+        <text class="unit">次/分</text>
+      </div>
+    </div>
+
+    <text class="zone" style="color: {{ zoneColor }};">{{ zoneLabel }}</text>
+  </div>
+</template>
+
+<script>
+/**
+ * 心率卡片（纯展示）。数据由父组件预处理后经 props 传入，组件只负责渲染。
+ *
+ * - `time` {string} 顶部时间 `HH:mm`
+ * - `hseg` / `vseg` {number[]} 背景虚线网格的横 / 纵分段
+ * - `chartOpts` {object} chart 的 options（坐标轴量程，静态、初始化后不可变）
+ * - `chartData` {object[]} chart 的 datasets（实时心率序列，随采样更新）
+ * - `bpmText` {string} 当前心率文本
+ * - `zoneLabel` {string} 区间标签（如"正常"）
+ * - `zoneColor` {string} 区间标签颜色
+ */
+export default {
+  props: [
+    'time', 
+    'hseg', 
+    'vseg', 
+    'chartOpts', 
+    'chartData', 
+    'bpmText', 
+    'zoneLabel', 
+    'zoneColor',
+  ],
+};
+</script>
+
+<style>
+@import './card.css';
+
+.hd {
+  width: 6px;
+  height: 1px;
+  background-color: #7a4c50;
+}
+.vd {
+  width: 1px;
+  height: 6px;
+  background-color: #6a3c40;
+}
+.ylab {
+  font-size: 16px;
+  color: #b98a8e;
+  text-align: left;
+}
+.xlab {
+  font-size: 16px;
+  color: #b98a8e;
+}
+
+.numrow {
+  flex-direction: row;
+  align-items: center;
+  width: 480px;
+  margin-top: 8px;
+}
+.numhalf {
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 250px;
+}
+.bpm {
+  font-size: 78px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.unithalf {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 214px;
+  margin-left: 16px;
+}
+.heart {
+  font-size: 28px;
+  color: #ff263c;
+}
+.unit {
+  font-size: 22px;
+  color: #c9cdd2;
+  margin-top: 4px;
+}
+.zone {
+  font-size: 30px;
+  margin-top: 6px;
+}
+</style>

@@ -1,0 +1,155 @@
+<template>
+  <div class="card">
+    <text class="time">{{ time }}</text>
+    <text class="title">压力</text>
+
+    <div class="chartwrap">
+      <div class="chartrow">
+        <stack class="chartbox">
+          <stack class="grid">
+            <div class="hgrid">
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+              <div class="hrow"><div class="hd" for="{{ hseg }}"></div></div>
+            </div>
+            <div class="vgrid">
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+              <div class="vcol"><div class="vd" for="{{ vseg }}"></div></div>
+            </div>
+          </stack>
+          <chart
+            class="chartplot"
+            type="line"
+            options="{{ chartOpts }}"
+            datasets="{{ chartData }}"
+          ></chart>
+        </stack>
+        <div class="ylabels">
+          <text class="ylab">100</text>
+          <text class="ylab">50</text>
+          <text class="ylab">0</text>
+        </div>
+      </div>
+      <div class="xrow">
+        <text class="xlab">0</text>
+        <text class="xlab">20</text>
+        <text class="xlab">40</text>
+      </div>
+    </div>
+
+    <text if="{{ err }}" class="err">{{ err }}</text>
+    <div else class="srow">
+      <text class="sval">{{ valText }}</text>
+      <text class="szone" style="color: {{ statusColor }};">{{ statusLabel }}</text>
+    </div>
+    <div if="{{ !err }}" class="stats">
+      <div class="stat">
+        <text class="snum">{{ statMin }}</text>
+        <text class="slab">最低</text>
+      </div>
+      <div class="stat">
+        <text class="snum">{{ statAvg }}</text>
+        <text class="slab">平均</text>
+      </div>
+      <div class="stat">
+        <text class="snum">{{ statMax }}</text>
+        <text class="slab">最高</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+/**
+ * 压力卡片（纯展示）。数据由父组件预处理后经 props 传入。
+ *
+ * - `time` {string} 顶部时间 `HH:mm`
+ * - `hseg` / `vseg` {number[]} 背景虚线网格的横 / 纵分段
+ * - `chartOpts` {object} chart 的 options（坐标轴量程，静态）
+ * - `chartData` {object[]} chart 的 datasets（实时压力序列，最新在最左）
+ * - `valText` {string} 当前压力值文本
+ * - `statusLabel` / `statusColor` {string} 状态标签与颜色
+ * - `statMin` / `statAvg` / `statMax` 窗口最低 / 平均 / 最高
+ * - `err` {string} 错误文案（非空时优先显示）
+ */
+export default {
+  props: [
+    'time',
+    'hseg',
+    'vseg',
+    'chartOpts',
+    'chartData',
+    'valText',
+    'statusLabel',
+    'statusColor',
+    'statMin',
+    'statAvg',
+    'statMax',
+    'err',
+  ],
+};
+</script>
+
+<style>
+@import './card.css';
+
+.hd {
+  width: 6px;
+  height: 1px;
+  background-color: #2f6157;
+}
+.vd {
+  width: 1px;
+  height: 6px;
+  background-color: #2a5650;
+}
+.ylab {
+  font-size: 16px;
+  color: #7fb8ae;
+  text-align: left;
+}
+.xlab {
+  font-size: 16px;
+  color: #7fb8ae;
+}
+
+.srow {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 480px;
+  margin-top: 10px;
+}
+.sval {
+  font-size: 64px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.szone {
+  font-size: 30px;
+  margin-left: 16px;
+}
+.stats {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  width: 300px;
+  margin-top: 10px;
+}
+.stat {
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+}
+.snum {
+  font-size: 30px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.slab {
+  font-size: 17px;
+  color: #7fb8ae;
+  margin-top: 2px;
+}
+</style>
