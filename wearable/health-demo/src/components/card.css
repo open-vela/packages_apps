@@ -1,0 +1,83 @@
+/* 三张健康卡片共用的结构性样式（布局与尺寸）。各卡的主题色、内容样式留在各自 .ux 内。 */
+.card {
+  flex-direction: column;
+  align-items: center;
+  width: 480px;
+  height: 480px;
+  background-color: #000000;
+}
+.time {
+  font-size: 26px;
+  color: #ffffff;
+  font-weight: bold;
+  margin-top: 14px;
+}
+.title {
+  font-size: 30px;
+  color: #ffffff;
+  margin-top: 2px;
+}
+.chartwrap {
+  flex-direction: column;
+  align-items: flex-start;
+  width: 348px;
+  margin-top: 14px;
+}
+.chartrow {
+  flex-direction: row;
+  align-items: center;
+}
+.chartbox {
+  width: 300px;
+  height: 146px;
+}
+.grid {
+  width: 300px;
+  height: 146px;
+}
+.hgrid {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  height: 146px;
+}
+.hrow {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px;
+  height: 1px;
+}
+.vgrid {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px;
+  height: 146px;
+}
+.vcol {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 1px;
+  height: 146px;
+}
+.chartplot {
+  width: 300px;
+  height: 146px;
+}
+.ylabels {
+  flex-direction: column;
+  justify-content: space-between;
+  width: 40px;
+  height: 146px;
+  margin-left: 8px;
+}
+.xrow {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px;
+  margin-top: 5px;
+}
+.err {
+  font-size: 24px;
+  color: #ff5555;
+  margin-top: 18px;
+}

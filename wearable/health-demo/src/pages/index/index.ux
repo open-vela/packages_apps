@@ -1,0 +1,285 @@
+<import name="hr-card" src="../../components/HrCard.ux"></import>
+<import name="spo2-card" src="../../components/Spo2Card.ux"></import>
+<import name="stress-card" src="../../components/StressCard.ux"></import>
+
+<template>
+  <swiper class="swiper" vertical="true">
+    <hr-card
+      time="{{ timeText }}"
+      hseg="{{ hseg }}"
+      vseg="{{ vseg }}"
+      chart-opts="{{ hrChartOpts }}"
+      chart-data="{{ hr.chartData }}"
+      bpm-text="{{ hr.bpmText }}"
+      zone-label="{{ hr.zoneLabel }}"
+      zone-color="{{ hr.zoneColor }}"
+    ></hr-card>
+    <spo2-card
+      time="{{ timeText }}"
+      hseg="{{ hseg }}"
+      vseg="{{ vseg }}"
+      chart-opts="{{ spo2ChartOpts }}"
+      chart-data="{{ spo2.chartData }}"
+      val-text="{{ spo2.valText }}"
+      status-label="{{ spo2.statusLabel }}"
+      status-color="{{ spo2.statusColor }}"
+      err="{{ spo2.err }}"
+    ></spo2-card>
+    <stress-card
+      time="{{ timeText }}"
+      hseg="{{ hseg }}"
+      vseg="{{ vseg }}"
+      chart-opts="{{ stressChartOpts }}"
+      chart-data="{{ stress.chartData }}"
+      val-text="{{ stress.valText }}"
+      status-label="{{ stress.statusLabel }}"
+      status-color="{{ stress.statusColor }}"
+      stat-min="{{ stress.statMin }}"
+      stat-avg="{{ stress.statAvg }}"
+      stat-max="{{ stress.statMax }}"
+      err="{{ stress.err }}"
+    ></stress-card>
+  </swiper>
+</template>
+
+<script>
+import theme from './theme.js';
+import vitals from './vitals.js';
+import { getRecent, subscribe, unsubscribe, DATA_TYPES } from './health.js';
+
+const ZONE_LABEL = { rest: '偏低', normal: '正常', elevated: '偏高', peak: '偏高' };
+const NORMAL = '#C9CDD2';
+const ABN = '#FF263C';
+const SPO2_LINE = '#FF2750';
+const STRESS_LINE = '#2CE5C0';
+const HR_FLOOR = 40;
+const HR_CEIL = 180;
+const SPO2_FLOOR = 80;
+const SPO2_CEIL = 100;
+const STRESS_FLOOR = 0;
+const STRESS_CEIL = 100;
+const WINDOW = 40;
+const ALL = [DATA_TYPES.HEART_RATE, DATA_TYPES.SPO2, DATA_TYPES.STRESS];
+
+/**
+ * 个位数补零。
+ * @param {number} n 0–59 的数
+ * @returns {string} 两位字符串
+ */
+const pad2 = (n) => (n < 10 ? `0${n}` : `${n}`);
+
+/**
+ * 当前时间 `HH:mm`。
+ * @returns {string} 形如 `09:05`
+ */
+function nowHM() {
+  const d = new Date();
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+
+/**
+ * 血氧状态判定。
+ * @param {number} v 血氧值（%）
+ * @returns {{statusLabel: string, statusColor: string}} 状态标签与颜色
+ */
+function spo2Status(v) {
+  return v >= 95
+    ? { statusLabel: '正常', statusColor: NORMAL }
+    : { statusLabel: '偏低', statusColor: ABN };
+}
+
+/**
+ * 压力状态判定（放松 / 正常 / 偏高 / 过高）。
+ * @param {number} v 压力值
+ * @returns {{statusLabel: string, statusColor: string}} 状态标签与颜色
+ */
+function stressStatus(v) {
+  if (v < 30) return { statusLabel: '放松', statusColor: '#34D399' };
+  if (v < 60) return { statusLabel: '正常', statusColor: '#2CE5C0' };
+  if (v < 80) return { statusLabel: '偏高', statusColor: '#FF9F43' };
+  return { statusLabel: '过高', statusColor: '#FF4D4D' };
+}
+
+export default {
+  private: {
+    accent: theme.accent,
+    timeText: nowHM(),
+    hseg: new Array(28).fill(0),
+    vseg: new Array(14).fill(0),
+    hrPoints: [],
+    spo2Points: [],
+    stressPoints: [],
+    hrChartOpts: {
+      xAxis: { min: 0, max: WINDOW - 1, display: false },
+      yAxis: { min: HR_FLOOR, max: HR_CEIL, display: false },
+    },
+    spo2ChartOpts: {
+      xAxis: { min: 0, max: WINDOW - 1, display: false },
+      yAxis: { min: SPO2_FLOOR, max: SPO2_CEIL, display: false },
+    },
+    stressChartOpts: {
+      xAxis: { min: 0, max: WINDOW - 1, display: false },
+      yAxis: { min: STRESS_FLOOR, max: STRESS_CEIL, display: false },
+    },
+    hr: {
+      chartData: [{ strokeColor: ABN, fillColor: ABN, gradient: true, data: [] }],
+      bpmText: '--',
+      zoneLabel: '--',
+      zoneColor: ABN,
+    },
+    spo2: {
+      chartData: [{ strokeColor: SPO2_LINE, fillColor: SPO2_LINE, gradient: true, data: [] }],
+      valText: '--',
+      statusLabel: '',
+      statusColor: NORMAL,
+      err: '',
+    },
+    stress: {
+      chartData: [{ strokeColor: STRESS_LINE, fillColor: STRESS_LINE, gradient: true, data: [] }],
+      valText: '--',
+      statusLabel: '',
+      statusColor: NORMAL,
+      statMin: '--',
+      statAvg: '--',
+      statMax: '--',
+      err: '',
+    },
+  },
+
+  onReady() {
+    // 冷启动一次性建立数据流：补一帧最近值 + 开始订阅。
+    // 已声明 service.health 后台模式，页面 JS 持续运行、订阅不断，故无需在 onShow 重复。
+    this.timeText = nowHM();
+    this.refresh();
+    this.subscribeAll();
+  },
+  // 订阅贯穿页面生命周期，仅在销毁时退订（后台不退）。
+  onDestroy() {
+    this.unsubscribeAll();
+  },
+
+  refresh() {
+    getRecent(ALL).then((list) => list.forEach((s) => this.applySample(s)));
+  },
+  subscribeAll() {
+    ALL.forEach((t) => {
+      subscribe(
+        t,
+        (s) => this.applySample(s),
+        (err) => this.applyError(t, err),
+      );
+    });
+  },
+  unsubscribeAll() {
+    ALL.forEach((t) => unsubscribe(t));
+  },
+
+  /**
+   * 处理一条规范化采样，更新对应卡片的渲染数据。
+   * @param {Object} s 规范化采样（来自 health.js，含 ok/dataType/value/timeStamp）
+   * @returns {void}
+   */
+  applySample(s) {
+    if (!s || !s.ok) {
+      return;
+    }
+    this.timeText = nowHM();
+    if (s.dataType === DATA_TYPES.HEART_RATE) {
+      this.hrPoints = vitals.pushWindow(this.hrPoints, s.value, WINDOW);
+      const zone = vitals.classifyHr(s.value);
+      this.hr = {
+        chartData: [
+          {
+            strokeColor: ABN,
+            fillColor: ABN,
+            gradient: true,
+            data: this.hrPoints.slice().reverse(),
+          },
+        ],
+        bpmText: vitals.fmt(s.value, 'HEART_RATE'),
+        zoneLabel: ZONE_LABEL[zone] || '',
+        zoneColor: theme.hrZoneColor[zone] || ABN,
+      };
+    } else if (s.dataType === DATA_TYPES.SPO2) {
+      this.spo2Points = vitals.pushWindow(this.spo2Points, s.value, WINDOW);
+      const status = spo2Status(s.value);
+      this.spo2 = {
+        chartData: [
+          {
+            strokeColor: SPO2_LINE,
+            fillColor: SPO2_LINE,
+            gradient: true,
+            data: this.spo2Points.slice().reverse(),
+          },
+        ],
+        valText: vitals.fmt(s.value, 'SPO2'),
+        statusLabel: status.statusLabel,
+        statusColor: status.statusColor,
+        err: '',
+      };
+    } else if (s.dataType === DATA_TYPES.STRESS) {
+      this.stressPoints = vitals.pushWindow(this.stressPoints, s.value, WINDOW);
+      const status = stressStatus(s.value);
+      const sumStats = vitals.stats(this.stressPoints);
+      this.stress = {
+        chartData: [
+          {
+            strokeColor: STRESS_LINE,
+            fillColor: STRESS_LINE,
+            gradient: true,
+            data: this.stressPoints.slice().reverse(),
+          },
+        ],
+        valText: vitals.fmt(s.value, 'STRESS'),
+        statusLabel: status.statusLabel,
+        statusColor: status.statusColor,
+        statMin: sumStats.min,
+        statAvg: sumStats.avg,
+        statMax: sumStats.max,
+        err: '',
+      };
+    }
+  },
+  /**
+   * 订阅失败时把错误文案写入对应卡片。
+   * @param {number} type 数据类型
+   * @param {Object} err 错误对象（含 `code`）
+   * @returns {void}
+   */
+  applyError(type, err) {
+    const msg = vitals.codeMessage(err.code);
+    if (type === DATA_TYPES.SPO2) {
+      this.spo2 = {
+        chartData: [{ strokeColor: SPO2_LINE, fillColor: SPO2_LINE, gradient: true, data: [] }],
+        valText: '--',
+        statusLabel: '',
+        statusColor: NORMAL,
+        err: msg,
+      };
+    } else if (type === DATA_TYPES.STRESS) {
+      this.stress = {
+        chartData: [{ strokeColor: STRESS_LINE, fillColor: STRESS_LINE, gradient: true, data: [] }],
+        valText: '--',
+        statusLabel: '',
+        statusColor: NORMAL,
+        statMin: '--',
+        statAvg: '--',
+        statMax: '--',
+        err: msg,
+      };
+    }
+  },
+};
+</script>
+
+<style>
+.swiper {
+  width: 480px;
+  height: 480px;
+  background-color: #000000;
+  indicator-color: #3a3a3a;
+  indicator-selected-color: #ffffff;
+  indicator-size: 8px;
+  indicator-right: 10px;
+}
+</style>
